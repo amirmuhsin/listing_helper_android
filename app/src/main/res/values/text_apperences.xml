@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="H1TextAppearance">
+        <item name="android:textSize">38sp</item>
+        <item name="android:fontFamily">@font/roboto_bold</item>
+    </style>
+
+    <style name="H2TextAppearance">
+        <item name="android:textSize">28sp</item>
+        <item name="android:letterSpacing">0.03</item>
+        <item name="fontFamily">@font/roboto_black</item>
+    </style>
+
+    <style name="H3TextAppearance">
+        <item name="android:textSize">24sp</item>
+        <item name="android:fontFamily">@font/roboto_bold</item>
+    </style>
+
+    <style name="H4TextAppearance">
+        <item name="android:textSize">20sp</item>
+        <item name="android:fontFamily">@font/roboto_bold</item>
+    </style>
+
+    // undefined in design system v2
+
+    <style name="H5TextAppearance">
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">@font/roboto_medium</item>
+    </style>
+
+    // undefined in design system v2
+
+    <style name="H6TextAppearance">
+        <item name="android:textSize">12sp</item>
+        <item name="android:letterSpacing">0.02</item>
+        <item name="android:fontFamily">@font/roboto_bold</item>
+    </style>
+
+    <style name="SubTitle_1_TextAppearance">
+        <item name="android:textSize">18sp</item>
+        <item name="android:fontFamily">@font/roboto_medium</item>
+    </style>
+
+    <style name="SubTitle_2_TextAppearance">
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">@font/roboto_medium</item>
+    </style>
+
+    <style name="SubTitle_3_TextAppearance">
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">@font/roboto_bold</item>
+    </style>
+
+    <style name="SubTitle_4_TextAppearance">
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">@font/roboto_medium</item>
+    </style>
+
+    <style name="SubTitle_5_TextAppearance">
+        <item name="android:textSize">12sp</item>
+        <item name="android:letterSpacing">0.02</item>
+        <item name="android:fontFamily">@font/roboto_medium</item>
+    </style>
+
+    <style name="SubTitle_6_TextAppearance">
+        <item name="android:textSize">10sp</item>
+        <item name="android:letterSpacing">0.02</item>
+        <item name="android:fontFamily">@font/roboto_medium</item>
+    </style>
+
+    <style name="Body_0_TextAppearance">
+        <item name="android:textSize">18sp</item>
+        <item name="android:fontFamily">@font/roboto_regular</item>
+    </style>
+
+    <style name="Body_1_TextAppearance">
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">@font/roboto_regular</item>
+    </style>
+
+    <style name="Body_2_TextAppearance">
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">@font/roboto_regular</item>
+    </style>
+
+    <style name="Body_3_TextAppearance">
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">@font/roboto_medium</item>
+    </style>
+
+    <style name="Body_4_TextAppearance">
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">@font/roboto_regular</item>
+    </style>
+
+    <style name="Body_5_TextAppearance">
+        <item name="android:textSize">12sp</item>
+        <item name="android:fontFamily">@font/roboto_medium</item>
+    </style>
+
+    <style name="Body_6_TextAppearance">
+        <item name="android:textSize">12sp</item>
+        <item name="android:fontFamily">@font/roboto_regular</item>
+    </style>
+
+    <style name="Body_7_TextAppearance">
+        <item name="android:textSize">10sp</item>
+        <item name="android:fontFamily">@font/roboto_regular</item>
+    </style>
+
+    <style name="BaseFieldLabel">
+        <item name="android:textSize">12sp</item>
+        <item name="android:fontFamily">@font/roboto_regular</item>
+    </style>
+
+    <style name="OnboardingTitleStyle">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_marginStart">@dimen/large_padding</item>
+        <item name="android:layout_marginEnd">@dimen/large_padding</item>
+        <item name="android:layout_marginTop">@dimen/huge_padding</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">28sp</item>
+        <item name="android:fontFamily">@font/arial_rounded_mt_bold</item>
+    </style>
+
+</resources>

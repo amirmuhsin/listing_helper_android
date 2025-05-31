@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="@color/edit_text_bg"/>
+    <corners android:radius="@dimen/radius_16"/>
+    <stroke
+        android:width="@dimen/app_edit_text_bg_stroke_width"
+        android:color="@color/edit_text_bg_stroke"/>
+</shape>

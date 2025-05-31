@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_main"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.amirmuhsin.listinghelper.ui.home.HomeFragment"
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/action_open_product_details"
+            app:destination="@id/productDetailFragment"
+            app:popUpTo="@id/homeFragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/productDetailFragment"
+        android:name="com.amirmuhsin.listinghelper.ui.product_detail.ProductDetailFragment"
+        tools:layout="@layout/fragment_product_detail">
+        <action
+            android:id="@+id/action_open_photo_capture"
+            app:destination="@id/photoCaptureFragment"
+            app:popUpTo="@id/productDetailFragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/photoCaptureFragment"
+        android:name="com.amirmuhsin.listinghelper.ui.photo_capture.PhotoCaptureFragment"
+        tools:layout="@layout/fragment_photo_capture"/>
+
+</navigation>

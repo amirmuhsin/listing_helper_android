@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@android:id/background" android:drawable="@drawable/black_progress_bar_bg"/>
+    <item android:id="@android:id/secondaryProgress">
+        <scale android:scaleWidth="100%">
+            <shape>
+                <solid android:color="#80D3D3D3"/> <!-- Light gray color as an example for secondary progress -->
+                <corners android:radius="2dp"/>
+            </shape>
+        </scale>
+    </item>
+    <item android:id="@android:id/progress">
+        <scale android:scaleWidth="100%">
+            <shape>
+                <solid android:color="@color/primary_black"/>
+                <corners android:radius="2dp"/>
+            </shape>
+        </scale>
+    </item>
+</layer-list>

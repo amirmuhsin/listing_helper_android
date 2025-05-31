@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="AppSwitchStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textAppearance">@style/SubTitle_1_TextAppearance</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:thumb">@drawable/app_switch_thumb</item>
+        <item name="track">@drawable/app_switch_track</item>
+    </style>
+
+</resources>

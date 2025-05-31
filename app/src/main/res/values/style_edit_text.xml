@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="EditTextStyle" parent="Widget.AppCompat.EditText">
+        <item name="android:paddingTop">@dimen/very_small_padding</item>
+        <item name="android:paddingBottom">@dimen/very_small_padding</item>
+        <item name="android:paddingLeft">@dimen/medium_padding</item>
+        <item name="android:paddingRight">@dimen/medium_padding</item>
+        <item name="android:background">@drawable/selector_bg_edittext</item>
+        <item name="android:textCursorDrawable">@drawable/shape_cursor</item>
+    </style>
+
+</resources>

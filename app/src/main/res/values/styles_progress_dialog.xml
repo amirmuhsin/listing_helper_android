@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="ProgressProcessDialogAnimation">
+        <item name="android:windowEnterAnimation">@anim/progress_dialog_fade_in</item>
+        <item name="android:windowExitAnimation">@anim/progress_dialog_fade_out</item>
+    </style>
+
+    <style name="ProgressBarTheme">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowAnimationStyle">@style/ProgressProcessDialogAnimation</item>
+    </style>
+</resources>

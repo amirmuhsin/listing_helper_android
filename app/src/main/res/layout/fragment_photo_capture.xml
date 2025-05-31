@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- 2. Camera preview -->
+    <androidx.camera.view.PreviewView
+        android:id="@+id/previewView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <!-- 1. Top bar: Cancel | count | Done -->
+    <LinearLayout
+        android:id="@+id/topBar"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:background="#80000000"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="8dp">
+
+        <ImageButton
+            android:id="@+id/btnCancel"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_back_24"
+            app:tint="@android:color/white"/>
+
+        <TextView
+            android:id="@+id/tvCount"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="0 / 15"
+            android:textColor="@android:color/white"/>
+
+        <Button
+            android:id="@+id/btnDone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:text="Done"/>
+    </LinearLayout>
+
+    <!-- 3. Thumbnail strip -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvThumbnails"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="100dp"
+        android:background="#80000000"
+        android:clipToPadding="false"
+        android:overScrollMode="never"
+        android:padding="8dp"/>
+
+    <!-- 4. Shutter button -->
+    <ImageButton
+        android:id="@+id/btnCapture"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="24dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:src="@drawable/selector_bg_btn_camera"/>
+</FrameLayout>

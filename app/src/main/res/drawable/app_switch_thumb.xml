@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:bottom="@dimen/app_switch_thumb_padding"
+        android:left="@dimen/app_switch_thumb_padding"
+        android:right="@dimen/app_switch_thumb_padding"
+        android:top="@dimen/app_switch_thumb_padding">
+
+        <shape android:shape="oval">
+            <solid android:color="@color/mystic"/>
+            <size
+                android:width="@dimen/app_switch_thumb_size"
+                android:height="@dimen/app_switch_thumb_size"/>
+        </shape>
+    </item>
+</layer-list>

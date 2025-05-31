@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="primary">#2C64E3</color>
+    <color name="accent">#E732B1</color>
+
+    <color name="transparent">#00000000</color>
+    <color name="white">#ffffff</color>
+
+    <color name="white_window_bg">#ffffff</color>
+    <color name="light_gray_window_bg">#F6F6F7</color>
+
+    <!--  Text  -->
+    <color name="primary_text">#000000</color>
+    <color name="secondary_text">#798182</color>
+    <color name="third_text">#A4A1AB</color>
+
+    <color name="primary_light_text">#ffffff</color>
+    <color name="primary_btn_text_color">@color/primary_light_text</color>
+    <color name="secondary_btn_text_color">@color/primary_text</color>
+
+    <!--  Button  -->
+    <color name="primary_btn_normal">@color/primary</color>
+    <color name="primary_btn_pressed">#295DCF</color>
+    <color name="primary_btn_disabled">#6896FF</color>
+
+    <color name="secondary_btn_normal">#E5EDFC</color>
+    <color name="secondary_btn_pressed">#C9DBF8</color>
+
+    <color name="text_btn_default_color">@color/primary</color>
+    <color name="text_btn_pressed_color">#B4CAF0</color>
+
+    <!--  Onboarding Button  -->
+    <color name="onboarding_btn_normal">#000000</color>
+    <color name="onboarding_btn_pressed">#ff333333</color>
+    <color name="onboarding_btn_disabled">#66000000</color>
+
+    <!--  EditText  -->
+    <color name="edit_text_bg">#EAECF1</color>
+    <color name="edit_text_bg_stroke">#82B8FD</color>
+
+    <color name="mystic">#F4F6FA</color>
+    <color name="ebony_clay_2">#222531</color>
+    <color name="pink">#FAE9F1</color>
+
+    <color name="dark_control_primary_bg_v2">#009A96</color>
+    <color name="divider_color">#F5F5F5</color>
+
+    <color name="shimmer_color">#dddddd</color>
+
+    <color name="bg_option_selected">#C0D5FF</color>
+    <color name="bg_option_normal">#00ffffff</color>
+    <color name="bg_option_error">#C0D5FF</color>
+    <color name="rejection_color_bg">#1AFF0000</color>
+
+    <color name="primary_black">#000000</color>
+    <color name="primary_white">#FFFFFF</color>
+    <color name="onboarding_bg">#ECECFD</color>
+    <color name="black_progress_bar_bg">#DAD5E3</color>
+
+    <color name="country_item_selected_bg_color">#D4DFFC</color>
+    <color name="country_item_selected_border_color">#798FF7</color>
+
+    <color name="gray_item_bg_normal">#F6F6F7</color>
+    <color name="gray_item_bg_pressed">#E1E1E2</color>
+
+    <!--  Bottom View Navigation  -->
+    <color name="bottom_nav_view_bg">#F6F7F6</color>
+    <color name="bottom_nav_view_top_divider">#B2B2B2</color>
+
+    <!--  Premium  -->
+    <color name="gradient_end_color">#e4effd</color>
+
+    <!--  Logout button  -->
+    <color name="logout_button_text_color">#FF305A</color>
+
+    <!--  BottomSheet  -->
+    <color name="bottom_sheet_handle_color">@color/gray_item_bg_pressed</color>
+
+    <!--  CalendarLayout  -->
+    <color name="calendar_layout_bg">@color/white_window_bg</color>
+    <color name="day_layout_today_bg">#DCE4FF</color>
+    <color name="day_layout_today_text_color">#16161A</color>
+    <color name="day_layout_other_day_text_color">#B1ABB8</color>
+
+    <!--  problem states  -->
+    <color name="solved_problem">#333DAC0D</color>
+    <color name="error_problem">#33CF0505</color>
+    <color name="unsolved_problem">@color/gray_item_bg_normal</color>
+
+    <!--  Snackbar  -->
+    <color name="snackbar_success_bg">#4CAF50</color>
+    <color name="snackbar_error_bg">#D02020</color>
+
+</resources>

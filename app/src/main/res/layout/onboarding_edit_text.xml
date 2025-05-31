@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/onboarding_edit_text_height"
+    android:orientation="horizontal"
+    tools:parentTag="android.widget.LinearLayout">
+
+    <ImageView
+        android:id="@+id/ivIcon"
+        android:layout_width="@dimen/small_icon_size"
+        android:layout_height="@dimen/small_icon_size"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="@dimen/large_padding"/>
+
+    <EditText
+        android:id="@+id/etText"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/onboarding_edit_text_height"
+        android:layout_marginEnd="@dimen/large_padding"
+        android:background="@null"
+        android:fontFamily="@font/roboto_medium"
+        android:gravity="center_vertical"
+        android:maxLines="1"
+        android:paddingStart="@dimen/large_padding"
+        android:textColor="@color/primary_black"
+        android:textSize="@dimen/title_text_size"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+</merge>

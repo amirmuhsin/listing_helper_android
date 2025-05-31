@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorAccent">@color/accent</item>
+        <item name="android:windowBackground">@color/white_window_bg</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">@color/white_window_bg</item>
+        <item name="android:navigationBarColor">@color/transparent</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <!-- Customize your theme here. -->
+        <item name="android:textViewStyle">@style/TextViewStyle</item>
+        <item name="android:buttonStyle">@style/BaseButtonStyle</item>
+        <item name="android:editTextStyle">@style/EditTextStyle</item>
+    </style>
+
+    <style name="TextViewStyle" parent="Widget.AppCompat.TextView">
+        <item name="android:textColor">@color/primary_text</item>
+        <item name="android:fontFamily">@font/roboto_regular</item>
+    </style>
+
+</resources>
