@@ -2,6 +2,7 @@ package com.amirmuhsin.listinghelper.ui.photo_capture
 
 import android.Manifest.permission.CAMERA
 import android.content.pm.PackageManager
+import android.net.Uri
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.core.AspectRatio
 import androidx.camera.core.CameraSelector
@@ -20,6 +21,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.amirmuhsin.listinghelper.R
 import com.amirmuhsin.listinghelper.core_views.base.ui.BaseFragment
 import com.amirmuhsin.listinghelper.databinding.FragmentPhotoCaptureBinding
+import com.amirmuhsin.listinghelper.ui.bg_removal.BgRemovalFragment
 import com.amirmuhsin.listinghelper.ui.photo_capture.list.ThumbsAdapter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -74,7 +76,13 @@ class PhotoCaptureFragment: BaseFragment<FragmentPhotoCaptureBinding, PhotoCaptu
             findNavController().popBackStack()
         }
         binding.btnDone.setOnClickListener {
-            findNavController().navigate(R.id.action_open_bg_removal)
+            // Grab the current list of URIs from your ViewModel
+            val uriList = viewModel.photosFlow.value
+
+            // Convert to an ArrayList<Uri> so it’s Parcelable
+            val arrayList = ArrayList<Uri>(uriList)
+            val args = BgRemovalFragment.createArgs(arrayList)
+            findNavController().navigate(R.id.action_open_bg_removal, args)
         }
         binding.btnCapture.setOnClickListener {
             takePhoto()
@@ -92,7 +100,7 @@ class PhotoCaptureFragment: BaseFragment<FragmentPhotoCaptureBinding, PhotoCaptu
             .onEach { list ->
                 // update count, done & capture buttons
                 binding.tvCount.text = "${list.size} / 15"
-                binding.btnDone.isEnabled = list.size in 2..15
+                binding.btnDone.isEnabled = list.size in 1..15
                 binding.btnCapture.isEnabled = list.size < 15
             }.launchIn(lifecycleScope)
     }

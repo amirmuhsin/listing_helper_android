@@ -67,4 +67,7 @@
     <!--  OnboardingEditText  -->
     <dimen name="onboarding_edit_text_height">64dp</dimen>
 
+    <!--  PhotoPair  -->
+    <dimen name="photo_pair_height">200dp</dimen>
+
 </resources>

@@ -4,5 +4,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvPhotoPairs"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/error_problem"/>
+
+    <Button
+        android:id="@+id/btnProcess"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_margin="@dimen/medium_padding"
+        android:text="Process Images"
+        android:textAllCaps="false"/>
+
 
 </FrameLayout>
