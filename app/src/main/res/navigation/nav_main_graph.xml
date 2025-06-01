@@ -31,6 +31,17 @@
     <fragment
         android:id="@+id/photoCaptureFragment"
         android:name="com.amirmuhsin.listinghelper.ui.photo_capture.PhotoCaptureFragment"
-        tools:layout="@layout/fragment_photo_capture"/>
+        tools:layout="@layout/fragment_photo_capture">
+        <action
+            android:id="@+id/action_open_bg_removal"
+            app:destination="@id/bgRemovalFragment"
+            app:popUpTo="@id/photoCaptureFragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/bgRemovalFragment"
+        android:name="com.amirmuhsin.listinghelper.ui.bg_removal.BgRemovalFragment"
+        tools:layout="@layout/fragment_bg_removal"/>
 
 </navigation>

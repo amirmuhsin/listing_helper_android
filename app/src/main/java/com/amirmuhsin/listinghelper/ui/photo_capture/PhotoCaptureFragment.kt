@@ -2,7 +2,6 @@ package com.amirmuhsin.listinghelper.ui.photo_capture
 
 import android.Manifest.permission.CAMERA
 import android.content.pm.PackageManager
-import android.os.Build.VERSION_CODES.P
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.core.AspectRatio
 import androidx.camera.core.CameraSelector
@@ -12,13 +11,13 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
-import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.amirmuhsin.listinghelper.R
 import com.amirmuhsin.listinghelper.core_views.base.ui.BaseFragment
 import com.amirmuhsin.listinghelper.databinding.FragmentPhotoCaptureBinding
 import com.amirmuhsin.listinghelper.ui.photo_capture.list.ThumbsAdapter
@@ -75,12 +74,7 @@ class PhotoCaptureFragment: BaseFragment<FragmentPhotoCaptureBinding, PhotoCaptu
             findNavController().popBackStack()
         }
         binding.btnDone.setOnClickListener {
-            // pass list to summary screen
-            parentFragmentManager.setFragmentResult(
-                RK_BARCODE,
-                bundleOf(ARG_BARCODE to viewModel.photosFlow.value)
-            )
-//            findNavController().navigate(R.id.action_photoCapture_to_photoSummary)
+            findNavController().navigate(R.id.action_open_bg_removal)
         }
         binding.btnCapture.setOnClickListener {
             takePhoto()
@@ -107,10 +101,12 @@ class PhotoCaptureFragment: BaseFragment<FragmentPhotoCaptureBinding, PhotoCaptu
         when {
             ContextCompat.checkSelfPermission(requireContext(), CAMERA) ==
                     PackageManager.PERMISSION_GRANTED -> bindCameraUseCases()
+
             shouldShowRequestPermissionRationale(CAMERA) -> {
                 showErrorSnackbar("Camera permission is required")
                 requestPermissionLauncher.launch(CAMERA)
             }
+
             else -> requestPermissionLauncher.launch(CAMERA)
         }
     }
@@ -146,7 +142,6 @@ class PhotoCaptureFragment: BaseFragment<FragmentPhotoCaptureBinding, PhotoCaptu
         )
     }
 
-
     private fun takePhoto() {
         // create temp file
         val photoFile = File.createTempFile(
@@ -161,10 +156,11 @@ class PhotoCaptureFragment: BaseFragment<FragmentPhotoCaptureBinding, PhotoCaptu
         imageCapture.takePicture(
             outputOptions,
             ContextCompat.getMainExecutor(requireContext()),
-            object : ImageCapture.OnImageSavedCallback {
+            object: ImageCapture.OnImageSavedCallback {
                 override fun onError(exc: ImageCaptureException) {
                     showErrorSnackbar("Capture failed: ${exc.message}")
                 }
+
                 override fun onImageSaved(output: ImageCapture.OutputFileResults) {
                     viewModel.addPhoto(uri)
                     thumbAdapter.addNewPhoto(uri)
@@ -181,12 +177,5 @@ class PhotoCaptureFragment: BaseFragment<FragmentPhotoCaptureBinding, PhotoCaptu
         cameraExecutor.shutdown()
         cameraProvider.unbindAll()
     }
-
-    companion object {
-
-        const val RK_BARCODE = "rk:barcode"
-        const val ARG_BARCODE = "arg:barcode"
-    }
-
 }
 
