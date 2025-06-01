@@ -12,9 +12,7 @@
         tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_open_product_details"
-            app:destination="@id/productDetailFragment"
-            app:popUpTo="@id/homeFragment"
-            app:popUpToInclusive="true"/>
+            app:destination="@id/productDetailFragment"/>
     </fragment>
 
     <fragment
@@ -23,9 +21,7 @@
         tools:layout="@layout/fragment_product_detail">
         <action
             android:id="@+id/action_open_photo_capture"
-            app:destination="@id/photoCaptureFragment"
-            app:popUpTo="@id/productDetailFragment"
-            app:popUpToInclusive="true"/>
+            app:destination="@id/photoCaptureFragment"/>
     </fragment>
 
     <fragment
@@ -34,9 +30,7 @@
         tools:layout="@layout/fragment_photo_capture">
         <action
             android:id="@+id/action_open_bg_removal"
-            app:destination="@id/bgRemovalFragment"
-            app:popUpTo="@id/photoCaptureFragment"
-            app:popUpToInclusive="true"/>
+            app:destination="@id/bgRemovalFragment"/>
     </fragment>
 
     <fragment
