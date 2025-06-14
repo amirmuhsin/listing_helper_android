@@ -26,14 +26,9 @@ class BgRemovalViewModel(
     private val _pairs = MutableStateFlow<List<PhotoPair>>(emptyList())
     val pairs = _pairs.asStateFlow()
 
-    // pass index and the object as liveData
     private val _updatedPair = MutableStateFlow<Pair<Int, PhotoPair?>>(Pair(-1, null))
     val updatedPair = _updatedPair.asStateFlow()
 
-    /**
-     * Call this when you have your list of original URIs.
-     * It initializes the cleanedBitmaps with the same size (all nulls).
-     */
     fun initOriginals(uriList: List<Uri>) {
         val pairs = mutableListOf<PhotoPair>()
         uriList.forEach { uri ->
@@ -43,10 +38,6 @@ class BgRemovalViewModel(
         _pairs.value = pairs
     }
 
-    /**
-     * For each original URI, upload to PhotoRoom and decode the response into a Bitmap.
-     * Emits each result into _cleanedBitmaps at the correct index.
-     */
     fun processAllOriginals() {
         // set all pairs to PROCESSING
         _pairs.value = _pairs.value.map { pair ->
