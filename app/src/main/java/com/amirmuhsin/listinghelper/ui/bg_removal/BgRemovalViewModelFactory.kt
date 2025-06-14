@@ -3,7 +3,7 @@ package com.amirmuhsin.listinghelper.ui.bg_removal
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.amirmuhsin.listinghelper.networking.PhotoRoomService
+import com.amirmuhsin.listinghelper.networking.api.PhotoRoomService
 
 class BgRemovalViewModelFactory(
     private val service: PhotoRoomService,

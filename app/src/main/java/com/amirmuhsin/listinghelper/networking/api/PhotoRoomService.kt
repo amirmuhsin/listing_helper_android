@@ -1,4 +1,4 @@
-package com.amirmuhsin.listinghelper.networking
+package com.amirmuhsin.listinghelper.networking.api
 
 import okhttp3.MultipartBody
 import okhttp3.ResponseBody

@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.amirmuhsin.listinghelper.core_views.base.ui.BaseFragment
 import com.amirmuhsin.listinghelper.databinding.FragmentBgRemovalBinding
-import com.amirmuhsin.listinghelper.networking.NetworkModule
+import com.amirmuhsin.listinghelper.networking.PhotoRoomNetworkModule
 import com.amirmuhsin.listinghelper.ui.bg_removal.list.PhotoPairAdapter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -22,7 +22,7 @@ class BgRemovalFragment: BaseFragment<FragmentBgRemovalBinding, BgRemovalViewMod
 
     override val viewModel: BgRemovalViewModel by viewModels {
         BgRemovalViewModelFactory(
-            NetworkModule.photoRoomService,
+            PhotoRoomNetworkModule.photoRoomService,
             requireContext().applicationContext
         )
     }

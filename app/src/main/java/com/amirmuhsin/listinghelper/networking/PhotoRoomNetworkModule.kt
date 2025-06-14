@@ -1,6 +1,6 @@
 package com.amirmuhsin.listinghelper.networking
 
-import android.R.attr.level
+import com.amirmuhsin.listinghelper.networking.api.PhotoRoomService
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -8,7 +8,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.scalars.ScalarsConverterFactory
 
-object NetworkModule {
+object PhotoRoomNetworkModule {
 
     private const val BASE_URL = "https://sdk.photoroom.com/"
 

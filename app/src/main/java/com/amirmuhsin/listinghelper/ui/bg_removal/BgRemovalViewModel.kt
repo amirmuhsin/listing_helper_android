@@ -1,13 +1,11 @@
 package com.amirmuhsin.listinghelper.ui.bg_removal
 
-import android.R.attr.path
 import android.content.Context
 import android.graphics.BitmapFactory
 import android.net.Uri
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.viewModelScope
 import com.amirmuhsin.listinghelper.core_views.base.viewmodel.BaseViewModel
-import com.amirmuhsin.listinghelper.networking.PhotoRoomService
+import com.amirmuhsin.listinghelper.networking.api.PhotoRoomService
 import com.amirmuhsin.listinghelper.ui.bg_removal.list.PhotoPair
 import com.amirmuhsin.listinghelper.util.copyUriToTempFile
 import kotlinx.coroutines.Dispatchers
@@ -18,7 +16,6 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import retrofit2.HttpException
-import java.io.File
 import java.util.UUID
 
 class BgRemovalViewModel(
@@ -51,6 +48,11 @@ class BgRemovalViewModel(
      * Emits each result into _cleanedBitmaps at the correct index.
      */
     fun processAllOriginals() {
+        // set all pairs to PROCESSING
+        _pairs.value = _pairs.value.map { pair ->
+            pair.copy(status = PhotoPair.Status.PROCESSING)
+        }
+
         viewModelScope.launch(Dispatchers.IO) {
             _pairs.value.forEachIndexed { index, pair ->
                 // 1) Read the file from cacheDir
@@ -85,6 +87,7 @@ class BgRemovalViewModel(
 
                         // 6) Store it and emit
                         pair.cleanedBitmap = bmp
+                        pair.status = PhotoPair.Status.COMPLETED
                         // emit that pair individually
                         _updatedPair.value = Pair(index, pair)
                     } else {

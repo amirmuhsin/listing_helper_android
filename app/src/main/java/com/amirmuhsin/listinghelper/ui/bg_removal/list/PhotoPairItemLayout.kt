@@ -21,16 +21,32 @@ class PhotoPairItemLayout(
     init {
         val height = resources.getDimensionPixelSize(R.dimen.photo_pair_height)
         layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, height)
-//        val marginLp = layoutParams as MarginLayoutParams
-//        val smallPadding = resources.getDimensionPixelSize(R.dimen.very_small_padding)
-//        marginLp.setMargins(smallPadding, smallPadding, smallPadding, smallPadding)
     }
 
     fun fillContent(photoPair: PhotoPair) {
         this.photoPair = photoPair
         binding.ivOriginal.load(photoPair.originalUri)
-        if (photoPair.cleanedBitmap != null) {
-            binding.ivCleaned.load(photoPair.cleanedBitmap)
+
+        when (photoPair.status) {
+            PhotoPair.Status.PENDING -> {
+                binding.pbLoading.visibility = GONE
+                binding.ivCleaned.setImageResource(0)
+            }
+
+            PhotoPair.Status.PROCESSING -> {
+                binding.pbLoading.visibility = VISIBLE
+                binding.ivCleaned.setImageResource(0)
+            }
+
+            PhotoPair.Status.COMPLETED -> {
+                binding.pbLoading.visibility = GONE
+                binding.ivCleaned.load(photoPair.cleanedBitmap)
+            }
+
+            PhotoPair.Status.FAILED -> {
+                binding.pbLoading.visibility = GONE
+                binding.ivCleaned.setImageResource(R.drawable.ic_report_16)
+            }
         }
     }
 }
