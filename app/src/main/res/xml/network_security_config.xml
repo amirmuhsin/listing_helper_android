@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <!-- by default block cleartext -->
+    <base-config cleartextTrafficPermitted="false" />
+
+    <!-- permit cleartext for your API server IP -->
+    <domain-config cleartextTrafficPermitted="true">
+        <!-- exact host -->
+        <domain includeSubdomains="false">87.106.214.160</domain>
+    </domain-config>
+</network-security-config>

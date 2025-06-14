@@ -1,8 +1,8 @@
 package com.amirmuhsin.listinghelper.networking.model.request
 
-import kotlinx.serialization.SerialName
+import com.google.gson.annotations.SerializedName
 
 data class UploadProductImageRequest(
-    @SerialName("ImageData") val itemData: String,
-    @SerialName("SalesChannelId") val salesChannelId: String,
+    @SerializedName("ImageData") val itemData: String,
+    @SerializedName("SalesChannelId") val salesChannelId: String,
 )
