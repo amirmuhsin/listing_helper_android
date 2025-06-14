@@ -1,49 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:padding="@dimen/medium_padding">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvSelectedPhotos"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="164dp"
-        android:orientation="horizontal"
-        android:overScrollMode="never"/>
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <Button
-        android:id="@+id/btnAddPhoto"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:layout_marginTop="8dp"
-        android:text="Add Photo"/>
+        <!-- Barcode -->
+        <EditText
+            android:id="@+id/etBarcode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/extreme_padding"
+            android:hint="Barcode"
+            android:inputType="number"/>
 
-    <!-- Barcode -->
-    <EditText
-        android:id="@+id/etBarcode"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:hint="Barcode"
-        android:inputType="number"/>
+        <Button
+            android:id="@+id/btnScanBarcode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginTop="@dimen/small_padding"
+            android:text="Scan Barcode"/>
 
-    <Button
-        android:id="@+id/btnScanBarcode"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:layout_marginTop="8dp"
-        android:text="Scan Barcode"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvSelectedPhotos"
+            android:layout_width="match_parent"
+            android:layout_height="164dp"
+            android:layout_marginTop="@dimen/large_padding"
+            android:orientation="horizontal"
+            android:overScrollMode="never"/>
+
+        <Button
+            android:id="@+id/btnAddPhoto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginTop="@dimen/small_padding"
+            android:text="Add Photo"/>
+    </LinearLayout>
 
     <!-- Submit -->
     <Button
         android:id="@+id/btnSubmit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_gravity="bottom"
+        android:layout_marginTop="@dimen/large_padding"
         android:enabled="false"
         android:text="Submit"/>
-</LinearLayout>
+</FrameLayout>
