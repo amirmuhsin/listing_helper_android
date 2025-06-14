@@ -43,14 +43,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/medium_padding"
-            android:text="Hello"/>
+            android:tools="Hello"/>
 
         <TextView
             android:id="@+id/tvProductDescription"
             style="@style/Body_4_TextAppearance"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Hello"/>
+            android:tools="Hello"/>
 
 
         <androidx.recyclerview.widget.RecyclerView
