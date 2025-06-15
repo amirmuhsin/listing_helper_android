@@ -23,11 +23,14 @@ class BgRemovalViewModel(
     private val appContext: Context
 ): BaseViewModel() {
 
-    private val _pairs = MutableStateFlow<List<PhotoPair>>(emptyList())
-    val pairs = _pairs.asStateFlow()
+    private val _flPairs = MutableStateFlow<List<PhotoPair>>(emptyList())
+    val flPairs = _flPairs.asStateFlow()
 
-    private val _updatedPair = MutableStateFlow<Pair<Int, PhotoPair?>>(Pair(-1, null))
-    val updatedPair = _updatedPair.asStateFlow()
+    private val _flUpdatedPair = MutableStateFlow<Pair<Int, PhotoPair?>>(Pair(-1, null))
+    val flUpdatedPair = _flUpdatedPair.asStateFlow()
+
+    private val _flProgress = MutableStateFlow<Int>(0)
+    val flProgress = _flProgress.asStateFlow()
 
     fun initOriginals(uriList: List<Uri>) {
         val pairs = mutableListOf<PhotoPair>()
@@ -35,17 +38,17 @@ class BgRemovalViewModel(
             val id = UUID.randomUUID().toString()
             pairs.add(PhotoPair(id, uri, null))
         }
-        _pairs.value = pairs
+        _flPairs.value = pairs
     }
 
     fun processAllOriginals() {
         // set all pairs to PROCESSING
-        _pairs.value = _pairs.value.map { pair ->
+        _flPairs.value = _flPairs.value.map { pair ->
             pair.copy(status = PhotoPair.Status.PROCESSING)
         }
 
         viewModelScope.launch(Dispatchers.IO) {
-            _pairs.value.forEachIndexed { index, pair ->
+            _flPairs.value.forEachIndexed { index, pair ->
                 // 1) Read the file from cacheDir
                 val originalUri = pair.originalUri
                 val tempFile = copyUriToTempFile(appContext, originalUri) ?: return@forEachIndexed
@@ -80,7 +83,9 @@ class BgRemovalViewModel(
                         pair.cleanedBitmap = bmp
                         pair.status = PhotoPair.Status.COMPLETED
                         // emit that pair individually
-                        _updatedPair.value = Pair(index, pair)
+                        _flUpdatedPair.value = Pair(index, pair)
+
+                        calculateProgress()
                     } else {
                         // 7) Handle non-2xx (e.g. quota exceeded, bad request)
                         throw HttpException(response)
@@ -89,6 +94,13 @@ class BgRemovalViewModel(
                 }
             }
         }
+    }
+
+    private fun calculateProgress() {
+        val total = _flPairs.value.size
+        if (total == 0) return
+        val completed = _flPairs.value.count { it.status == PhotoPair.Status.COMPLETED }
+        _flProgress.value = (completed * 100) / total
     }
 
 }

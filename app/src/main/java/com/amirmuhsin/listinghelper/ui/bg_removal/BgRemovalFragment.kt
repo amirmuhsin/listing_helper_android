@@ -7,6 +7,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.amirmuhsin.listinghelper.core_views.base.ui.BaseFragment
@@ -46,19 +47,28 @@ class BgRemovalFragment: BaseFragment<FragmentBgRemovalBinding, BgRemovalViewMod
         binding.btnProcess.setOnClickListener {
             viewModel.processAllOriginals()
         }
+        binding.flToolbar.ibBack.setOnClickListener {
+            findNavController().popBackStack()
+        }
     }
 
     override fun setObservers() {
-        viewModel.pairs
+        viewModel.flPairs
             .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
             .onEach { list ->
                 pairAdapter.setData(list)
             }.launchIn(lifecycleScope)
 
-        viewModel.updatedPair
+        viewModel.flUpdatedPair
             .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
             .onEach { updatedPair ->
                 pairAdapter.update(updatedPair)
+            }.launchIn(lifecycleScope)
+
+        viewModel.flProgress
+            .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
+            .onEach { progress ->
+                binding.pbProcess.progress = progress
             }.launchIn(lifecycleScope)
     }
 
