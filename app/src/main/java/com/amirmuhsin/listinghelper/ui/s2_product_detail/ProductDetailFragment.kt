@@ -6,10 +6,13 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.amirmuhsin.listinghelper.R
 import com.amirmuhsin.listinghelper.core_views.base.ui.BaseFragment
 import com.amirmuhsin.listinghelper.databinding.FragmentProductDetailBinding
 import com.amirmuhsin.listinghelper.domain.model.PhotoPair
+import com.amirmuhsin.listinghelper.ui.s2_product_detail.list.CleanedPhotoAdapter
 import com.amirmuhsin.listinghelper.util.parcelableList
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanOptions
@@ -24,6 +27,8 @@ class ProductDetailFragment: BaseFragment<FragmentProductDetailBinding, ProductD
         ProductDetailViewModelFactory()
     }
 
+    private lateinit var cleanedPhotosAdapter: CleanedPhotoAdapter
+
     private val barcodeLauncher = registerForActivityResult(ScanContract()) { result ->
         result?.contents?.let { code ->
             binding.etBarcode.setText(code)
@@ -35,6 +40,12 @@ class ProductDetailFragment: BaseFragment<FragmentProductDetailBinding, ProductD
             val cleanedPairs = bundle.parcelableList<PhotoPair>(ARG_IMAGE_URI) ?: emptyList()
             viewModel.setCleanedPhotos(cleanedPairs)
         }
+        cleanedPhotosAdapter = CleanedPhotoAdapter(requireContext(), {})
+    }
+
+    override fun prepareUI() {
+        binding.rvCleanedPhotos.layoutManager = GridLayoutManager(requireContext(), 3, RecyclerView.VERTICAL, false)
+        binding.rvCleanedPhotos.adapter = cleanedPhotosAdapter
     }
 
     override fun setListeners() {
@@ -65,9 +76,7 @@ class ProductDetailFragment: BaseFragment<FragmentProductDetailBinding, ProductD
 
         viewModel.flCleanedPhotos.flowWithLifecycle(lifecycle)
             .onEach { cleanedPhotos ->
-                binding.rvCleanedPhotos.adapter?.let { adapter ->
-//                    adapter.submitList(cleanedPhotos)
-                }
+                cleanedPhotosAdapter.submitList(cleanedPhotos)
             }.launchIn(lifecycleScope)
     }
 

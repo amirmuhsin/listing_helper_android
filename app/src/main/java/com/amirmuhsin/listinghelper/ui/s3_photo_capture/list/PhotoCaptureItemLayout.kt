@@ -29,7 +29,6 @@ class PhotoCaptureItemLayout(
 
     fun fillContent(uri: Uri) {
         currentUri = uri
-        binding.ivThumb.setImageURI(uri)
 
         binding.ivThumb.load(uri) {
             size(ViewSizeResolver(binding.ivThumb))

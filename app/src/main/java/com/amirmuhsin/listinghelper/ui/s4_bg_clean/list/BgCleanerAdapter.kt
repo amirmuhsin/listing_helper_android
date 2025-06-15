@@ -26,7 +26,6 @@ class BgCleanerAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PhotoPairViewHolder {
         val layout = BgCleanerItemLayout(context, onPhotoClick, onPhotoRemoveClick)
-
         return PhotoPairViewHolder(layout)
     }
 
