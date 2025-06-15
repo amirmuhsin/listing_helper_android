@@ -4,15 +4,24 @@ import android.content.Context
 import android.net.Uri
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 
 class PhotoPairAdapter(
     val context: Context,
     val onPhotoClick: () -> Unit,
     val onPhotoRemoveClick: (uri: Uri) -> Unit,
-): RecyclerView.Adapter<PhotoPairAdapter.PhotoPairViewHolder>() {
+): ListAdapter<PhotoPair, PhotoPairAdapter.PhotoPairViewHolder>(DIFF) {
 
-    val pairs = mutableListOf<PhotoPair>()
+    companion object {
+
+        private val DIFF = object: DiffUtil.ItemCallback<PhotoPair>() {
+            override fun areItemsTheSame(a: PhotoPair, b: PhotoPair) = a.id == b.id
+            override fun areContentsTheSame(a: PhotoPair, b: PhotoPair) =
+                a.status == b.status
+        }
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PhotoPairViewHolder {
         val layout = PhotoPairItemLayout(context, onPhotoClick, onPhotoRemoveClick)
@@ -21,30 +30,11 @@ class PhotoPairAdapter(
     }
 
     override fun onBindViewHolder(holder: PhotoPairViewHolder, position: Int) {
-        holder.layout.fillContent(pairs[position])
-    }
-
-    override fun getItemCount(): Int {
-        return pairs.size
-    }
-
-    fun setData(pairs: List<PhotoPair>) {
-        this.pairs.clear()
-        this.pairs.addAll(pairs)
-        notifyDataSetChanged()
-    }
-
-    fun update(updatedPair: Pair<Int, PhotoPair?>) {
-        val index = updatedPair.first
-        val pair = updatedPair.second
-        if (pair != null) {
-            pairs[index] = pair
-            notifyItemChanged(index)
-        }
+        val pair = getItem(position)
+        holder.layout.fillContent(pair)
     }
 
     inner class PhotoPairViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
-
         val layout = itemView as PhotoPairItemLayout
     }
 

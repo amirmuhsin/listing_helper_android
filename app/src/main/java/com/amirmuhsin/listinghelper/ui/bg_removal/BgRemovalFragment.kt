@@ -34,7 +34,6 @@ class BgRemovalFragment: BaseFragment<FragmentBgRemovalBinding, BgRemovalViewMod
         val uriList = requireArguments().getParcelableArrayList<Uri>(ARG_IMAGE_URI) ?: emptyList()
 
         viewModel.initOriginals(uriList)
-        println("hop: initial list: $uriList")
         pairAdapter = PhotoPairAdapter(requireContext(), {}, {})
     }
 
@@ -56,19 +55,14 @@ class BgRemovalFragment: BaseFragment<FragmentBgRemovalBinding, BgRemovalViewMod
         viewModel.flPairs
             .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
             .onEach { list ->
-                pairAdapter.setData(list)
-            }.launchIn(lifecycleScope)
-
-        viewModel.flUpdatedPair
-            .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
-            .onEach { updatedPair ->
-                pairAdapter.update(updatedPair)
+                pairAdapter.submitList(list)
             }.launchIn(lifecycleScope)
 
         viewModel.flProgress
             .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
             .onEach { progress ->
                 binding.pbProcess.progress = progress
+                binding.flToolbar.tvTitle.text = progress.toString() + "%"
             }.launchIn(lifecycleScope)
     }
 

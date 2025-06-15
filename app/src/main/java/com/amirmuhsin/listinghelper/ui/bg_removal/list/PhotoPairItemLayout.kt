@@ -40,12 +40,32 @@ class PhotoPairItemLayout(
 
             PhotoPair.Status.COMPLETED -> {
                 binding.pbLoading.visibility = GONE
-                binding.ivCleaned.load(photoPair.cleanedBitmap)
+                binding.ivCleaned.load(photoPair.cleanedBitmap) {
+                    val sizePx = getCellSizeInPx(context)
+                    size(sizePx, sizePx)
+                    crossfade(true)
+                }
             }
 
             PhotoPair.Status.FAILED -> {
                 binding.pbLoading.visibility = GONE
                 binding.ivCleaned.setImageResource(R.drawable.ic_report_16)
+            }
+        }
+    }
+
+    companion object {
+
+        private const val cellSizeInDP = 184
+        var cellSizeInPx = 0
+
+        private fun getCellSizeInPx(context: Context): Int {
+            return if (cellSizeInPx == 0) {
+                val scale = context.resources.displayMetrics.density
+                cellSizeInPx = (cellSizeInDP * scale + 0.5f).toInt()
+                cellSizeInPx
+            } else {
+                cellSizeInPx
             }
         }
     }

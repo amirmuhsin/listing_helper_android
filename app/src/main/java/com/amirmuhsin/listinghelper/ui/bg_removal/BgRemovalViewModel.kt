@@ -26,9 +26,6 @@ class BgRemovalViewModel(
     private val _flPairs = MutableStateFlow<List<PhotoPair>>(emptyList())
     val flPairs = _flPairs.asStateFlow()
 
-    private val _flUpdatedPair = MutableStateFlow<Pair<Int, PhotoPair?>>(Pair(-1, null))
-    val flUpdatedPair = _flUpdatedPair.asStateFlow()
-
     private val _flProgress = MutableStateFlow<Int>(0)
     val flProgress = _flProgress.asStateFlow()
 
@@ -47,11 +44,11 @@ class BgRemovalViewModel(
             pair.copy(status = PhotoPair.Status.PROCESSING)
         }
 
-        viewModelScope.launch(Dispatchers.IO) {
-            _flPairs.value.forEachIndexed { index, pair ->
+        _flPairs.value.forEachIndexed { index, pair ->
+            viewModelScope.launch {
                 // 1) Read the file from cacheDir
                 val originalUri = pair.originalUri
-                val tempFile = copyUriToTempFile(appContext, originalUri) ?: return@forEachIndexed
+                val tempFile = copyUriToTempFile(appContext, originalUri) ?: return@launch
 
                 // 2) Build MultipartBody.Part
                 val requestFile = tempFile
@@ -73,17 +70,20 @@ class BgRemovalViewModel(
                     )
                     if (response.isSuccessful) {
                         // 4) Read raw bytes (PNG/JPG/WEBP)
-                        val body = response.body() ?: return@forEachIndexed
+                        val body = response.body() ?: return@launch
                         val bytes = body.bytes()
 
                         // 5) Decode to Bitmap (on IO pool)
                         val bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
 
                         // 6) Store it and emit
-                        pair.cleanedBitmap = bmp
-                        pair.status = PhotoPair.Status.COMPLETED
-                        // emit that pair individually
-                        _flUpdatedPair.value = Pair(index, pair)
+                        _flPairs.value = _flPairs.value.map {
+                            if (it.id == pair.id) {
+                                it.copy(cleanedBitmap = bmp, status = PhotoPair.Status.COMPLETED)
+                            } else {
+                                it
+                            }
+                        }
 
                         calculateProgress()
                     } else {
@@ -91,6 +91,7 @@ class BgRemovalViewModel(
                         throw HttpException(response)
                     }
                 } catch (e: Exception) {
+                    //
                 }
             }
         }

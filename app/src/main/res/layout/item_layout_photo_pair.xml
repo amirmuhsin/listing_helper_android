@@ -14,20 +14,18 @@
 
         <ImageView
             android:id="@+id/ivOriginal"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_width="184dp"
+            android:layout_height="184dp"
             android:layout_marginRight="@dimen/very_small_padding"
-            android:layout_weight="1"
             android:background="?selectableItemBackground"
             android:clickable="true"
             android:focusable="true"
             android:scaleType="centerCrop"/>
 
         <FrameLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_width="184dp"
+            android:layout_height="184dp"
             android:layout_marginLeft="@dimen/very_small_padding"
-            android:layout_weight="1"
             android:background="@color/gradient_end_color">
 
             <ProgressBar
@@ -38,8 +36,8 @@
 
             <ImageView
                 android:id="@+id/ivCleaned"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_width="184dp"
+                android:layout_height="184dp"
                 android:background="?selectableItemBackground"
                 android:clickable="true"
                 android:focusable="true"

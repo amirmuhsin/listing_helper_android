@@ -43,7 +43,7 @@ class PhotoItemLayout(
         private const val cellSizeInDP = 64
         var cellSizeInPx = 0
 
-        fun getCellSizeInPx(context: Context): Int {
+        private fun getCellSizeInPx(context: Context): Int {
             return if (cellSizeInPx == 0) {
                 val scale = context.resources.displayMetrics.density
                 cellSizeInPx = (cellSizeInDP * scale + 0.5f).toInt()
