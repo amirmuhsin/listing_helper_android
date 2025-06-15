@@ -76,7 +76,7 @@ class BgCleanerFragment: BaseFragment<FragmentBgCleanerBinding, BgCleanerViewMod
             .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
             .onEach { progress ->
                 binding.pbProcess.progress = progress
-                binding.flToolbar.tvTitle.text = "$progress%"
+                binding.toolbar.tvTitle.text = "$progress%"
                 if (progress == 100) {
                     buttonStateDone()
                 }
