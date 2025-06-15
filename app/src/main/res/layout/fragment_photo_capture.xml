@@ -13,19 +13,21 @@
 
     <!-- 1. Top bar: Cancel | count | Done -->
     <LinearLayout
-        android:id="@+id/topBar"
+        android:id="@+id/llTopBar"
         android:layout_width="match_parent"
-        android:layout_height="64dp"
+        android:layout_height="48dp"
         android:background="#80000000"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:padding="8dp">
+        android:padding="@dimen/small_padding">
 
         <ImageButton
             android:id="@+id/btnCancel"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            style="@style/ImageButtonStyle"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="@dimen/very_small_padding"
             android:src="@drawable/ic_back_24"
             app:tint="@android:color/white"/>
 
@@ -40,6 +42,7 @@
 
         <Button
             android:id="@+id/btnDone"
+            style="@style/PrimaryButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:enabled="false"
@@ -56,15 +59,23 @@
         android:background="#80000000"
         android:clipToPadding="false"
         android:overScrollMode="never"
-        android:padding="8dp"/>
+        android:padding="@dimen/small_padding"/>
 
     <!-- 4. Shutter button -->
-    <ImageButton
-        android:id="@+id/btnCapture"
-        android:layout_width="72dp"
-        android:layout_height="72dp"
-        android:layout_gravity="bottom|center_horizontal"
-        android:layout_marginBottom="24dp"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:src="@drawable/selector_bg_btn_camera"/>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="24dp">
+
+        <ImageButton
+            android:id="@+id/btnCapture"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_gravity="center_horizontal"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/selector_bg_btn_camera"/>
+    </FrameLayout>
+
 </FrameLayout>
