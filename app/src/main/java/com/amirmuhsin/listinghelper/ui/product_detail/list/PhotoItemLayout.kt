@@ -5,7 +5,6 @@ import android.net.Uri
 import android.view.LayoutInflater
 import android.widget.FrameLayout
 import coil.load
-import com.amirmuhsin.listinghelper.R
 import com.amirmuhsin.listinghelper.databinding.ItemLayoutPhotoBinding
 
 class PhotoItemLayout(
@@ -14,19 +13,11 @@ class PhotoItemLayout(
     val photoRemove: (uri: Uri) -> Unit,
 ): FrameLayout(context) {
 
-    private val binding = ItemLayoutPhotoBinding.inflate(LayoutInflater.from(context), this)
+    private val binding = ItemLayoutPhotoBinding.inflate(LayoutInflater.from(context), this, true)
 
     private var currentUri: Uri? = null
 
     init {
-        layoutParams = LayoutParams(getCellSizeInPx(context), getCellSizeInPx(context))
-        val marginLp = layoutParams as MarginLayoutParams
-        val smallPadding = resources.getDimensionPixelSize(R.dimen.very_small_padding)
-        marginLp.setMargins(smallPadding, smallPadding, smallPadding, smallPadding)
-
-        isClickable = true
-        isFocusable = true
-
         setOnClickListener {
             photoClick()
         }
@@ -49,7 +40,7 @@ class PhotoItemLayout(
 
     companion object {
 
-        const val cellSizeInDP = 64
+        private const val cellSizeInDP = 64
         var cellSizeInPx = 0
 
         fun getCellSizeInPx(context: Context): Int {

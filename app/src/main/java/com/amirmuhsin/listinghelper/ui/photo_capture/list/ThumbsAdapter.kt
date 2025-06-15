@@ -7,10 +7,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.amirmuhsin.listinghelper.ui.product_detail.list.PhotoItemLayout
 
-class ThumbsAdapter(val context: Context,
+class ThumbsAdapter(
+    val context: Context,
     val onPhotoClick: () -> Unit,
     val onPhotoRemoveClick: (uri: Uri) -> Unit,
-    ) : RecyclerView.Adapter<ThumbsAdapter.PhotoViewHolder>() {
+): RecyclerView.Adapter<ThumbsAdapter.PhotoViewHolder>() {
 
     private val list = mutableListOf<Uri>()
 

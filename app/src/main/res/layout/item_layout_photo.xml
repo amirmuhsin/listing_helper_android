@@ -1,24 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merge>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/flProblemCell"
+    android:layout_width="80dp"
+    android:layout_height="80dp">
 
-    <FrameLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/flProblemCell"
+    <ImageView
+        android:id="@+id/ivThumb"
         android:layout_width="64dp"
-        android:layout_height="64dp">
+        android:layout_height="64dp"
+        android:layout_gravity="center"
+        android:background="@color/gray_item_bg_pressed"
+        android:scaleType="centerCrop"/>
 
-        <ImageView
-            android:id="@+id/ivThumb"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="centerCrop"/>
-
-        <ImageButton
-            android:id="@+id/btnRemove"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_gravity="top|end"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/selector_bg_btn_camera"/>
-    </FrameLayout>
-</merge>
+    <ImageButton
+        android:id="@+id/btnRemove"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_gravity="top|end"
+        android:src="@drawable/ic_remove"/>
+</FrameLayout>
