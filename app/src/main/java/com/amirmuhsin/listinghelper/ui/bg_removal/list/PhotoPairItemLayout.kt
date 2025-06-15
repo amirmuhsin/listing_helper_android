@@ -5,6 +5,7 @@ import android.net.Uri
 import android.view.LayoutInflater
 import android.widget.FrameLayout
 import coil.load
+import coil.size.ViewSizeResolver
 import com.amirmuhsin.listinghelper.R
 import com.amirmuhsin.listinghelper.databinding.ItemLayoutPhotoPairBinding
 
@@ -25,7 +26,11 @@ class PhotoPairItemLayout(
 
     fun fillContent(photoPair: PhotoPair) {
         this.photoPair = photoPair
-        binding.ivOriginal.load(photoPair.originalUri)
+
+        binding.ivOriginal.load(photoPair.originalUri) {
+            size(ViewSizeResolver(binding.ivCleaned))
+            crossfade(true)
+        }
 
         when (photoPair.status) {
             PhotoPair.Status.PENDING -> {
@@ -40,9 +45,8 @@ class PhotoPairItemLayout(
 
             PhotoPair.Status.COMPLETED -> {
                 binding.pbLoading.visibility = GONE
-                binding.ivCleaned.load(photoPair.cleanedBitmap) {
-                    val sizePx = getCellSizeInPx(context)
-                    size(sizePx, sizePx)
+                binding.ivCleaned.load(photoPair.cleanedUri) {
+                    size(binding.ivCleaned.width, binding.ivCleaned.height)
                     crossfade(true)
                 }
             }

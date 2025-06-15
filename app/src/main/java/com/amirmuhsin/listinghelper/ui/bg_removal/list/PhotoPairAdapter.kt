@@ -19,7 +19,7 @@ class PhotoPairAdapter(
         private val DIFF = object: DiffUtil.ItemCallback<PhotoPair>() {
             override fun areItemsTheSame(a: PhotoPair, b: PhotoPair) = a.id == b.id
             override fun areContentsTheSame(a: PhotoPair, b: PhotoPair) =
-                a.status == b.status
+                a.status == b.status && a.cleanedUri == b.cleanedUri
         }
     }
 

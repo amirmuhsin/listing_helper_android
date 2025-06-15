@@ -1,8 +1,8 @@
 package com.amirmuhsin.listinghelper.ui.bg_removal
 
 import android.content.Context
-import android.graphics.BitmapFactory
 import android.net.Uri
+import androidx.core.net.toUri
 import androidx.lifecycle.viewModelScope
 import com.amirmuhsin.listinghelper.core_views.base.viewmodel.BaseViewModel
 import com.amirmuhsin.listinghelper.networking.api.PhotoRoomService
@@ -16,6 +16,7 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import retrofit2.HttpException
+import java.io.File
 import java.util.UUID
 
 class BgRemovalViewModel(
@@ -45,7 +46,7 @@ class BgRemovalViewModel(
         }
 
         _flPairs.value.forEachIndexed { index, pair ->
-            viewModelScope.launch {
+            viewModelScope.launch(Dispatchers.IO) {
                 // 1) Read the file from cacheDir
                 val originalUri = pair.originalUri
                 val tempFile = copyUriToTempFile(appContext, originalUri) ?: return@launch
@@ -73,13 +74,15 @@ class BgRemovalViewModel(
                         val body = response.body() ?: return@launch
                         val bytes = body.bytes()
 
-                        // 5) Decode to Bitmap (on IO pool)
-                        val bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+                        // write bytes to file so Coil can load from disk
+                        val out = File(appContext.cacheDir, "cleaned_${pair.id}.png")
+                        out.writeBytes(bytes)
+                        val cleanedUri = out.toUri()
 
                         // 6) Store it and emit
                         _flPairs.value = _flPairs.value.map {
                             if (it.id == pair.id) {
-                                it.copy(cleanedBitmap = bmp, status = PhotoPair.Status.COMPLETED)
+                                it.copy(cleanedUri = cleanedUri, status = PhotoPair.Status.COMPLETED)
                             } else {
                                 it
                             }
