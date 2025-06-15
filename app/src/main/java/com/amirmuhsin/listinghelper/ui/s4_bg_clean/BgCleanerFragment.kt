@@ -53,7 +53,7 @@ class BgCleanerFragment: BaseFragment<FragmentBgCleanerBinding, BgCleanerViewMod
             viewModel.processAllOriginals()
             buttonStateProcessing()
         }
-        binding.flToolbar.ibBack.setOnClickListener {
+        binding.toolbar.ibBack.setOnClickListener {
             findNavController().popBackStack()
         }
         binding.btnDone.setOnClickListener {
