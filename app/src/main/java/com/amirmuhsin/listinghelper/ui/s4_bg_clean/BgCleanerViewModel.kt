@@ -1,4 +1,4 @@
-package com.amirmuhsin.listinghelper.ui.s4_bg_removal
+package com.amirmuhsin.listinghelper.ui.s4_bg_clean
 
 import android.content.Context
 import android.net.Uri
@@ -6,7 +6,7 @@ import androidx.core.net.toUri
 import androidx.lifecycle.viewModelScope
 import com.amirmuhsin.listinghelper.core_views.base.viewmodel.BaseViewModel
 import com.amirmuhsin.listinghelper.networking.api.PhotoRoomService
-import com.amirmuhsin.listinghelper.ui.s4_bg_removal.list.PhotoPair
+import com.amirmuhsin.listinghelper.ui.s4_bg_clean.list.PhotoPair
 import com.amirmuhsin.listinghelper.util.copyUriToTempFile
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,7 +19,7 @@ import retrofit2.HttpException
 import java.io.File
 import java.util.UUID
 
-class BgRemovalViewModel(
+class BgCleanerViewModel(
     private val service: PhotoRoomService,
     private val appContext: Context
 ): BaseViewModel() {
@@ -62,7 +62,7 @@ class BgRemovalViewModel(
                 //    val formatPart = RequestBody.create("text/plain".toMediaTypeOrNull(), "jpg")
 
                 try {
-                    val response = service.removeBackground(
+                    val response = service.cleanBackground(
                         image_file = multipart,
                         format = "png",   // or "jpg", "webp", or leave null for default
                         bgColor = "#FFFFFF", // if you want white background instead of transparency

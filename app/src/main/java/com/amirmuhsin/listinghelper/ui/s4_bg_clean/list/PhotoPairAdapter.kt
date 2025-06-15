@@ -1,4 +1,4 @@
-package com.amirmuhsin.listinghelper.ui.s4_bg_removal.list
+package com.amirmuhsin.listinghelper.ui.s4_bg_clean.list
 
 import android.content.Context
 import android.net.Uri

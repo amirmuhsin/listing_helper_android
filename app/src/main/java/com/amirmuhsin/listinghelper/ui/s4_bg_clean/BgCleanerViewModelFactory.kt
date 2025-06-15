@@ -1,19 +1,19 @@
-package com.amirmuhsin.listinghelper.ui.s4_bg_removal
+package com.amirmuhsin.listinghelper.ui.s4_bg_clean
 
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.amirmuhsin.listinghelper.networking.api.PhotoRoomService
 
-class BgRemovalViewModelFactory(
+class BgCleanerViewModelFactory(
     private val service: PhotoRoomService,
     private val appContext: Context
 ): ViewModelProvider.Factory {
 
     override fun <T: ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(BgRemovalViewModel::class.java)) {
+        if (modelClass.isAssignableFrom(BgCleanerViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return BgRemovalViewModel(service, appContext) as T
+            return BgCleanerViewModel(service, appContext) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
     }

@@ -35,8 +35,8 @@
 
     <fragment
         android:id="@+id/bgRemovalFragment"
-        android:name="com.amirmuhsin.listinghelper.ui.s4_bg_removal.BgRemovalFragment"
-        tools:layout="@layout/fragment_bg_removal">
+        android:name="com.amirmuhsin.listinghelper.ui.s4_bg_clean.BgCleanerFragment"
+        tools:layout="@layout/fragment_bg_cleaner">
         <action
             android:id="@+id/action_bgRemoval_to_productDetail"
             app:destination="@id/productDetailFragment"

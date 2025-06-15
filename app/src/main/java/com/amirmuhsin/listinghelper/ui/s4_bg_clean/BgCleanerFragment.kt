@@ -1,4 +1,4 @@
-package com.amirmuhsin.listinghelper.ui.s4_bg_removal
+package com.amirmuhsin.listinghelper.ui.s4_bg_clean
 
 import android.net.Uri
 import android.os.Bundle
@@ -14,19 +14,19 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.amirmuhsin.listinghelper.R
 import com.amirmuhsin.listinghelper.core_views.base.ui.BaseFragment
-import com.amirmuhsin.listinghelper.databinding.FragmentBgRemovalBinding
+import com.amirmuhsin.listinghelper.databinding.FragmentBgCleanerBinding
 import com.amirmuhsin.listinghelper.networking.PhotoRoomNetworkModule
-import com.amirmuhsin.listinghelper.ui.s4_bg_removal.list.PhotoPairAdapter
 import com.amirmuhsin.listinghelper.ui.s2_product_detail.ProductDetailFragment
+import com.amirmuhsin.listinghelper.ui.s4_bg_clean.list.PhotoPairAdapter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
-class BgRemovalFragment: BaseFragment<FragmentBgRemovalBinding, BgRemovalViewModel>(
-    FragmentBgRemovalBinding::inflate
+class BgCleanerFragment: BaseFragment<FragmentBgCleanerBinding, BgCleanerViewModel>(
+    FragmentBgCleanerBinding::inflate
 ) {
 
-    override val viewModel: BgRemovalViewModel by viewModels {
-        BgRemovalViewModelFactory(
+    override val viewModel: BgCleanerViewModel by viewModels {
+        BgCleanerViewModelFactory(
             PhotoRoomNetworkModule.photoRoomService,
             requireContext().applicationContext
         )
@@ -58,7 +58,7 @@ class BgRemovalFragment: BaseFragment<FragmentBgRemovalBinding, BgRemovalViewMod
         }
         binding.btnDone.setOnClickListener {
             setFragmentResult(
-                ProductDetailFragment.RK_BG_REMOVED_PHOTOS,
+                ProductDetailFragment.RK_CLEANED_PHOTOS,
                 bundleOf(ProductDetailFragment.ARG_IMAGE_URI to ArrayList(viewModel.flPairs.value))
             )
             findNavController().popBackStack(R.id.productDetailFragment, false)
@@ -90,7 +90,7 @@ class BgRemovalFragment: BaseFragment<FragmentBgRemovalBinding, BgRemovalViewMod
     }
 
     private fun buttonStateProcessing() {
-        binding.btnProcess.text = "Removing Background..."
+        binding.btnProcess.text = "Cleaning Background..."
         binding.btnProcess.visibility = View.VISIBLE
         binding.btnProcess.isEnabled = false
         binding.btnDone.visibility = View.GONE

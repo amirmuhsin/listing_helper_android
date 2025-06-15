@@ -10,7 +10,7 @@ import retrofit2.http.Part
 interface PhotoRoomService {
     @Multipart
     @POST("v1/segment")
-    suspend fun removeBackground(
+    suspend fun cleanBackground(
         @Part image_file: MultipartBody.Part,
         @Part("format") format: String? = null,
         @Part("bg_color") bgColor: String? = null,

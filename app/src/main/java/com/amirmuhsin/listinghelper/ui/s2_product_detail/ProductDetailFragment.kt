@@ -9,7 +9,7 @@ import androidx.navigation.fragment.findNavController
 import com.amirmuhsin.listinghelper.R
 import com.amirmuhsin.listinghelper.core_views.base.ui.BaseFragment
 import com.amirmuhsin.listinghelper.databinding.FragmentProductDetailBinding
-import com.amirmuhsin.listinghelper.ui.s4_bg_removal.list.PhotoPair
+import com.amirmuhsin.listinghelper.ui.s4_bg_clean.list.PhotoPair
 import com.amirmuhsin.listinghelper.util.parcelableList
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanOptions
@@ -31,7 +31,7 @@ class ProductDetailFragment: BaseFragment<FragmentProductDetailBinding, ProductD
     }
 
     override fun assignObjects() {
-        setFragmentResultListener(RK_BG_REMOVED_PHOTOS) { _, bundle ->
+        setFragmentResultListener(RK_CLEANED_PHOTOS) { _, bundle ->
             val cleanedPairs = bundle.parcelableList<PhotoPair>(ARG_IMAGE_URI) ?: emptyList()
             viewModel.setCleanedPhotos(cleanedPairs)
         }
@@ -82,7 +82,7 @@ class ProductDetailFragment: BaseFragment<FragmentProductDetailBinding, ProductD
 
     companion object {
 
-        const val RK_BG_REMOVED_PHOTOS = "rk:bg_removed_photos"
+        const val RK_CLEANED_PHOTOS = "rk:cleaned_photos"
         const val ARG_IMAGE_URI = "arg:image_uri"
     }
 }

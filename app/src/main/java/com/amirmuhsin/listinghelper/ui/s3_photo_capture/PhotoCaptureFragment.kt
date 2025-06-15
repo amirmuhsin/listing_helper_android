@@ -21,7 +21,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.amirmuhsin.listinghelper.R
 import com.amirmuhsin.listinghelper.core_views.base.ui.BaseFragment
 import com.amirmuhsin.listinghelper.databinding.FragmentPhotoCaptureBinding
-import com.amirmuhsin.listinghelper.ui.s4_bg_removal.BgRemovalFragment
+import com.amirmuhsin.listinghelper.ui.s4_bg_clean.BgCleanerFragment
 import com.amirmuhsin.listinghelper.ui.s3_photo_capture.list.ThumbnailsAdapter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -81,7 +81,7 @@ class PhotoCaptureFragment: BaseFragment<FragmentPhotoCaptureBinding, PhotoCaptu
 
             // Convert to an ArrayList<Uri> so it’s Parcelable
             val arrayList = ArrayList<Uri>(uriList)
-            val args = BgRemovalFragment.createArgs(arrayList)
+            val args = BgCleanerFragment.createArgs(arrayList)
             findNavController().navigate(R.id.action_open_bg_removal, args)
         }
         binding.btnCapture.setOnClickListener {
