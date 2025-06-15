@@ -53,7 +53,7 @@ class ProductDetailFragment: BaseFragment<FragmentProductDetailBinding, ProductD
             openBarcodeScanner()
         }
 
-        binding.btnAddPhoto.setOnClickListener {
+        binding.fabAddPhoto.setOnClickListener {
             findNavController().navigate(R.id.action_open_photo_capture)
         }
 

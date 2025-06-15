@@ -83,13 +83,21 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvProductShortDescription"/>
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabAddPhoto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/medium_padding"
+        android:layout_marginBottom="@dimen/huge_padding"
+        app:backgroundTint="@color/primary"
+        app:layout_constraintBottom_toTopOf="@id/flBottomContainer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/ic_add_a_photo_24"/>
+
     <FrameLayout
         android:id="@+id/flBottomContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/medium_padding"
-        android:layout_marginEnd="@dimen/medium_padding"
-        android:layout_marginBottom="@dimen/medium_padding"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
@@ -100,18 +108,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
+            android:layout_marginStart="@dimen/medium_padding"
+            android:layout_marginTop="@dimen/small_padding"
+            android:layout_marginEnd="@dimen/medium_padding"
+            android:layout_marginBottom="@dimen/medium_padding"
             android:enabled="false"
             android:text="Submit"/>
-
-        <Button
-            android:id="@+id/btnAddPhoto"
-            style="@style/SecondaryButtonStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:paddingHorizontal="@dimen/medium_padding"
-            android:text="Add Photo"/>
-
 
     </FrameLayout>
 
