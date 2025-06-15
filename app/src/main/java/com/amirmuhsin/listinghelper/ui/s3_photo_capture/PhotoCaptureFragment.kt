@@ -22,7 +22,7 @@ import com.amirmuhsin.listinghelper.R
 import com.amirmuhsin.listinghelper.core_views.base.ui.BaseFragment
 import com.amirmuhsin.listinghelper.databinding.FragmentPhotoCaptureBinding
 import com.amirmuhsin.listinghelper.ui.s4_bg_clean.BgCleanerFragment
-import com.amirmuhsin.listinghelper.ui.s3_photo_capture.list.ThumbnailsAdapter
+import com.amirmuhsin.listinghelper.ui.s3_photo_capture.list.PhotoCaptureAdapter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import java.io.File
@@ -38,7 +38,7 @@ class PhotoCaptureFragment: BaseFragment<FragmentPhotoCaptureBinding, PhotoCaptu
     private lateinit var cameraProvider: ProcessCameraProvider
     private lateinit var imageCapture: ImageCapture
     private lateinit var cameraExecutor: ExecutorService
-    private lateinit var thumbAdapter: ThumbnailsAdapter
+    private lateinit var thumbAdapter: PhotoCaptureAdapter
 
     private val requestPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
@@ -56,7 +56,7 @@ class PhotoCaptureFragment: BaseFragment<FragmentPhotoCaptureBinding, PhotoCaptu
     override fun assignObjects() {
         cameraExecutor = Executors.newSingleThreadExecutor()
 
-        thumbAdapter = ThumbnailsAdapter(requireContext(), {
+        thumbAdapter = PhotoCaptureAdapter(requireContext(), {
             // do nothing for now
         }, {
             viewModel.removePhoto(it)

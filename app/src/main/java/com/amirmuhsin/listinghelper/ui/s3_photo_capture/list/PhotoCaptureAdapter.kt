@@ -6,16 +6,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 
-class ThumbnailsAdapter(
+class PhotoCaptureAdapter(
     val context: Context,
     val onPhotoClick: () -> Unit,
     val onPhotoRemoveClick: (uri: Uri) -> Unit,
-): RecyclerView.Adapter<ThumbnailsAdapter.ThumbnailViewHolder>() {
+): RecyclerView.Adapter<PhotoCaptureAdapter.ThumbnailViewHolder>() {
 
     private val list = mutableListOf<Uri>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ThumbnailViewHolder {
-        val layout = ThumbnailItemLayout(context, onPhotoClick, onPhotoRemoveClick)
+        val layout = PhotoCaptureItemLayout(context, onPhotoClick, onPhotoRemoveClick)
         return ThumbnailViewHolder(layout)
     }
 
@@ -41,6 +41,6 @@ class ThumbnailsAdapter(
 
     inner class ThumbnailViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
 
-        val layout = itemView as ThumbnailItemLayout
+        val layout = itemView as PhotoCaptureItemLayout
     }
 }

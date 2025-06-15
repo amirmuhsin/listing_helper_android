@@ -8,7 +8,7 @@ import coil.load
 import coil.size.ViewSizeResolver
 import com.amirmuhsin.listinghelper.databinding.ItemLayoutPhotoBinding
 
-class ThumbnailItemLayout(
+class PhotoCaptureItemLayout(
     context: Context,
     val photoClick: () -> Unit,
     val photoRemove: (uri: Uri) -> Unit,
