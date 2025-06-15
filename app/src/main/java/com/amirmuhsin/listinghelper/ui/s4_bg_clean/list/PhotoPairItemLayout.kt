@@ -8,6 +8,7 @@ import coil.load
 import coil.size.ViewSizeResolver
 import com.amirmuhsin.listinghelper.R
 import com.amirmuhsin.listinghelper.databinding.ItemLayoutPhotoPairBinding
+import com.amirmuhsin.listinghelper.domain.model.PhotoPair
 
 class PhotoPairItemLayout(
     context: Context,

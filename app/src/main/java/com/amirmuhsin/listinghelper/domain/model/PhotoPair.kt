@@ -1,4 +1,4 @@
-package com.amirmuhsin.listinghelper.ui.s4_bg_clean.list
+package com.amirmuhsin.listinghelper.domain.model
 
 import android.net.Uri
 import android.os.Parcelable

@@ -4,7 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.amirmuhsin.listinghelper.core_views.base.viewmodel.BaseViewModel
 import com.amirmuhsin.listinghelper.domain.product.ProductRepository
 import com.amirmuhsin.listinghelper.networking.model.product.ProductAM
-import com.amirmuhsin.listinghelper.ui.s4_bg_clean.list.PhotoPair
+import com.amirmuhsin.listinghelper.domain.model.PhotoPair
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch

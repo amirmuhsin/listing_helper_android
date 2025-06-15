@@ -9,7 +9,7 @@ import androidx.navigation.fragment.findNavController
 import com.amirmuhsin.listinghelper.R
 import com.amirmuhsin.listinghelper.core_views.base.ui.BaseFragment
 import com.amirmuhsin.listinghelper.databinding.FragmentProductDetailBinding
-import com.amirmuhsin.listinghelper.ui.s4_bg_clean.list.PhotoPair
+import com.amirmuhsin.listinghelper.domain.model.PhotoPair
 import com.amirmuhsin.listinghelper.util.parcelableList
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanOptions
