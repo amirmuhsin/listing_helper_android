@@ -31,22 +31,6 @@
             android:src="@drawable/ic_back_24"
             app:tint="@android:color/white"/>
 
-        <TextView
-            android:id="@+id/tvCount"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="0 / 15"
-            android:textColor="@android:color/white"/>
-
-        <Button
-            android:id="@+id/btnDone"
-            style="@style/PrimaryButtonStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:enabled="false"
-            android:text="Done"/>
     </LinearLayout>
 
     <!-- 3. Thumbnail strip -->
@@ -76,6 +60,28 @@
             android:layout_gravity="center_horizontal"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:src="@drawable/selector_bg_btn_camera"/>
+
+        <TextView
+            android:id="@+id/tvCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="@dimen/huge_padding"
+            android:background="@color/secondary_btn_normal"
+            android:paddingHorizontal="@dimen/small_padding"
+            android:paddingVertical="@dimen/very_small_padding"
+            android:text="0 / 15"
+            android:textColor="@color/primary_text"/>
+
+        <Button
+            android:id="@+id/btnDone"
+            style="@style/SecondaryButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|center_vertical"
+            android:layout_marginRight="@dimen/large_padding"
+            android:enabled="false"
+            android:text="Done"/>
     </FrameLayout>
 
 </FrameLayout>
