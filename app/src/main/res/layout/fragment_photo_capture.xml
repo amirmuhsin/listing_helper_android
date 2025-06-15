@@ -42,7 +42,8 @@
         android:layout_marginBottom="100dp"
         android:background="#80000000"
         android:clipToPadding="false"
-        android:overScrollMode="never"/>
+        android:paddingStart="@dimen/medium_padding"
+        android:paddingEnd="@dimen/medium_padding"/>
 
     <!-- 4. Shutter button -->
 

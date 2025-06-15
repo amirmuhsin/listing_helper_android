@@ -2,14 +2,16 @@
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/flProblemCell"
-    android:layout_width="80dp"
-    android:layout_height="80dp">
+    android:layout_width="70dp"
+    android:layout_height="70dp"
+    android:layout_marginTop="@dimen/smallest_padding"
+    android:layout_marginRight="@dimen/very_small_padding">
 
     <ImageView
         android:id="@+id/ivThumb"
         android:layout_width="64dp"
         android:layout_height="64dp"
-        android:layout_gravity="center"
+        android:layout_gravity="bottom"
         android:background="@color/gray_item_bg_pressed"
         android:scaleType="centerCrop"/>
 
