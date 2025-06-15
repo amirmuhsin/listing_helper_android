@@ -10,7 +10,7 @@ import com.amirmuhsin.listinghelper.R
 import com.amirmuhsin.listinghelper.databinding.ItemLayoutPhotoPairBinding
 import com.amirmuhsin.listinghelper.domain.model.PhotoPair
 
-class PhotoPairItemLayout(
+class BgCleanerItemLayout(
     context: Context,
     val photoClick: () -> Unit,
     val photoRemove: (uri: Uri) -> Unit,

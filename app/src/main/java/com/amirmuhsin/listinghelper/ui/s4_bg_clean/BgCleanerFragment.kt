@@ -17,7 +17,7 @@ import com.amirmuhsin.listinghelper.core_views.base.ui.BaseFragment
 import com.amirmuhsin.listinghelper.databinding.FragmentBgCleanerBinding
 import com.amirmuhsin.listinghelper.networking.PhotoRoomNetworkModule
 import com.amirmuhsin.listinghelper.ui.s2_product_detail.ProductDetailFragment
-import com.amirmuhsin.listinghelper.ui.s4_bg_clean.list.PhotoPairAdapter
+import com.amirmuhsin.listinghelper.ui.s4_bg_clean.list.BgCleanerAdapter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
@@ -32,13 +32,13 @@ class BgCleanerFragment: BaseFragment<FragmentBgCleanerBinding, BgCleanerViewMod
         )
     }
 
-    private lateinit var pairAdapter: PhotoPairAdapter
+    private lateinit var pairAdapter: BgCleanerAdapter
 
     override fun assignObjects() {
         val uriList = requireArguments().getParcelableArrayList<Uri>(ARG_IMAGE_URI) ?: emptyList()
 
         viewModel.initOriginals(uriList)
-        pairAdapter = PhotoPairAdapter(requireContext(), {}, {})
+        pairAdapter = BgCleanerAdapter(requireContext(), {}, {})
     }
 
     override fun prepareUI() {

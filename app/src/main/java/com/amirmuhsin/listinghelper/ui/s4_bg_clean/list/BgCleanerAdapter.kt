@@ -9,11 +9,11 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.amirmuhsin.listinghelper.domain.model.PhotoPair
 
-class PhotoPairAdapter(
+class BgCleanerAdapter(
     val context: Context,
     val onPhotoClick: () -> Unit,
     val onPhotoRemoveClick: (uri: Uri) -> Unit,
-): ListAdapter<PhotoPair, PhotoPairAdapter.PhotoPairViewHolder>(DIFF) {
+): ListAdapter<PhotoPair, BgCleanerAdapter.PhotoPairViewHolder>(DIFF) {
 
     companion object {
 
@@ -25,7 +25,7 @@ class PhotoPairAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PhotoPairViewHolder {
-        val layout = PhotoPairItemLayout(context, onPhotoClick, onPhotoRemoveClick)
+        val layout = BgCleanerItemLayout(context, onPhotoClick, onPhotoRemoveClick)
 
         return PhotoPairViewHolder(layout)
     }
@@ -36,7 +36,7 @@ class PhotoPairAdapter(
     }
 
     inner class PhotoPairViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
-        val layout = itemView as PhotoPairItemLayout
+        val layout = itemView as BgCleanerItemLayout
     }
 
 }
