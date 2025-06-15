@@ -57,20 +57,4 @@ class PhotoPairItemLayout(
             }
         }
     }
-
-    companion object {
-
-        private const val cellSizeInDP = 184
-        var cellSizeInPx = 0
-
-        private fun getCellSizeInPx(context: Context): Int {
-            return if (cellSizeInPx == 0) {
-                val scale = context.resources.displayMetrics.density
-                cellSizeInPx = (cellSizeInDP * scale + 0.5f).toInt()
-                cellSizeInPx
-            } else {
-                cellSizeInPx
-            }
-        }
-    }
 }

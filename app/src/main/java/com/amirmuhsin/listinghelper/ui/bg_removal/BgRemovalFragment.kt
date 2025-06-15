@@ -2,6 +2,7 @@ package com.amirmuhsin.listinghelper.ui.bg_removal
 
 import android.net.Uri
 import android.os.Bundle
+import android.view.View
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -40,13 +41,19 @@ class BgRemovalFragment: BaseFragment<FragmentBgRemovalBinding, BgRemovalViewMod
     override fun prepareUI() {
         binding.rvPhotoPairs.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
         binding.rvPhotoPairs.adapter = pairAdapter
+
+        buttonStatePending()
     }
 
     override fun setListeners() {
         binding.btnProcess.setOnClickListener {
             viewModel.processAllOriginals()
+            buttonStateProcessing()
         }
         binding.flToolbar.ibBack.setOnClickListener {
+            findNavController().popBackStack()
+        }
+        binding.btnDone.setOnClickListener {
             findNavController().popBackStack()
         }
     }
@@ -62,8 +69,29 @@ class BgRemovalFragment: BaseFragment<FragmentBgRemovalBinding, BgRemovalViewMod
             .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
             .onEach { progress ->
                 binding.pbProcess.progress = progress
-                binding.flToolbar.tvTitle.text = progress.toString() + "%"
+                binding.flToolbar.tvTitle.text = "$progress%"
+                if (progress == 100) {
+                    buttonStateDone()
+                }
             }.launchIn(lifecycleScope)
+    }
+
+    private fun buttonStatePending() {
+        binding.btnProcess.isEnabled = true
+        binding.btnProcess.visibility = View.VISIBLE
+        binding.btnDone.visibility = View.GONE
+    }
+
+    private fun buttonStateProcessing() {
+        binding.btnProcess.text = "Removing Background..."
+        binding.btnProcess.visibility = View.VISIBLE
+        binding.btnProcess.isEnabled = false
+        binding.btnDone.visibility = View.GONE
+    }
+
+    private fun buttonStateDone() {
+        binding.btnProcess.visibility = View.GONE
+        binding.btnDone.visibility = View.VISIBLE
     }
 
     companion object {
