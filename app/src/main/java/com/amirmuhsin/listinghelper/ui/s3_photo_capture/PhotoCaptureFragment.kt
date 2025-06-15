@@ -1,4 +1,4 @@
-package com.amirmuhsin.listinghelper.ui.photo_capture
+package com.amirmuhsin.listinghelper.ui.s3_photo_capture
 
 import android.Manifest.permission.CAMERA
 import android.content.pm.PackageManager
@@ -21,8 +21,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.amirmuhsin.listinghelper.R
 import com.amirmuhsin.listinghelper.core_views.base.ui.BaseFragment
 import com.amirmuhsin.listinghelper.databinding.FragmentPhotoCaptureBinding
-import com.amirmuhsin.listinghelper.ui.bg_removal.BgRemovalFragment
-import com.amirmuhsin.listinghelper.ui.photo_capture.list.ThumbsAdapter
+import com.amirmuhsin.listinghelper.ui.s4_bg_removal.BgRemovalFragment
+import com.amirmuhsin.listinghelper.ui.s3_photo_capture.list.ThumbnailsAdapter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import java.io.File
@@ -38,7 +38,7 @@ class PhotoCaptureFragment: BaseFragment<FragmentPhotoCaptureBinding, PhotoCaptu
     private lateinit var cameraProvider: ProcessCameraProvider
     private lateinit var imageCapture: ImageCapture
     private lateinit var cameraExecutor: ExecutorService
-    private lateinit var thumbAdapter: ThumbsAdapter
+    private lateinit var thumbAdapter: ThumbnailsAdapter
 
     private val requestPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
@@ -56,7 +56,7 @@ class PhotoCaptureFragment: BaseFragment<FragmentPhotoCaptureBinding, PhotoCaptu
     override fun assignObjects() {
         cameraExecutor = Executors.newSingleThreadExecutor()
 
-        thumbAdapter = ThumbsAdapter(requireContext(), {
+        thumbAdapter = ThumbnailsAdapter(requireContext(), {
             // do nothing for now
         }, {
             viewModel.removePhoto(it)

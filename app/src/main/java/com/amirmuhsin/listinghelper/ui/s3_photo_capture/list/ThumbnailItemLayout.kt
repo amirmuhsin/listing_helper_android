@@ -1,13 +1,14 @@
-package com.amirmuhsin.listinghelper.ui.product_detail.list
+package com.amirmuhsin.listinghelper.ui.s3_photo_capture.list
 
 import android.content.Context
 import android.net.Uri
 import android.view.LayoutInflater
 import android.widget.FrameLayout
 import coil.load
+import coil.size.ViewSizeResolver
 import com.amirmuhsin.listinghelper.databinding.ItemLayoutPhotoBinding
 
-class PhotoItemLayout(
+class ThumbnailItemLayout(
     context: Context,
     val photoClick: () -> Unit,
     val photoRemove: (uri: Uri) -> Unit,
@@ -30,27 +31,9 @@ class PhotoItemLayout(
         currentUri = uri
         binding.ivThumb.setImageURI(uri)
 
-        val sizePx = getCellSizeInPx(context)
-
         binding.ivThumb.load(uri) {
-            size(sizePx, sizePx)
+            size(ViewSizeResolver(binding.ivThumb))
             crossfade(true)
-        }
-    }
-
-    companion object {
-
-        private const val cellSizeInDP = 64
-        var cellSizeInPx = 0
-
-        private fun getCellSizeInPx(context: Context): Int {
-            return if (cellSizeInPx == 0) {
-                val scale = context.resources.displayMetrics.density
-                cellSizeInPx = (cellSizeInDP * scale + 0.5f).toInt()
-                cellSizeInPx
-            } else {
-                cellSizeInPx
-            }
         }
     }
 }

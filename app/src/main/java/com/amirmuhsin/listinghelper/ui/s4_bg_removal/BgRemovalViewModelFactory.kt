@@ -1,4 +1,4 @@
-package com.amirmuhsin.listinghelper.ui.bg_removal
+package com.amirmuhsin.listinghelper.ui.s4_bg_removal
 
 import android.content.Context
 import androidx.lifecycle.ViewModel

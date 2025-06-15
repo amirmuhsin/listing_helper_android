@@ -1,26 +1,25 @@
-package com.amirmuhsin.listinghelper.ui.photo_capture.list
+package com.amirmuhsin.listinghelper.ui.s3_photo_capture.list
 
 import android.content.Context
 import android.net.Uri
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.amirmuhsin.listinghelper.ui.product_detail.list.PhotoItemLayout
 
-class ThumbsAdapter(
+class ThumbnailsAdapter(
     val context: Context,
     val onPhotoClick: () -> Unit,
     val onPhotoRemoveClick: (uri: Uri) -> Unit,
-): RecyclerView.Adapter<ThumbsAdapter.PhotoViewHolder>() {
+): RecyclerView.Adapter<ThumbnailsAdapter.ThumbnailViewHolder>() {
 
     private val list = mutableListOf<Uri>()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PhotoViewHolder {
-        val layout = PhotoItemLayout(context, onPhotoClick, onPhotoRemoveClick)
-        return PhotoViewHolder(layout)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ThumbnailViewHolder {
+        val layout = ThumbnailItemLayout(context, onPhotoClick, onPhotoRemoveClick)
+        return ThumbnailViewHolder(layout)
     }
 
-    override fun onBindViewHolder(holder: PhotoViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ThumbnailViewHolder, position: Int) {
         val uri = list[position]
         holder.layout.fillContent(uri)
     }
@@ -40,9 +39,8 @@ class ThumbsAdapter(
         notifyItemRemoved(indexOf)
     }
 
-    inner class PhotoViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+    inner class ThumbnailViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
 
-        val layout = itemView as PhotoItemLayout
+        val layout = itemView as ThumbnailItemLayout
     }
-
 }

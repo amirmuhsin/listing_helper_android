@@ -1,4 +1,4 @@
-package com.amirmuhsin.listinghelper.ui.product_detail
+package com.amirmuhsin.listinghelper.ui.s2_product_detail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

@@ -25,14 +25,15 @@
                 android:layout_height="@dimen/app_edit_text_height"
                 android:layout_marginRight="@dimen/small_padding"
                 android:layout_weight="1"
+                android:enabled="false"
                 android:hint="Barcode"
                 android:inputType="text"/>
 
             <ImageButton
                 android:id="@+id/btnScanBarcode"
                 style="@style/ImageButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
                 android:layout_gravity="center"
                 android:background="@drawable/selector_bg_btn_secondary"
                 android:src="@drawable/ic_scan_barcode"/>
@@ -55,7 +56,7 @@
 
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvSelectedPhotos"
+            android:id="@+id/rvCleanedPhotos"
             android:layout_width="match_parent"
             android:layout_height="164dp"
             android:layout_marginTop="@dimen/large_padding"

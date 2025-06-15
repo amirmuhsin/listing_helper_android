@@ -1,4 +1,4 @@
-package com.amirmuhsin.listinghelper.ui.bg_removal
+package com.amirmuhsin.listinghelper.ui.s4_bg_removal
 
 import android.content.Context
 import android.net.Uri
@@ -6,7 +6,7 @@ import androidx.core.net.toUri
 import androidx.lifecycle.viewModelScope
 import com.amirmuhsin.listinghelper.core_views.base.viewmodel.BaseViewModel
 import com.amirmuhsin.listinghelper.networking.api.PhotoRoomService
-import com.amirmuhsin.listinghelper.ui.bg_removal.list.PhotoPair
+import com.amirmuhsin.listinghelper.ui.s4_bg_removal.list.PhotoPair
 import com.amirmuhsin.listinghelper.util.copyUriToTempFile
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow

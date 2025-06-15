@@ -1,4 +1,4 @@
-package com.amirmuhsin.listinghelper.ui
+package com.amirmuhsin.listinghelper.ui.empty
 
 import androidx.fragment.app.viewModels
 import com.amirmuhsin.listinghelper.core_views.base.ui.BaseFragment

@@ -8,7 +8,7 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.amirmuhsin.listinghelper.ui.home.HomeFragment"
+        android:name="com.amirmuhsin.listinghelper.ui.s1_home.HomeFragment"
         tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_open_product_details"
@@ -17,7 +17,7 @@
 
     <fragment
         android:id="@+id/productDetailFragment"
-        android:name="com.amirmuhsin.listinghelper.ui.product_detail.ProductDetailFragment"
+        android:name="com.amirmuhsin.listinghelper.ui.s2_product_detail.ProductDetailFragment"
         tools:layout="@layout/fragment_product_detail">
         <action
             android:id="@+id/action_open_photo_capture"
@@ -26,7 +26,7 @@
 
     <fragment
         android:id="@+id/photoCaptureFragment"
-        android:name="com.amirmuhsin.listinghelper.ui.photo_capture.PhotoCaptureFragment"
+        android:name="com.amirmuhsin.listinghelper.ui.s3_photo_capture.PhotoCaptureFragment"
         tools:layout="@layout/fragment_photo_capture">
         <action
             android:id="@+id/action_open_bg_removal"
@@ -35,7 +35,13 @@
 
     <fragment
         android:id="@+id/bgRemovalFragment"
-        android:name="com.amirmuhsin.listinghelper.ui.bg_removal.BgRemovalFragment"
-        tools:layout="@layout/fragment_bg_removal"/>
+        android:name="com.amirmuhsin.listinghelper.ui.s4_bg_removal.BgRemovalFragment"
+        tools:layout="@layout/fragment_bg_removal">
+        <action
+            android:id="@+id/action_bgRemoval_to_productDetail"
+            app:destination="@id/productDetailFragment"
+            app:popUpTo="@id/productDetailFragment"
+            app:popUpToInclusive="false"/>
+    </fragment>
 
 </navigation>

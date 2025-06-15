@@ -1,4 +1,4 @@
-package com.amirmuhsin.listinghelper.ui.photo_capture
+package com.amirmuhsin.listinghelper.ui.s3_photo_capture
 
 import android.net.Uri
 import com.amirmuhsin.listinghelper.core_views.base.viewmodel.BaseViewModel

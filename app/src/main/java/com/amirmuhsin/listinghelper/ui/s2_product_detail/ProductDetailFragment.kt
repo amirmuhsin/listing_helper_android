@@ -1,6 +1,7 @@
-package com.amirmuhsin.listinghelper.ui.product_detail
+package com.amirmuhsin.listinghelper.ui.s2_product_detail
 
 import androidx.core.widget.doAfterTextChanged
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
@@ -8,6 +9,8 @@ import androidx.navigation.fragment.findNavController
 import com.amirmuhsin.listinghelper.R
 import com.amirmuhsin.listinghelper.core_views.base.ui.BaseFragment
 import com.amirmuhsin.listinghelper.databinding.FragmentProductDetailBinding
+import com.amirmuhsin.listinghelper.ui.s4_bg_removal.list.PhotoPair
+import com.amirmuhsin.listinghelper.util.parcelableList
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanOptions
 import kotlinx.coroutines.flow.launchIn
@@ -28,6 +31,10 @@ class ProductDetailFragment: BaseFragment<FragmentProductDetailBinding, ProductD
     }
 
     override fun assignObjects() {
+        setFragmentResultListener(RK_BG_REMOVED_PHOTOS) { _, bundle ->
+            val cleanedPairs = bundle.parcelableList<PhotoPair>(ARG_IMAGE_URI) ?: emptyList()
+            viewModel.setCleanedPhotos(cleanedPairs)
+        }
     }
 
     override fun setListeners() {
@@ -55,6 +62,13 @@ class ProductDetailFragment: BaseFragment<FragmentProductDetailBinding, ProductD
                     binding.tvProductShortDescription.text = product.shortDescription
                 }
             }.launchIn(lifecycleScope)
+
+        viewModel.flCleanedPhotos.flowWithLifecycle(lifecycle)
+            .onEach { cleanedPhotos ->
+                binding.rvCleanedPhotos.adapter?.let { adapter ->
+//                    adapter.submitList(cleanedPhotos)
+                }
+            }.launchIn(lifecycleScope)
     }
 
     private fun openBarcodeScanner() {
@@ -64,5 +78,11 @@ class ProductDetailFragment: BaseFragment<FragmentProductDetailBinding, ProductD
             setDesiredBarcodeFormats(ScanOptions.ONE_D_CODE_TYPES)
         }
         barcodeLauncher.launch(options)
+    }
+
+    companion object {
+
+        const val RK_BG_REMOVED_PHOTOS = "rk:bg_removed_photos"
+        const val ARG_IMAGE_URI = "arg:image_uri"
     }
 }

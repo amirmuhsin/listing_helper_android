@@ -1,9 +1,10 @@
-package com.amirmuhsin.listinghelper.ui.bg_removal
+package com.amirmuhsin.listinghelper.ui.s4_bg_removal
 
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.core.os.bundleOf
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
@@ -11,10 +12,12 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.amirmuhsin.listinghelper.R
 import com.amirmuhsin.listinghelper.core_views.base.ui.BaseFragment
 import com.amirmuhsin.listinghelper.databinding.FragmentBgRemovalBinding
 import com.amirmuhsin.listinghelper.networking.PhotoRoomNetworkModule
-import com.amirmuhsin.listinghelper.ui.bg_removal.list.PhotoPairAdapter
+import com.amirmuhsin.listinghelper.ui.s4_bg_removal.list.PhotoPairAdapter
+import com.amirmuhsin.listinghelper.ui.s2_product_detail.ProductDetailFragment
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
@@ -54,7 +57,11 @@ class BgRemovalFragment: BaseFragment<FragmentBgRemovalBinding, BgRemovalViewMod
             findNavController().popBackStack()
         }
         binding.btnDone.setOnClickListener {
-            findNavController().popBackStack()
+            setFragmentResult(
+                ProductDetailFragment.RK_BG_REMOVED_PHOTOS,
+                bundleOf(ProductDetailFragment.ARG_IMAGE_URI to ArrayList(viewModel.flPairs.value))
+            )
+            findNavController().popBackStack(R.id.productDetailFragment, false)
         }
     }
 

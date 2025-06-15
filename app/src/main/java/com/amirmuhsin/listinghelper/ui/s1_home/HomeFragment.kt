@@ -1,4 +1,4 @@
-package com.amirmuhsin.listinghelper.ui.home
+package com.amirmuhsin.listinghelper.ui.s1_home
 
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
