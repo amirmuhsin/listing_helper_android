@@ -22,4 +22,10 @@
         app:backgroundTint="@color/primary"
         app:srcCompat="@drawable/ic_add_24"/>
 
+    <FrameLayout
+        android:id="@+id/flBannerAd"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_gravity="bottom"/>
+
 </FrameLayout>
