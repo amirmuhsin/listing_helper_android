@@ -39,9 +39,11 @@ class BgCleanerViewModel(
                     internalId = id,
                     originalUri = uri,
                     cleanedUri = null,
-                    status = PhotoPair.Status.PENDING,
+                    bgCleanStatus = PhotoPair.BgCleanStatus.PENDING,
                     order = index + 1,
-                    isUploaded = false
+                    resolution = "256x256 TEST",
+                    sizeInBytes = 400,
+                    imageType = ".png TEST"
                 )
             )
         }
@@ -51,7 +53,7 @@ class BgCleanerViewModel(
     fun processAllOriginals() {
         // set all pairs to PROCESSING
         _flPairs.value = _flPairs.value.map { pair ->
-            pair.copy(status = PhotoPair.Status.PROCESSING)
+            pair.copy(bgCleanStatus = PhotoPair.BgCleanStatus.PROCESSING)
         }
 
         _flPairs.value.forEachIndexed { index, pair ->
@@ -91,7 +93,7 @@ class BgCleanerViewModel(
                         // 6) Store it and emit
                         _flPairs.value = _flPairs.value.map {
                             if (it.internalId == pair.internalId) {
-                                it.copy(cleanedUri = cleanedUri, status = PhotoPair.Status.COMPLETED)
+                                it.copy(cleanedUri = cleanedUri, bgCleanStatus = PhotoPair.BgCleanStatus.COMPLETED)
                             } else {
                                 it
                             }
@@ -112,7 +114,7 @@ class BgCleanerViewModel(
     private fun calculateProgress() {
         val total = _flPairs.value.size
         if (total == 0) return
-        val completed = _flPairs.value.count { it.status == PhotoPair.Status.COMPLETED }
+        val completed = _flPairs.value.count { it.bgCleanStatus == PhotoPair.BgCleanStatus.COMPLETED }
         _flProgress.value = (completed * 100) / total
     }
 

@@ -20,7 +20,7 @@ class CleanedPhotoAdapter(
                 a.internalId == b.internalId
 
             override fun areContentsTheSame(a: PhotoPair, b: PhotoPair) =
-                a.cleanedUri == b.cleanedUri && a.status == b.status
+                a.cleanedUri == b.cleanedUri && a.bgCleanStatus == b.bgCleanStatus
         }
     }
 

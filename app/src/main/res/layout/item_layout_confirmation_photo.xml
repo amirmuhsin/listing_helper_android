@@ -1,44 +1,110 @@
-<merge
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="150dp"
+    android:background="@color/gradient_end_color">
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+    <ImageView
+        android:id="@+id/ivPhoto"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/very_small_padding"
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_width="150dp"
+        tools:src="@drawable/img_emoji_book"/>
 
-        <ImageView
-            android:id="@+id/ivPhoto"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="centerCrop"/>
+    <TextView
+        android:id="@+id/tvOrder"
+        style="@style/Body_4_TextAppearance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/very_small_padding"
+        android:gravity="center"
+        android:text="Order: 1"
+        app:layout_constraintStart_toEndOf="@id/ivPhoto"
+        app:layout_constraintTop_toTopOf="parent"/>
 
-        <TextView
-            android:id="@+id/tvOrder"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_margin="4dp"
-            android:gravity="center"
-            android:textColor="@android:color/white"/>
+    <TextView
+        android:id="@+id/tvResolution"
+        style="@style/Body_4_TextAppearance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/very_small_padding"
+        android:gravity="center"
+        android:text="500x500"
+        app:layout_constraintStart_toEndOf="@id/ivPhoto"
+        app:layout_constraintTop_toBottomOf="@id/tvOrder"/>
 
-        <ProgressBar
-            android:id="@+id/pbItem"
-            style="?android:attr/progressBarStyleSmall"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_gravity="center"/>
+    <TextView
+        android:id="@+id/tvSize"
+        style="@style/Body_4_TextAppearance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/very_small_padding"
+        android:gravity="center"
+        android:text="244 KB"
+        app:layout_constraintStart_toEndOf="@id/ivPhoto"
+        app:layout_constraintTop_toBottomOf="@id/tvResolution"/>
 
-        <ImageView
-            android:id="@+id/ivCheck"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_gravity="center"
-            android:visibility="gone"/>
+    <TextView
+        android:id="@+id/tvFileType"
+        style="@style/Body_4_TextAppearance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/very_small_padding"
+        android:gravity="center"
+        android:text=".jpg"
+        app:layout_constraintStart_toEndOf="@id/ivPhoto"
+        app:layout_constraintTop_toBottomOf="@id/tvSize"/>
 
-        <ImageButton
-            android:id="@+id/btnRemove"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_gravity="top|end"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/ic_remove"/>
-    </FrameLayout>
-</merge>
+    <ProgressBar
+        android:id="@+id/pbUploading"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/small_padding"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <ImageView
+        android:id="@+id/ivUploadStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/small_padding"
+        android:padding="@dimen/small_padding"
+        android:src="@drawable/ic_warning"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:visibility="visible"/>
+
+    <ImageButton
+        android:id="@+id/btnRemove"
+        style="@style/ImageButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/very_small_padding"
+        android:src="@drawable/ic_trash"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/ivPhoto"/>
+
+    <ImageButton
+        android:id="@+id/btnHandle"
+        style="@style/ImageButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/small_padding"
+        android:layout_marginBottom="@dimen/large_padding"
+        android:src="@drawable/ic_drag_handle"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

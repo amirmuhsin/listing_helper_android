@@ -20,7 +20,7 @@ class BgCleanerAdapter(
         private val DIFF = object: DiffUtil.ItemCallback<PhotoPair>() {
             override fun areItemsTheSame(a: PhotoPair, b: PhotoPair) = a.internalId == b.internalId
             override fun areContentsTheSame(a: PhotoPair, b: PhotoPair) =
-                a.status == b.status && a.cleanedUri == b.cleanedUri
+                a.bgCleanStatus == b.bgCleanStatus && a.cleanedUri == b.cleanedUri
         }
     }
 

@@ -7,32 +7,57 @@ import android.widget.FrameLayout
 import androidx.core.view.isVisible
 import coil.load
 import coil.size.ViewSizeResolver
+import com.amirmuhsin.listinghelper.R
 import com.amirmuhsin.listinghelper.databinding.ItemLayoutConfirmationPhotoBinding
 import com.amirmuhsin.listinghelper.domain.model.PhotoPair
+import com.amirmuhsin.listinghelper.domain.model.PhotoPair.UploadStatus
 
 class ConfirmationItemLayout(
     context: Context,
-    val onClick: (PhotoPair) -> Unit,
-    val onRemove: (PhotoPair) -> Unit
+    val onPhotoClick: (PhotoPair) -> Unit,
+    val onRemoveClick: (PhotoPair) -> Unit
 ): FrameLayout(context) {
 
-    private val binding = ItemLayoutConfirmationPhotoBinding
-        .inflate(LayoutInflater.from(context), this)
+    private val binding = ItemLayoutConfirmationPhotoBinding.inflate(LayoutInflater.from(context), this, true)
     private var current: PhotoPair? = null
 
     init {
-        binding.ivPhoto.setOnClickListener { current?.let(onClick) }
-        binding.btnRemove.setOnClickListener { current?.let(onRemove) }
+        binding.ivPhoto.setOnClickListener { current?.let(onPhotoClick) }
+        binding.btnRemove.setOnClickListener { current?.let(onRemoveClick) }
     }
 
-    fun fillContent(pair: PhotoPair, order: Int) {
+    fun fillContent(pair: PhotoPair) {
         current = pair
-        binding.tvOrder.text = order.toString()
+
+        binding.tvOrder.text = pair.order.toString()
+        binding.tvResolution.text = pair.resolution
+        binding.tvSize.text = pair.sizeInBytes.toString()
+
         binding.ivPhoto.load(pair.cleanedUri) {
             size(ViewSizeResolver(binding.ivPhoto))
             crossfade(true)
         }
-        binding.pbItem.isVisible = !pair.isUploaded
-        binding.ivCheck.isVisible = pair.isUploaded
+
+        binding.pbUploading.isVisible = false
+        binding.ivUploadStatus.isVisible = false
+        when (pair.uploadStatus) {
+            UploadStatus.PENDING -> {
+                // Do nothing, show default state
+            }
+
+            UploadStatus.UPLOADING -> {
+                binding.pbUploading.isVisible = true
+            }
+
+            UploadStatus.UPLOADED -> {
+                binding.ivUploadStatus.isVisible = true
+                binding.ivUploadStatus.setImageResource(R.drawable.ic_check)
+            }
+
+            UploadStatus.FAILED -> {
+                binding.ivUploadStatus.isVisible = true
+                binding.ivUploadStatus.setImageResource(R.drawable.ic_warning)
+            }
+        }
     }
 }

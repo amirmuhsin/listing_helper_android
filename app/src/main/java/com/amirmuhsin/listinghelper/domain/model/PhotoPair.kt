@@ -9,15 +9,25 @@ data class PhotoPair(
     val internalId: String,
     val originalUri: Uri,
     var cleanedUri: Uri?,
-    var status: Status = Status.PENDING,
+    var bgCleanStatus: BgCleanStatus = BgCleanStatus.PENDING,
     var order: Int,
-    var isUploaded: Boolean = false
+    var resolution: String? = null,
+    var uploadStatus: UploadStatus = UploadStatus.PENDING,
+    var sizeInBytes: Int = 0,
+    var imageType: String
 ): Parcelable {
 
-    enum class Status {
+    enum class BgCleanStatus {
         PENDING,
         PROCESSING,
         COMPLETED,
+        FAILED
+    }
+
+    enum class UploadStatus {
+        PENDING,
+        UPLOADING,
+        UPLOADED,
         FAILED
     }
 }

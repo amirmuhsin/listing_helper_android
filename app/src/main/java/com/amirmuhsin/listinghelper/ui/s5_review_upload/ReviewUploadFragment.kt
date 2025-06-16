@@ -25,7 +25,6 @@ class ReviewUploadFragment: BaseFragment<FragmentReviewUploadBinding, ReviewUplo
     private var productItemId: Long = -1L
 
     override fun assignObjects() {
-        // Receive cleaned URI list from args
         productItemId = requireArguments().getLong(ARG_PRODUCT_ITEM_ID, -1L)
         val pairs = requireArguments().parcelableList<PhotoPair>(ARG_PAIRS) ?: emptyList()
 

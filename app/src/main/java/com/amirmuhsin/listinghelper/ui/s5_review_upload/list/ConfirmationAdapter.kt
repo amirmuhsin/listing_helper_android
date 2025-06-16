@@ -1,4 +1,3 @@
-// ConfirmationAdapter.kt
 package com.amirmuhsin.listinghelper.ui.s5_review_upload.list
 
 import android.content.Context
@@ -16,11 +15,10 @@ class ConfirmationAdapter(
 ): ListAdapter<PhotoPair, ConfirmationAdapter.VH>(DIFF) {
 
     companion object {
-
         private val DIFF = object: DiffUtil.ItemCallback<PhotoPair>() {
             override fun areItemsTheSame(a: PhotoPair, b: PhotoPair) = a.internalId == b.internalId
             override fun areContentsTheSame(a: PhotoPair, b: PhotoPair) =
-                a.order == b.order && a.cleanedUri == b.cleanedUri && a.isUploaded == b.isUploaded
+                a.order == b.order && a.cleanedUri == b.cleanedUri && a.uploadStatus == b.uploadStatus
         }
     }
 
@@ -30,11 +28,11 @@ class ConfirmationAdapter(
     }
 
     override fun onBindViewHolder(holder: VH, position: Int) {
-        holder.layout.fillContent(getItem(position), position + 1)
+        val pair = getItem(position)
+        holder.layout.fillContent(pair)
     }
 
     inner class VH(itemView: View): RecyclerView.ViewHolder(itemView) {
-
         val layout = itemView as ConfirmationItemLayout
     }
 }

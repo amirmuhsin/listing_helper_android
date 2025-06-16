@@ -33,18 +33,18 @@ class BgCleanerItemLayout(
             crossfade(true)
         }
 
-        when (photoPair.status) {
-            PhotoPair.Status.PENDING -> {
+        when (photoPair.bgCleanStatus) {
+            PhotoPair.BgCleanStatus.PENDING -> {
                 binding.pbLoading.visibility = GONE
                 binding.ivCleaned.setImageResource(0)
             }
 
-            PhotoPair.Status.PROCESSING -> {
+            PhotoPair.BgCleanStatus.PROCESSING -> {
                 binding.pbLoading.visibility = VISIBLE
                 binding.ivCleaned.setImageResource(0)
             }
 
-            PhotoPair.Status.COMPLETED -> {
+            PhotoPair.BgCleanStatus.COMPLETED -> {
                 binding.pbLoading.visibility = GONE
                 binding.ivCleaned.load(photoPair.cleanedUri) {
                     size(binding.ivCleaned.width, binding.ivCleaned.height)
@@ -52,7 +52,7 @@ class BgCleanerItemLayout(
                 }
             }
 
-            PhotoPair.Status.FAILED -> {
+            PhotoPair.BgCleanStatus.FAILED -> {
                 binding.pbLoading.visibility = GONE
                 binding.ivCleaned.setImageResource(R.drawable.ic_report_16)
             }
