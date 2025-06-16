@@ -45,7 +45,7 @@
     <TextView
         android:id="@+id/tvProductName"
         style="@style/SubTitle_4_TextAppearance"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/medium_padding"
         android:layout_marginTop="@dimen/medium_padding"
@@ -60,7 +60,7 @@
     <TextView
         android:id="@+id/tvProductShortDescription"
         style="@style/Body_4_TextAppearance"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/medium_padding"
         android:layout_marginTop="@dimen/small_padding"
