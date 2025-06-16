@@ -43,7 +43,8 @@ class ReviewUploadItemLayout(
         binding.ivUploadStatus.isVisible = false
         when (pair.uploadStatus) {
             UploadStatus.PENDING -> {
-                // Do nothing, show default state
+                binding.ivUploadStatus.isVisible = true
+                binding.ivUploadStatus.setImageResource(R.drawable.ic_upload)
             }
 
             UploadStatus.UPLOADING -> {
