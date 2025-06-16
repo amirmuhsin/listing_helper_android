@@ -1,6 +1,8 @@
 package com.amirmuhsin.listinghelper.repository
 
+import android.content.Context
 import android.net.Uri
+import android.util.Base64
 import com.amirmuhsin.listinghelper.domain.product.ProductRepository
 import com.amirmuhsin.listinghelper.networking.api.ImageService
 import com.amirmuhsin.listinghelper.networking.api.ProductService
@@ -10,6 +12,7 @@ import com.amirmuhsin.listinghelper.networking.model.request.UploadProductImageR
 import retrofit2.HttpException
 
 class ProductRepositoryImpl(
+    private val context: Context,
     private val productService: ProductService,
     private val imageService: ImageService
 ): ProductRepository {
@@ -44,13 +47,18 @@ class ProductRepositoryImpl(
     }
 
     override suspend fun uploadImage(itemId: Long, uri: Uri, channelId: String): ImageAM {
-        val response = imageService.uploadProductImage(
-            itemId = itemId,
-            request = UploadProductImageRequest(
-                itemData = "", // binary data of the image
-                salesChannelId = channelId,
-            )
+        val inputStream = context.contentResolver.openInputStream(uri)
+            ?: throw IllegalArgumentException("Cannot open URI: $uri")
+        val bytes = inputStream.use { it.readBytes() }
+
+        val base64Data = Base64.encodeToString(bytes, Base64.NO_WRAP)
+
+        val request = UploadProductImageRequest(
+            itemData = base64Data,
+            salesChannelId = channelId
         )
+
+        val response = imageService.uploadProductImage(itemId, request)
         if (!response.isSuccessful) {
             throw HttpException(response)
         }

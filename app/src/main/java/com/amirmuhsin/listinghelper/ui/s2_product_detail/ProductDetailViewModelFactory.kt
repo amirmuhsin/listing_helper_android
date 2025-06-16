@@ -1,11 +1,13 @@
 package com.amirmuhsin.listinghelper.ui.s2_product_detail
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.amirmuhsin.listinghelper.networking.ProductNetworkModule
 import com.amirmuhsin.listinghelper.repository.ProductRepositoryImpl
 
 class ProductDetailViewModelFactory(
+    private val context: Context
 ): ViewModelProvider.Factory {
 
     override fun <T: ViewModel> create(modelClass: Class<T>): T {
@@ -13,6 +15,7 @@ class ProductDetailViewModelFactory(
             @Suppress("UNCHECKED_CAST")
             return ProductDetailViewModel(
                 productRepository = ProductRepositoryImpl(
+                    context = context,
                     ProductNetworkModule.productService,
                     ProductNetworkModule.imageService
                 )

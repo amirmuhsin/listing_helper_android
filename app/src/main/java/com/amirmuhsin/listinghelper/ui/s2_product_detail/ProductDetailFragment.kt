@@ -26,7 +26,7 @@ class ProductDetailFragment: BaseFragment<FragmentProductDetailBinding, ProductD
 ) {
 
     override val viewModel: ProductDetailViewModel by viewModels {
-        ProductDetailViewModelFactory()
+        ProductDetailViewModelFactory(requireContext())
     }
 
     private lateinit var cleanedPhotosAdapter: CleanedPhotoAdapter

@@ -19,7 +19,7 @@ class ReviewUploadFragment: BaseFragment<FragmentReviewUploadBinding, ReviewUplo
     FragmentReviewUploadBinding::inflate
 ) {
 
-    override val viewModel: ReviewUploadViewModel by viewModels { ReviewUploadViewModelFactory() }
+    override val viewModel: ReviewUploadViewModel by viewModels { ReviewUploadViewModelFactory(requireContext()) }
 
     private lateinit var adapter: ReviewUploadAdapter
     private var productItemId: Long = -1L
@@ -46,9 +46,9 @@ class ReviewUploadFragment: BaseFragment<FragmentReviewUploadBinding, ReviewUplo
 
     override fun setListeners() {
         binding.btnUpload.setOnClickListener {
-            viewModel.uploadAll(productItemId, adapter.currentList)
+            viewModel.uploadAll(productItemId)
         }
-        binding.flToolbar.ibBack.setOnClickListener {
+        binding.toolbar.ibBack.setOnClickListener {
             findNavController().popBackStack()
         }
     }
@@ -61,14 +61,7 @@ class ReviewUploadFragment: BaseFragment<FragmentReviewUploadBinding, ReviewUplo
 
         viewModel.uploadProgress
             .flowWithLifecycle(viewLifecycleOwner.lifecycle)
-            .onEach { binding.pbOverall.progress = it }
-            .launchIn(lifecycleScope)
-
-        viewModel.uploadedIds
-            .flowWithLifecycle(viewLifecycleOwner.lifecycle)
-            .onEach { id ->
-
-            }
+            .onEach { binding.pbUpload.progress = it }
             .launchIn(lifecycleScope)
     }
 

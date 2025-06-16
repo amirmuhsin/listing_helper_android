@@ -3,7 +3,7 @@ package com.amirmuhsin.listinghelper.ui.s5_review_upload.list
 
 import android.content.Context
 import android.view.LayoutInflater
-import android.widget.FrameLayout
+import android.widget.RelativeLayout
 import androidx.core.view.isVisible
 import coil.load
 import coil.size.ViewSizeResolver
@@ -16,7 +16,7 @@ class ReviewUploadItemLayout(
     context: Context,
     val onPhotoClick: (PhotoPair) -> Unit,
     val onRemoveClick: (PhotoPair) -> Unit
-): FrameLayout(context) {
+): RelativeLayout(context) {
 
     private val binding = ItemLayoutConfirmationPhotoBinding.inflate(LayoutInflater.from(context), this, true)
     private var current: PhotoPair? = null

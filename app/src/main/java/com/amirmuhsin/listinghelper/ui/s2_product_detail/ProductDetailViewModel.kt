@@ -21,7 +21,7 @@ class ProductDetailViewModel(
 
     fun onBarcodeChanged(sku: String) {
         viewModelScope.launch {
-            val product = productRepository.getProductsBySku("R06-685510")
+            val product = productRepository.getProductsBySku(sku)
             _fProduct.value = product
         }
     }

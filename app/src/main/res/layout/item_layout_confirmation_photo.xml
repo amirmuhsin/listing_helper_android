@@ -4,19 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="150dp"
+    android:layout_marginBottom="@dimen/small_padding"
     android:background="@color/gradient_end_color">
 
     <ImageView
         android:id="@+id/ivPhoto"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_width="142dp"
+        android:layout_height="142dp"
         android:layout_margin="@dimen/very_small_padding"
-        android:adjustViewBounds="true"
         android:scaleType="centerCrop"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:layout_width="150dp"
         tools:src="@drawable/img_emoji_book"/>
 
     <TextView
