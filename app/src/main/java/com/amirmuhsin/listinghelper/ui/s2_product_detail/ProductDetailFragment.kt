@@ -13,6 +13,7 @@ import com.amirmuhsin.listinghelper.core_views.base.ui.BaseFragment
 import com.amirmuhsin.listinghelper.databinding.FragmentProductDetailBinding
 import com.amirmuhsin.listinghelper.domain.model.PhotoPair
 import com.amirmuhsin.listinghelper.ui.s2_product_detail.list.CleanedPhotoAdapter
+import com.amirmuhsin.listinghelper.ui.s5_review_upload.ReviewUploadFragment
 import com.amirmuhsin.listinghelper.util.parcelableList
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanOptions
@@ -52,15 +53,23 @@ class ProductDetailFragment: BaseFragment<FragmentProductDetailBinding, ProductD
         binding.btnScanBarcode.setOnClickListener {
             openBarcodeScanner()
         }
-
         binding.fabAddPhoto.setOnClickListener {
             findNavController().navigate(R.id.action_open_photo_capture)
         }
-
         binding.etBarcode.doAfterTextChanged {
             val barcode = it.toString()
             if (barcode.isNotEmpty()) {
                 viewModel.onBarcodeChanged(barcode)
+            }
+        }
+        binding.btnReview.setOnClickListener {
+            val product = viewModel.fProduct.value
+            val hasProduct = product != null
+            if (hasProduct) {
+                val args = ReviewUploadFragment.createArgs(product.id, viewModel.flCleanedPhotos.value)
+                findNavController().navigate(R.id.action_open_review_upload, args)
+            } else {
+                showErrorSnackbar("Product not found")
             }
         }
     }
@@ -77,6 +86,7 @@ class ProductDetailFragment: BaseFragment<FragmentProductDetailBinding, ProductD
         viewModel.flCleanedPhotos.flowWithLifecycle(lifecycle)
             .onEach { cleanedPhotos ->
                 cleanedPhotosAdapter.submitList(cleanedPhotos)
+                binding.btnReview.isEnabled = cleanedPhotos.size >= 2
             }.launchIn(lifecycleScope)
     }
 

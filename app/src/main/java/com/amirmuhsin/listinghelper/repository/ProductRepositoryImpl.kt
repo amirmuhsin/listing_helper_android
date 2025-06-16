@@ -1,5 +1,6 @@
 package com.amirmuhsin.listinghelper.repository
 
+import android.net.Uri
 import com.amirmuhsin.listinghelper.domain.product.ProductRepository
 import com.amirmuhsin.listinghelper.networking.api.ImageService
 import com.amirmuhsin.listinghelper.networking.api.ProductService
@@ -42,12 +43,17 @@ class ProductRepositoryImpl(
         return resp.body()!!
     }
 
-    override suspend fun uploadImage(
-        itemId: Long,
-        request: UploadProductImageRequest
-    ): ImageAM {
-        val resp = imageService.uploadProductImage(itemId, request)
-        if (!resp.isSuccessful) throw HttpException(resp)
-        return resp.body()!!
+    override suspend fun uploadImage(itemId: Long, uri: Uri, channelId: String): ImageAM {
+        val response = imageService.uploadProductImage(
+            itemId = itemId,
+            request = UploadProductImageRequest(
+                itemData = "", // binary data of the image
+                salesChannelId = channelId,
+            )
+        )
+        if (!response.isSuccessful) {
+            throw HttpException(response)
+        }
+        return response.body()!!
     }
 }

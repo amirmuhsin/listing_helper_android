@@ -1,0 +1,46 @@
+<merge
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/ivPhoto"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"/>
+
+        <TextView
+            android:id="@+id/tvOrder"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_margin="4dp"
+            android:background="@drawable/circle_bg"
+            android:gravity="center"
+            android:textColor="@android:color/white"/>
+
+        <ProgressBar
+            android:id="@+id/pbItem"
+            style="?android:attr/progressBarStyleSmall"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center"/>
+
+        <ImageView
+            android:id="@+id/ivCheck"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_check_24"
+            android:visibility="gone"/>
+
+        <ImageButton
+            android:id="@+id/btnRemove"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="top|end"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_close_16"/>
+    </FrameLayout>
+</merge>

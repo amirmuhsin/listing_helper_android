@@ -5,8 +5,8 @@ import android.net.Uri
 import androidx.core.net.toUri
 import androidx.lifecycle.viewModelScope
 import com.amirmuhsin.listinghelper.core_views.base.viewmodel.BaseViewModel
-import com.amirmuhsin.listinghelper.networking.api.PhotoRoomService
 import com.amirmuhsin.listinghelper.domain.model.PhotoPair
+import com.amirmuhsin.listinghelper.networking.api.PhotoRoomService
 import com.amirmuhsin.listinghelper.util.copyUriToTempFile
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -32,9 +32,18 @@ class BgCleanerViewModel(
 
     fun initOriginals(uriList: List<Uri>) {
         val pairs = mutableListOf<PhotoPair>()
-        uriList.forEach { uri ->
+        uriList.forEachIndexed { index, uri ->
             val id = UUID.randomUUID().toString()
-            pairs.add(PhotoPair(id, uri, null))
+            pairs.add(
+                PhotoPair(
+                    internalId = id,
+                    originalUri = uri,
+                    cleanedUri = null,
+                    status = PhotoPair.Status.PENDING,
+                    order = index + 1,
+                    isUploaded = false
+                )
+            )
         }
         _flPairs.value = pairs
     }
@@ -75,13 +84,13 @@ class BgCleanerViewModel(
                         val bytes = body.bytes()
 
                         // write bytes to file so Coil can load from disk
-                        val out = File(appContext.cacheDir, "cleaned_${pair.id}.png")
+                        val out = File(appContext.cacheDir, "cleaned_${pair.internalId}.png")
                         out.writeBytes(bytes)
                         val cleanedUri = out.toUri()
 
                         // 6) Store it and emit
                         _flPairs.value = _flPairs.value.map {
-                            if (it.id == pair.id) {
+                            if (it.internalId == pair.internalId) {
                                 it.copy(cleanedUri = cleanedUri, status = PhotoPair.Status.COMPLETED)
                             } else {
                                 it

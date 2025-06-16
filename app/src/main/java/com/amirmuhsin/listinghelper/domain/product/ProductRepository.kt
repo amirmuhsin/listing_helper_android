@@ -1,5 +1,6 @@
 package com.amirmuhsin.listinghelper.domain.product
 
+import android.net.Uri
 import com.amirmuhsin.listinghelper.networking.model.product.ImageAM
 import com.amirmuhsin.listinghelper.networking.model.product.ProductAM
 import com.amirmuhsin.listinghelper.networking.model.request.UploadProductImageRequest
@@ -14,7 +15,8 @@ interface ProductRepository {
 
     suspend fun uploadImage(
         itemId: Long,
-        request: UploadProductImageRequest
+        uri: Uri,
+        channelId: String
     ): ImageAM
 
 }

@@ -17,7 +17,7 @@ class CleanedPhotoAdapter(
 
         private val DIFF = object: DiffUtil.ItemCallback<PhotoPair>() {
             override fun areItemsTheSame(a: PhotoPair, b: PhotoPair) =
-                a.id == b.id
+                a.internalId == b.internalId
 
             override fun areContentsTheSame(a: PhotoPair, b: PhotoPair) =
                 a.cleanedUri == b.cleanedUri && a.status == b.status
