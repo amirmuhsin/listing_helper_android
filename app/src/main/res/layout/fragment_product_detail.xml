@@ -28,9 +28,13 @@
             android:layout_height="@dimen/app_edit_text_height"
             android:layout_marginEnd="@dimen/small_padding"
             android:layout_weight="1"
-            android:enabled="false"
+            android:cursorVisible="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
             android:hint="Barcode"
-            android:inputType="text"/>
+            android:inputType="none"
+            android:longClickable="false"
+            android:textIsSelectable="false"/>
 
         <ImageButton
             android:id="@+id/btnScanBarcode"
