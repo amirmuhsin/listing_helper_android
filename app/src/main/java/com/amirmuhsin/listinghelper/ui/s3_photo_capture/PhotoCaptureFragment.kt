@@ -3,12 +3,14 @@ package com.amirmuhsin.listinghelper.ui.s3_photo_capture
 import android.Manifest.permission.CAMERA
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.util.Size
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.camera.core.AspectRatio
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
+import androidx.camera.core.resolutionselector.ResolutionSelector
+import androidx.camera.core.resolutionselector.ResolutionStrategy
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
@@ -21,8 +23,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.amirmuhsin.listinghelper.R
 import com.amirmuhsin.listinghelper.core_views.base.ui.BaseFragment
 import com.amirmuhsin.listinghelper.databinding.FragmentPhotoCaptureBinding
-import com.amirmuhsin.listinghelper.ui.s4_bg_clean.BgCleanerFragment
 import com.amirmuhsin.listinghelper.ui.s3_photo_capture.list.PhotoCaptureAdapter
+import com.amirmuhsin.listinghelper.ui.s4_bg_clean.BgCleanerFragment
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import java.io.File
@@ -92,6 +94,10 @@ class PhotoCaptureFragment: BaseFragment<FragmentPhotoCaptureBinding, PhotoCaptu
     override fun prepareUI() {
         binding.rvThumbnails.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         binding.rvThumbnails.adapter = thumbAdapter
+
+        val width = resources.displayMetrics.widthPixels
+        binding.previewView.layoutParams.height = width
+        binding.previewView.requestLayout()
     }
 
     override fun setObservers() {
@@ -122,23 +128,23 @@ class PhotoCaptureFragment: BaseFragment<FragmentPhotoCaptureBinding, PhotoCaptu
     private fun bindCameraUseCases() {
         cameraProvider.unbindAll()
 
-        // 1) Sharper live preview (16:9 or a fixed resolution)
+        val resolution = Size(1600, 1600)
+
+        val resolutionSelector = ResolutionSelector.Builder()
+            .setResolutionStrategy(
+                ResolutionStrategy(resolution, ResolutionStrategy.FALLBACK_RULE_CLOSEST_LOWER)
+            )
+            .build()
+
         val preview = Preview.Builder()
-            // pick your desired aspect ratio:
-            .setTargetAspectRatio(AspectRatio.RATIO_16_9)
-            // or lock to a high-res the device can support:
-            // .setTargetResolution(Size(1280, 720))
+            .setResolutionSelector(resolutionSelector)
             .setTargetRotation(binding.previewView.display.rotation)
             .build()
-            .also { it.setSurfaceProvider(binding.previewView.surfaceProvider) }
+            .also { it.surfaceProvider = binding.previewView.surfaceProvider }
 
-        // 2) Max-quality captures
         imageCapture = ImageCapture.Builder()
-            // ask for the best JPEG
+            .setResolutionSelector(resolutionSelector)
             .setCaptureMode(ImageCapture.CAPTURE_MODE_MAXIMIZE_QUALITY)
-            // optionally lock resolution if you know your sensor size:
-            // .setTargetResolution(Size(4032, 3024))
-            .setTargetAspectRatio(AspectRatio.RATIO_16_9)
             .setTargetRotation(binding.previewView.display.rotation)
             .build()
 
