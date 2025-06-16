@@ -8,11 +8,11 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.amirmuhsin.listinghelper.domain.model.PhotoPair
 
-class ConfirmationAdapter(
+class ReviewUploadAdapter(
     private val context: Context,
     private val onPhotoClick: (PhotoPair) -> Unit,
     private val onPhotoRemove: (PhotoPair) -> Unit
-): ListAdapter<PhotoPair, ConfirmationAdapter.VH>(DIFF) {
+): ListAdapter<PhotoPair, ReviewUploadAdapter.VH>(DIFF) {
 
     companion object {
         private val DIFF = object: DiffUtil.ItemCallback<PhotoPair>() {
@@ -23,7 +23,7 @@ class ConfirmationAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
-        val layout = ConfirmationItemLayout(context, onPhotoClick, onPhotoRemove)
+        val layout = ReviewUploadItemLayout(context, onPhotoClick, onPhotoRemove)
         return VH(layout)
     }
 
@@ -33,6 +33,6 @@ class ConfirmationAdapter(
     }
 
     inner class VH(itemView: View): RecyclerView.ViewHolder(itemView) {
-        val layout = itemView as ConfirmationItemLayout
+        val layout = itemView as ReviewUploadItemLayout
     }
 }

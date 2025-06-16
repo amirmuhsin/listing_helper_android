@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.amirmuhsin.listinghelper.core_views.base.ui.BaseFragment
 import com.amirmuhsin.listinghelper.databinding.FragmentReviewUploadBinding
 import com.amirmuhsin.listinghelper.domain.model.PhotoPair
-import com.amirmuhsin.listinghelper.ui.s5_review_upload.list.ConfirmationAdapter
+import com.amirmuhsin.listinghelper.ui.s5_review_upload.list.ReviewUploadAdapter
 import com.amirmuhsin.listinghelper.util.parcelableList
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -21,14 +21,14 @@ class ReviewUploadFragment: BaseFragment<FragmentReviewUploadBinding, ReviewUplo
 
     override val viewModel: ReviewUploadViewModel by viewModels { ReviewUploadViewModelFactory() }
 
-    private lateinit var adapter: ConfirmationAdapter
+    private lateinit var adapter: ReviewUploadAdapter
     private var productItemId: Long = -1L
 
     override fun assignObjects() {
         productItemId = requireArguments().getLong(ARG_PRODUCT_ITEM_ID, -1L)
         val pairs = requireArguments().parcelableList<PhotoPair>(ARG_PAIRS) ?: emptyList()
 
-        adapter = ConfirmationAdapter(
+        adapter = ReviewUploadAdapter(
             requireContext(),
             onPhotoClick = { pair -> /* open full screen */ },
             onPhotoRemove = { pair -> viewModel.removePair(pair) }
@@ -67,7 +67,7 @@ class ReviewUploadFragment: BaseFragment<FragmentReviewUploadBinding, ReviewUplo
         viewModel.uploadedIds
             .flowWithLifecycle(viewLifecycleOwner.lifecycle)
             .onEach { id ->
-//                adapter.markUploaded(id)
+
             }
             .launchIn(lifecycleScope)
     }

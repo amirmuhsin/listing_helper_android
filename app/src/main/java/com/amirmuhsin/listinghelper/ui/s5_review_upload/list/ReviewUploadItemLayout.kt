@@ -12,7 +12,7 @@ import com.amirmuhsin.listinghelper.databinding.ItemLayoutConfirmationPhotoBindi
 import com.amirmuhsin.listinghelper.domain.model.PhotoPair
 import com.amirmuhsin.listinghelper.domain.model.PhotoPair.UploadStatus
 
-class ConfirmationItemLayout(
+class ReviewUploadItemLayout(
     context: Context,
     val onPhotoClick: (PhotoPair) -> Unit,
     val onRemoveClick: (PhotoPair) -> Unit

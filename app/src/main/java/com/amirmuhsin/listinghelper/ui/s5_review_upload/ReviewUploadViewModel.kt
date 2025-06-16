@@ -48,31 +48,3 @@ class ReviewUploadViewModel(
         }
     }
 }
-
-///**
-// * Returns a Callback to enable drag & drop reordering in the RecyclerView.
-// */
-//fun ReviewUploadViewModel.dragCallback(adapter: ConfirmationAdapter): ItemTouchHelper.Callback {
-//    return object: ItemTouchHelper.SimpleCallback(
-//        ItemTouchHelper.UP or ItemTouchHelper.DOWN,
-//        0
-//    ) {
-//        override fun onMove(
-//            recyclerView: RecyclerView,
-//            viewHolder: RecyclerView.ViewHolder,
-//            target: RecyclerView.ViewHolder
-//        ): Boolean {
-//            val from = viewHolder.bindingAdapterPosition
-//            val to = target.bindingAdapterPosition
-//            // Swap items in the ViewModel state
-//            val updated = _pairs.value.toMutableList().apply { Collections.swap(this, from, to) }
-//            _pairs.value = updated
-//            adapter.notifyItemMoved(from, to)
-//            return true
-//        }
-//
-//        override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-//            // No swipe actions
-//        }
-//    }
-//}
