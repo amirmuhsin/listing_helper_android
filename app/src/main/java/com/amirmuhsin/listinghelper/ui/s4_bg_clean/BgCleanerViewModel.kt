@@ -75,7 +75,7 @@ class BgCleanerViewModel(
                 try {
                     val response = service.cleanBackground(
                         image_file = multipart,
-                        format = "png",   // or "jpg", "webp", or leave null for default
+                        format = "jpg",   // or "jpg", "webp", or leave null for default
                         bgColor = "#FFFFFF", // if you want white background instead of transparency
                         size = "full",
                         crop = false
@@ -86,7 +86,7 @@ class BgCleanerViewModel(
                         val bytes = body.bytes()
 
                         // write bytes to file so Coil can load from disk
-                        val out = File(appContext.cacheDir, "cleaned_${pair.internalId}.png")
+                        val out = File(appContext.cacheDir, "cleaned_${pair.internalId}.jpg")
                         out.writeBytes(bytes)
                         val cleanedUri = out.toUri()
 
