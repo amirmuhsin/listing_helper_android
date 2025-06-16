@@ -1,5 +1,6 @@
 package com.amirmuhsin.listinghelper.ui.s2_product_detail
 
+import android.view.View
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
@@ -72,6 +73,9 @@ class ProductDetailFragment: BaseFragment<FragmentProductDetailBinding, ProductD
                 showErrorSnackbar("Product not found")
             }
         }
+        binding.toolbar.ibBack.setOnClickListener {
+            findNavController().popBackStack()
+        }
     }
 
     override fun setObservers() {
@@ -80,6 +84,8 @@ class ProductDetailFragment: BaseFragment<FragmentProductDetailBinding, ProductD
                 if (product != null) {
                     binding.tvProductName.text = product.name
                     binding.tvProductShortDescription.text = product.shortDescription
+                    binding.tvProductName.visibility = View.VISIBLE
+                    binding.tvProductShortDescription.visibility = View.VISIBLE
                 }
             }.launchIn(lifecycleScope)
 

@@ -50,10 +50,12 @@
         android:layout_marginStart="@dimen/medium_padding"
         android:layout_marginTop="@dimen/medium_padding"
         android:layout_marginEnd="@dimen/medium_padding"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/llBarcode"
-        tools:text="Product Name"/>
+        tools:text="Product Name"
+        tools:visibility="visible"/>
 
     <TextView
         android:id="@+id/tvProductShortDescription"
@@ -63,10 +65,12 @@
         android:layout_marginStart="@dimen/medium_padding"
         android:layout_marginTop="@dimen/small_padding"
         android:layout_marginEnd="@dimen/medium_padding"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvProductName"
-        tools:text="Description"/>
+        tools:text="Description"
+        tools:visibility="visible"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvCleanedPhotos"
