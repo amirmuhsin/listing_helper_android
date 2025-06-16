@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.amirmuhsin.listinghelper.core_views.base.viewmodel.BaseViewModel
 import com.amirmuhsin.listinghelper.domain.model.PhotoPair
 import com.amirmuhsin.listinghelper.domain.product.ProductRepository
+import com.amirmuhsin.listinghelper.ui.s5_review_upload.command.ReviewUploadCommands
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -29,14 +30,17 @@ class ReviewUploadViewModel(
     fun uploadAll(productItemId: Long) {
         val list = _pairs.value
 
+        // set all pairs to UPLOADING
+        println("hop: VM: updating all to UPLOADING")
+        _pairs.value = _pairs.value.map { pair ->
+            pair.copy(uploadStatus = PhotoPair.UploadStatus.UPLOADING)
+        }
+
+        var uploadCount = 0
+
         viewModelScope.launch {
-            showProgressDialog()
             val total = list.size
             list.forEachIndexed { index, pair ->
-                // update the status to UPLOADING
-                pair.uploadStatus = PhotoPair.UploadStatus.UPLOADING
-                updatePair(pair)
-
                 // start uploading
                 try {
                     val imageAM = repo.uploadImage(productItemId, pair.cleanedUri!!, "1-1-1")
@@ -44,22 +48,34 @@ class ReviewUploadViewModel(
 
                     println("Image uploaded successfully: $imageAM")
                     pair.uploadStatus = PhotoPair.UploadStatus.UPLOADED
+                    println("hop: VM: updating pair to UPLOADED: $pair")
                     updatePair(pair)
 
+                    uploadCount++
+                    sendCommand(ReviewUploadCommands.UploadItemProgress(uploadCount, total))
                 } catch (e: Exception) {
                     showErrorSnackbar("Upload failed: ${e.message}")
 
                     pair.uploadStatus = PhotoPair.UploadStatus.FAILED
                     updatePair(pair)
                 }
-                _uploadProgress.value = ((index + 1) * 100) / total
+
+                // progress should be based on the upload count
+                _uploadProgress.value = ((uploadCount.toFloat() / total) * 100).toInt()
             }
-            hideProgressDialog()
+
+            sendCommand(ReviewUploadCommands.UploadCompleted(uploadCount, total))
         }
     }
 
     private fun updatePair(updated: PhotoPair) {
-        _pairs.value = _pairs.value.map { if (it.internalId == updated.internalId) updated else it }
+        _pairs.value = _pairs.value.map {
+            if (it.internalId == updated.internalId) {
+                updated
+            } else {
+                it
+            }
+        }
     }
 
 }

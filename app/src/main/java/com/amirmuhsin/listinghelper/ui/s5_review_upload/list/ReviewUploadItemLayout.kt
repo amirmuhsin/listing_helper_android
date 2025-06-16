@@ -27,6 +27,7 @@ class ReviewUploadItemLayout(
     }
 
     fun fillContent(pair: PhotoPair) {
+        println("hop: fillContent: ${pair.internalId} - ${pair.originalUri} - ${pair.cleanedUri} - ${pair.uploadStatus}")
         current = pair
 
         binding.tvOrder.text = pair.order.toString()

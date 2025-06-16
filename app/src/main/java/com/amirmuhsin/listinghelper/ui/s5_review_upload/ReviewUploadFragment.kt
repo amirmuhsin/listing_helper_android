@@ -1,5 +1,6 @@
 package com.amirmuhsin.listinghelper.ui.s5_review_upload
 
+import android.view.View
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
@@ -8,8 +9,10 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.amirmuhsin.listinghelper.core_views.base.ui.BaseFragment
+import com.amirmuhsin.listinghelper.core_views.events.command.Command
 import com.amirmuhsin.listinghelper.databinding.FragmentReviewUploadBinding
 import com.amirmuhsin.listinghelper.domain.model.PhotoPair
+import com.amirmuhsin.listinghelper.ui.s5_review_upload.command.ReviewUploadCommands
 import com.amirmuhsin.listinghelper.ui.s5_review_upload.list.ReviewUploadAdapter
 import com.amirmuhsin.listinghelper.util.parcelableList
 import kotlinx.coroutines.flow.launchIn
@@ -51,6 +54,9 @@ class ReviewUploadFragment: BaseFragment<FragmentReviewUploadBinding, ReviewUplo
         binding.toolbar.ibBack.setOnClickListener {
             findNavController().popBackStack()
         }
+        binding.btnDone.setOnClickListener {
+            findNavController().popBackStack()
+        }
     }
 
     override fun setObservers() {
@@ -61,8 +67,35 @@ class ReviewUploadFragment: BaseFragment<FragmentReviewUploadBinding, ReviewUplo
 
         viewModel.uploadProgress
             .flowWithLifecycle(viewLifecycleOwner.lifecycle)
-            .onEach { binding.pbUpload.progress = it }
-            .launchIn(lifecycleScope)
+            .onEach {
+                binding.pbUpload.progress = it
+                binding.toolbar.tvTitle.text = "$it%"
+            }.launchIn(lifecycleScope)
+    }
+
+    override fun handleCommand(command: Command) {
+        when (command) {
+            is ReviewUploadCommands.UploadCompleted -> {
+                val areAllUploaded = command.uploaded == command.total
+                if (areAllUploaded) {
+                    showSuccessSnackbar("All images uploaded successfully!")
+                    binding.btnDone.visibility = View.VISIBLE
+                    binding.btnUpload.visibility = View.GONE
+                } else {
+                    showErrorSnackbar("Some images failed to upload. Please try again.")
+                    binding.btnDone.visibility = View.GONE
+                    binding.btnUpload.visibility = View.VISIBLE
+                    binding.btnUpload.isEnabled = true
+                    binding.btnUpload.text = "Retry Upload"
+                }
+            }
+
+            is ReviewUploadCommands.UploadItemProgress -> {
+                binding.btnUpload.isEnabled = false
+                val percent = (command.uploaded * 100) / command.total
+                binding.btnUpload.text = "Uploading ${percent}% (${command.uploaded}/${command.total})"
+            }
+        }
     }
 
     companion object {
