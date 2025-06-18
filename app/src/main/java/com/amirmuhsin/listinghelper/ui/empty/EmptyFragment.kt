@@ -12,4 +12,4 @@ class EmptyFragment: BaseFragment<FragmentEmptyBinding, EmptyViewModel>(
 
 }
 
-// commit from develop
+// commit from develop + change AFTER branchA created
