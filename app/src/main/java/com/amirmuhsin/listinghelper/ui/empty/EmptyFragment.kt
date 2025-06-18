@@ -12,3 +12,4 @@ class EmptyFragment: BaseFragment<FragmentEmptyBinding, EmptyViewModel>(
 
 }
 
+// commit from develop
