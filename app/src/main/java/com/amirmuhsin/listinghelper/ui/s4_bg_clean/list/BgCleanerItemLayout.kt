@@ -2,6 +2,7 @@ package com.amirmuhsin.listinghelper.ui.s4_bg_clean.list
 
 import android.content.Context
 import android.net.Uri
+import android.util.Log
 import android.view.LayoutInflater
 import android.widget.FrameLayout
 import coil.load
@@ -9,6 +10,9 @@ import coil.size.ViewSizeResolver
 import com.amirmuhsin.listinghelper.R
 import com.amirmuhsin.listinghelper.databinding.ItemLayoutPhotoPairBinding
 import com.amirmuhsin.listinghelper.domain.model.PhotoPair
+import com.amirmuhsin.listinghelper.util.getImageResolution
+import com.amirmuhsin.listinghelper.util.getImageSizeInBytes
+import com.amirmuhsin.listinghelper.util.getReadableSize
 
 class BgCleanerItemLayout(
     context: Context,
@@ -37,6 +41,12 @@ class BgCleanerItemLayout(
             PhotoPair.BgCleanStatus.PENDING -> {
                 binding.pbLoading.visibility = GONE
                 binding.ivCleaned.setImageResource(0)
+
+                val fileSizeBytes = getImageSizeInBytes(context, photoPair.originalUri)
+                val resolution = getImageResolution(context, photoPair.originalUri)
+
+                Log.d("ImageInfo", "Original Size: ${getReadableSize(fileSizeBytes)}")
+                Log.d("ImageInfo", "Original Resolution: ${resolution?.first} x ${resolution?.second}")
             }
 
             PhotoPair.BgCleanStatus.PROCESSING -> {
@@ -50,6 +60,12 @@ class BgCleanerItemLayout(
                     size(binding.ivCleaned.width, binding.ivCleaned.height)
                     crossfade(true)
                 }
+
+                val fileSizeBytes = getImageSizeInBytes(context, photoPair.cleanedUri!!)
+                val resolution = getImageResolution(context, photoPair.cleanedUri!!)
+
+                Log.d("ImageInfo", "Cleaned Size: ${getReadableSize(fileSizeBytes)}")
+                Log.d("ImageInfo", "Cleaned Resolution: ${resolution?.first} x ${resolution?.second}")
             }
 
             PhotoPair.BgCleanStatus.FAILED -> {

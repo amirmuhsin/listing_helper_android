@@ -68,11 +68,11 @@ dependencies {
     // For MultipartBody, RequestBody, etc.
     implementation ("com.squareup.okhttp3:okhttp:4.12.0")
 
-    implementation("com.cloudx:cloudx-sdk:v0.0.1.10")
-    implementation("com.cloudx.adapter:adapter-cloudx:v0.0.1.10")
-    implementation("com.cloudx.adapter:adapter-meta:v0.0.1.10")
-    implementation("com.cloudx.adapter:adapter-google:v0.0.1.10")
-    implementation("com.cloudx.adapter:adapter-mintegral:v0.0.1.10")
+    implementation("com.cloudx:cloudx-sdk:v0.0.1.15")
+//    implementation("com.cloudx.adapter:adapter-cloudx:v0.0.1.10")
+//    implementation("com.cloudx.adapter:adapter-meta:v0.0.1.10")
+//    implementation("com.cloudx.adapter:adapter-google:v0.0.1.10")
+//    implementation("com.cloudx.adapter:adapter-mintegral:v0.0.1.10")
 //    implementation("com.cloudx.adapter:adapter-testbidder:v0.0.1.10")
     implementation "com.google.guava:guava:33.0.0-android"
 
