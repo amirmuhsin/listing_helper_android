@@ -12,3 +12,8 @@ class EmptyFragment: BaseFragment<FragmentEmptyBinding, EmptyViewModel>(
 
 }
 
+// commit from develop + change AFTER branchA created
+// created branchA
+//  - commit#1 from branchA
+//  - commit#2 from branchA
+//  - commit#3 from branchA
