@@ -51,8 +51,7 @@
                 android:layout_height="wrap_content"
                 android:background="?selectableItemBackground"
                 android:clickable="true"
-                android:focusable="true"
-                android:scaleType="centerCrop"/>
+                android:focusable="true"/>
         </FrameLayout>
 
         <TextView
