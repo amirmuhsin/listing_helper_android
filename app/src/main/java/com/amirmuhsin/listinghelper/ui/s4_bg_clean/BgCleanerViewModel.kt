@@ -40,10 +40,7 @@ class BgCleanerViewModel(
                     originalUri = uri,
                     cleanedUri = null,
                     bgCleanStatus = PhotoPair.BgCleanStatus.PENDING,
-                    order = index + 1,
-                    resolution = "256x256 TEST",
-                    sizeInBytes = 400,
-                    imageType = ".png TEST"
+                    order = index + 1
                 )
             )
         }

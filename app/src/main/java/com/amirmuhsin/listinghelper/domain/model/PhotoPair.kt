@@ -11,10 +11,7 @@ data class PhotoPair(
     var cleanedUri: Uri?,
     var bgCleanStatus: BgCleanStatus = BgCleanStatus.PENDING,
     var order: Int,
-    var resolution: String? = null,
     var uploadStatus: UploadStatus = UploadStatus.PENDING,
-    var sizeInBytes: Int = 0,
-    var imageType: String
 ): Parcelable {
 
     enum class BgCleanStatus {

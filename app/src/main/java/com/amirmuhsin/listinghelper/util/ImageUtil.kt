@@ -4,13 +4,15 @@ import android.content.Context
 import android.graphics.BitmapFactory
 import android.net.Uri
 
-fun getImageSizeInBytes(context: Context, uri: Uri): Long {
+fun getImageSizeInBytes(context: Context, uri: Uri?): Long {
+    if (uri == null) return -1
     return context.contentResolver.openAssetFileDescriptor(uri, "r")?.use {
         it.length
     } ?: -1
 }
 
-fun getImageResolution(context: Context, uri: Uri): Pair<Int, Int>? {
+fun getImageResolution(context: Context, uri: Uri?): Pair<Int, Int>? {
+    if (uri == null) return null
     return try {
         val options = BitmapFactory.Options().apply {
             inJustDecodeBounds = true

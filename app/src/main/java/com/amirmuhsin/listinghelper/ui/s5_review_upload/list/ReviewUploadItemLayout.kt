@@ -1,4 +1,3 @@
-// ConfirmationItemLayout.kt
 package com.amirmuhsin.listinghelper.ui.s5_review_upload.list
 
 import android.content.Context
@@ -11,6 +10,9 @@ import com.amirmuhsin.listinghelper.R
 import com.amirmuhsin.listinghelper.databinding.ItemLayoutConfirmationPhotoBinding
 import com.amirmuhsin.listinghelper.domain.model.PhotoPair
 import com.amirmuhsin.listinghelper.domain.model.PhotoPair.UploadStatus
+import com.amirmuhsin.listinghelper.util.getImageResolution
+import com.amirmuhsin.listinghelper.util.getImageSizeInBytes
+import com.amirmuhsin.listinghelper.util.getReadableSize
 
 class ReviewUploadItemLayout(
     context: Context,
@@ -27,12 +29,17 @@ class ReviewUploadItemLayout(
     }
 
     fun fillContent(pair: PhotoPair) {
-        println("hop: fillContent: ${pair.internalId} - ${pair.originalUri} - ${pair.cleanedUri} - ${pair.uploadStatus}")
         current = pair
 
+        val fileSizeBytes = getImageSizeInBytes(context, pair.cleanedUri)
+        val resolution = getImageResolution(context, pair.cleanedUri)
+
+        val imageResolution = resolution?.let { "${it.first} x ${it.second}" } ?: "Unknown"
+        val imageSizeInKB = getReadableSize(fileSizeBytes)
+
         binding.tvOrder.text = pair.order.toString()
-        binding.tvResolution.text = pair.resolution
-        binding.tvSize.text = pair.sizeInBytes.toString()
+        binding.tvResolution.text = imageResolution
+        binding.tvSize.text = imageSizeInKB
 
         binding.ivPhoto.load(pair.cleanedUri) {
             size(ViewSizeResolver(binding.ivPhoto))

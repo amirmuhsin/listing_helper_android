@@ -235,7 +235,6 @@ class PhotoCaptureFragment: BaseFragment<FragmentPhotoCaptureBinding, PhotoCaptu
             if (lensFacing == CameraCharacteristics.LENS_FACING_BACK) {
                 val configs = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP)
                 val sizes = configs?.getOutputSizes(ImageFormat.JPEG)
-                println("hop: all 1x1 sizes: ${sizes?.filter { it.width == it.height }}")
                 return sizes?.filter { it.width == it.height } ?: emptyList()
             }
         }
