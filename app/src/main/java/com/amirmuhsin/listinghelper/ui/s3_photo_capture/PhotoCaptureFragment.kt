@@ -215,12 +215,6 @@ class PhotoCaptureFragment: BaseFragment<FragmentPhotoCaptureBinding, PhotoCaptu
                 }
 
                 override fun onImageSaved(output: ImageCapture.OutputFileResults) {
-                    // Log resolution
-                    val resolution = getImageResolution(photoFile)
-                    Log.d("CameraX", "Saved image resolution: ${resolution?.first}x${resolution?.second}")
-                    println("hop: CameraX: Saved image resolution: ${resolution?.first}x${resolution?.second}")
-
-
                     viewModel.addPhoto(uri)
                     thumbAdapter.addNewPhoto(uri)
                     binding.rvThumbnails.post {
@@ -229,19 +223,6 @@ class PhotoCaptureFragment: BaseFragment<FragmentPhotoCaptureBinding, PhotoCaptu
                 }
             }
         )
-    }
-
-    private fun getImageResolution(file: File): Pair<Int, Int>? {
-        return try {
-            val options = BitmapFactory.Options().apply { inJustDecodeBounds = true }
-            BitmapFactory.decodeFile(file.absolutePath, options)
-            if (options.outWidth > 0 && options.outHeight > 0) {
-                Pair(options.outWidth, options.outHeight)
-            } else null
-        } catch (e: Exception) {
-            e.printStackTrace()
-            null
-        }
     }
 
     @SuppressLint("MissingPermission")

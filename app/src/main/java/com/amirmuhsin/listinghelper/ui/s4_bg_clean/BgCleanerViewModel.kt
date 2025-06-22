@@ -66,19 +66,15 @@ class BgCleanerViewModel(
                 val requestFile = tempFile
                     .asRequestBody("image/jpeg".toMediaTypeOrNull())
                 val multipart = MultipartBody.Part.createFormData(
-                    "image_file", tempFile.name, requestFile
+                    "imageFile", tempFile.name, requestFile
                 )
 
                 // 3) Optionally add other form parts (e.g. format=jpg)
                 //    val formatPart = RequestBody.create("text/plain".toMediaTypeOrNull(), "jpg")
 
                 try {
-                    val response = service.cleanBackground(
-                        image_file = multipart,
-                        format = "jpg",   // or "jpg", "webp", or leave null for default
-                        bgColor = "#FFFFFF", // if you want white background instead of transparency
-                        size = "full",
-                        crop = false
+                    val response = service.editImage(
+                        imageFile = multipart
                     )
                     if (response.isSuccessful) {
                         // 4) Read raw bytes (PNG/JPG/WEBP)
