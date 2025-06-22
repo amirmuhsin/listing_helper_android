@@ -1,9 +1,19 @@
 package com.amirmuhsin.listinghelper.ui.s3_photo_capture
 
 import android.Manifest.permission.CAMERA
+import android.annotation.SuppressLint
+import android.content.Context
 import android.content.pm.PackageManager
+import android.graphics.BitmapFactory
+import android.graphics.ImageFormat
+import android.hardware.camera2.CameraCharacteristics
+import android.hardware.camera2.CameraManager
 import android.net.Uri
+import android.util.Log
 import android.util.Size
+import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
@@ -42,6 +52,9 @@ class PhotoCaptureFragment: BaseFragment<FragmentPhotoCaptureBinding, PhotoCaptu
     private lateinit var cameraExecutor: ExecutorService
     private lateinit var thumbAdapter: PhotoCaptureAdapter
 
+    private lateinit var sizeAdapter: ArrayAdapter<String>
+    private val squareSizes = mutableListOf<Size>()
+
     private val requestPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
             if (granted) {
@@ -64,6 +77,17 @@ class PhotoCaptureFragment: BaseFragment<FragmentPhotoCaptureBinding, PhotoCaptu
             viewModel.removePhoto(it)
             thumbAdapter.removePhoto(it)
         })
+
+        squareSizes.clear()
+        squareSizes.addAll(getSupportedSquareSizes(requireContext()))
+
+        sizeAdapter = ArrayAdapter(
+            requireContext(),
+            android.R.layout.simple_spinner_item,
+            squareSizes.map { "${it.width} x ${it.height}" }
+        ).apply {
+            setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        }
 
         ProcessCameraProvider.getInstance(requireContext()).also { future ->
             future.addListener({
@@ -89,11 +113,21 @@ class PhotoCaptureFragment: BaseFragment<FragmentPhotoCaptureBinding, PhotoCaptu
         binding.btnCapture.setOnClickListener {
             takePhoto()
         }
+        binding.spCameraSize.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                val selectedSize = squareSizes[position]
+                bindCameraUseCases(selectedSize)
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {}
+        }
     }
 
     override fun prepareUI() {
         binding.rvThumbnails.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         binding.rvThumbnails.adapter = thumbAdapter
+
+        binding.spCameraSize.adapter = sizeAdapter
 
         val width = resources.displayMetrics.widthPixels
         binding.previewView.layoutParams.height = width
@@ -111,10 +145,16 @@ class PhotoCaptureFragment: BaseFragment<FragmentPhotoCaptureBinding, PhotoCaptu
             }.launchIn(lifecycleScope)
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        cameraExecutor.shutdown()
+        cameraProvider.unbindAll()
+    }
+
     private fun checkCameraPermission() {
         when {
             ContextCompat.checkSelfPermission(requireContext(), CAMERA) ==
-                    PackageManager.PERMISSION_GRANTED -> bindCameraUseCases()
+                    PackageManager.PERMISSION_GRANTED -> bindCameraUseCases(squareSizes.first())
 
             shouldShowRequestPermissionRationale(CAMERA) -> {
                 showErrorSnackbar("Camera permission is required")
@@ -125,22 +165,21 @@ class PhotoCaptureFragment: BaseFragment<FragmentPhotoCaptureBinding, PhotoCaptu
         }
     }
 
-    private fun bindCameraUseCases() {
+    private fun bindCameraUseCases(resolution: Size) {
+        if (::cameraProvider.isInitialized.not()) {
+            Log.e("CameraX", "CameraProvider is not initialized")
+            return
+        }
         cameraProvider.unbindAll()
 
-        val resolution = Size(1600, 1600)
-
-        val resolutionSelector = ResolutionSelector.Builder()
-            .setResolutionStrategy(
-                ResolutionStrategy(resolution, ResolutionStrategy.FALLBACK_RULE_CLOSEST_LOWER)
-            )
-            .build()
-
         val preview = Preview.Builder()
-            .setResolutionSelector(resolutionSelector)
             .setTargetRotation(binding.previewView.display.rotation)
             .build()
             .also { it.surfaceProvider = binding.previewView.surfaceProvider }
+
+        val resolutionSelector = ResolutionSelector.Builder()
+            .setResolutionStrategy(ResolutionStrategy(resolution, ResolutionStrategy.FALLBACK_RULE_CLOSEST_HIGHER))
+            .build()
 
         imageCapture = ImageCapture.Builder()
             .setResolutionSelector(resolutionSelector)
@@ -176,6 +215,12 @@ class PhotoCaptureFragment: BaseFragment<FragmentPhotoCaptureBinding, PhotoCaptu
                 }
 
                 override fun onImageSaved(output: ImageCapture.OutputFileResults) {
+                    // Log resolution
+                    val resolution = getImageResolution(photoFile)
+                    Log.d("CameraX", "Saved image resolution: ${resolution?.first}x${resolution?.second}")
+                    println("hop: CameraX: Saved image resolution: ${resolution?.first}x${resolution?.second}")
+
+
                     viewModel.addPhoto(uri)
                     thumbAdapter.addNewPhoto(uri)
                     binding.rvThumbnails.post {
@@ -186,10 +231,35 @@ class PhotoCaptureFragment: BaseFragment<FragmentPhotoCaptureBinding, PhotoCaptu
         )
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        cameraExecutor.shutdown()
-        cameraProvider.unbindAll()
+    private fun getImageResolution(file: File): Pair<Int, Int>? {
+        return try {
+            val options = BitmapFactory.Options().apply { inJustDecodeBounds = true }
+            BitmapFactory.decodeFile(file.absolutePath, options)
+            if (options.outWidth > 0 && options.outHeight > 0) {
+                Pair(options.outWidth, options.outHeight)
+            } else null
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    fun getSupportedSquareSizes(context: Context): List<Size> {
+        val cameraManager = context.getSystemService(Context.CAMERA_SERVICE) as CameraManager
+
+        for (cameraId in cameraManager.cameraIdList) {
+            val characteristics = cameraManager.getCameraCharacteristics(cameraId)
+            val lensFacing = characteristics.get(CameraCharacteristics.LENS_FACING)
+            if (lensFacing == CameraCharacteristics.LENS_FACING_BACK) {
+                val configs = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP)
+                val sizes = configs?.getOutputSizes(ImageFormat.JPEG)
+                println("hop: all 1x1 sizes: ${sizes?.filter { it.width == it.height }}")
+                return sizes?.filter { it.width == it.height } ?: emptyList()
+            }
+        }
+
+        return emptyList()
     }
 }
 

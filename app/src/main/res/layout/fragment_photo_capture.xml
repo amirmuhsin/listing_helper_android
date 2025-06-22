@@ -33,6 +33,17 @@
             android:src="@drawable/ic_back_24"
             app:tint="@android:color/white"/>
 
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+
+        <Spinner
+            android:id="@+id/spCameraSize"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@color/white"/>
+
     </LinearLayout>
 
     <!-- 3. Thumbnail strip -->
