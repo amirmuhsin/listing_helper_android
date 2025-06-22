@@ -10,9 +10,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="@dimen/smallest_padding"
-        android:background="@color/gray_item_bg_pressed"
+        android:background="@color/white"
         android:foreground="?selectableItemBackground"
         android:padding="@dimen/large_padding"
-        android:src="@drawable/ic_add_24"/>
+        android:src="@drawable/ic_add_24_gray"/>
 
 </FrameLayout>

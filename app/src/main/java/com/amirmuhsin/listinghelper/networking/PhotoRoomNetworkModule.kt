@@ -19,7 +19,7 @@ object PhotoRoomNetworkModule {
     private val apiKeyInterceptor = Interceptor { chain ->
         val original: Request = chain.request()
         val requestWithKey = original.newBuilder()
-            .addHeader("x-api-key", LIVE_API_KEY)
+            .addHeader("x-api-key", SANDBOX_API_KEY)
             .build()
         chain.proceed(requestWithKey)
     }
