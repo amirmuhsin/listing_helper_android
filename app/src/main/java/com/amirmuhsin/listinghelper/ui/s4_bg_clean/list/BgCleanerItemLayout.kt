@@ -25,8 +25,17 @@ class BgCleanerItemLayout(
     private var photoPair: PhotoPair? = null
 
     init {
-        val height = resources.getDimensionPixelSize(R.dimen.photo_pair_height)
-        layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, height)
+        calcImageSize(context)
+
+        val layoutParamsOriginal = binding.ivOriginal.layoutParams
+        layoutParamsOriginal.width = cellSizeInPx
+        layoutParamsOriginal.height = cellSizeInPx
+        binding.ivOriginal.layoutParams = layoutParamsOriginal
+
+        val layoutParamsCleaned = binding.ivCleaned.layoutParams
+        layoutParamsCleaned.width = cellSizeInPx
+        layoutParamsCleaned.height = cellSizeInPx
+        binding.ivCleaned.layoutParams = layoutParamsCleaned
     }
 
     fun fillContent(photoPair: PhotoPair) {
@@ -72,6 +81,23 @@ class BgCleanerItemLayout(
                 binding.pbLoading.visibility = GONE
                 binding.ivCleaned.setImageResource(R.drawable.ic_report_16)
             }
+        }
+    }
+
+    companion object {
+
+        private var cellSizeInPx = 0
+
+        fun calcImageSize(context: Context) {
+            if (cellSizeInPx > 0) return // Already calculated
+            // 1. Get screen width
+            val screenWidth = context.resources.displayMetrics.widthPixels
+
+            // 3. Calculate final available width for images
+            val availableWidth = screenWidth
+            val imageSize = availableWidth / 2
+
+            cellSizeInPx = imageSize
         }
     }
 }
