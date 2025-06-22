@@ -2,7 +2,6 @@ package com.amirmuhsin.listinghelper.ui.s4_bg_clean.list
 
 import android.content.Context
 import android.net.Uri
-import android.util.Log
 import android.view.LayoutInflater
 import android.widget.FrameLayout
 import coil.load
@@ -22,7 +21,7 @@ class BgCleanerItemLayout(
 
     private val binding = ItemLayoutPhotoPairBinding.inflate(LayoutInflater.from(context), this, true)
 
-    private var photoPair: PhotoPair? = null
+    private var currentPhotoPair: PhotoPair? = null
 
     init {
         calcImageSize(context)
@@ -39,23 +38,19 @@ class BgCleanerItemLayout(
     }
 
     fun fillContent(photoPair: PhotoPair) {
-        this.photoPair = photoPair
+        this.currentPhotoPair = photoPair
 
         binding.ivOriginal.load(photoPair.originalUri) {
             size(ViewSizeResolver(binding.ivCleaned))
             crossfade(true)
         }
 
+        setOriginalImageInfo(photoPair)
+
         when (photoPair.bgCleanStatus) {
             PhotoPair.BgCleanStatus.PENDING -> {
                 binding.pbLoading.visibility = GONE
                 binding.ivCleaned.setImageResource(0)
-
-                val fileSizeBytes = getImageSizeInBytes(context, photoPair.originalUri)
-                val resolution = getImageResolution(context, photoPair.originalUri)
-
-                Log.d("ImageInfo", "Original Size: ${getReadableSize(fileSizeBytes)}")
-                Log.d("ImageInfo", "Original Resolution: ${resolution?.first} x ${resolution?.second}")
             }
 
             PhotoPair.BgCleanStatus.PROCESSING -> {
@@ -70,11 +65,7 @@ class BgCleanerItemLayout(
                     crossfade(true)
                 }
 
-                val fileSizeBytes = getImageSizeInBytes(context, photoPair.cleanedUri!!)
-                val resolution = getImageResolution(context, photoPair.cleanedUri!!)
-
-                Log.d("ImageInfo", "Cleaned Size: ${getReadableSize(fileSizeBytes)}")
-                Log.d("ImageInfo", "Cleaned Resolution: ${resolution?.first} x ${resolution?.second}")
+                setCleanedImageInfo(photoPair)
             }
 
             PhotoPair.BgCleanStatus.FAILED -> {
@@ -82,6 +73,24 @@ class BgCleanerItemLayout(
                 binding.ivCleaned.setImageResource(R.drawable.ic_report_16)
             }
         }
+    }
+
+    private fun setOriginalImageInfo(photoPair: PhotoPair) {
+        val fileSizeBytes = getImageSizeInBytes(context, photoPair.originalUri)
+        val resolution = getImageResolution(context, photoPair.originalUri)
+
+        val imageResolution = resolution?.let { "${it.first} x ${it.second}" } ?: "Unknown"
+        val imageSizeInKB = getReadableSize(fileSizeBytes)
+        binding.tvOriginalImageInfo.text = imageResolution + " | " + imageSizeInKB
+    }
+
+    private fun setCleanedImageInfo(photoPair: PhotoPair) {
+        val fileSizeBytes = getImageSizeInBytes(context, photoPair.cleanedUri!!)
+        val resolution = getImageResolution(context, photoPair.cleanedUri!!)
+
+        val imageResolution = resolution?.let { "${it.first} x ${it.second}" } ?: "Unknown"
+        val imageSizeInKB = getReadableSize(fileSizeBytes)
+        binding.tvCleanedImageInfo.text = imageResolution + " | " + imageSizeInKB
     }
 
     companion object {
@@ -93,8 +102,14 @@ class BgCleanerItemLayout(
             // 1. Get screen width
             val screenWidth = context.resources.displayMetrics.widthPixels
 
+            // 2. Calculate margins
+            // || 8dp | image | 4dp || 4dp | image | 8dp ||
+            val outerMargin = context.resources.getDimensionPixelSize(R.dimen.small_padding)
+            val innerMargin = context.resources.getDimensionPixelSize(R.dimen.very_small_padding)
+            val totalMargin = 2 * (outerMargin + innerMargin)
+
             // 3. Calculate final available width for images
-            val availableWidth = screenWidth
+            val availableWidth = screenWidth - totalMargin
             val imageSize = availableWidth / 2
 
             cellSizeInPx = imageSize

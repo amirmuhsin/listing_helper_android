@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/flRoot"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/small_padding"
+        android:layout_marginBottom="@dimen/smallest_padding"
         android:orientation="horizontal"
         tools:layout_height="200dp">
 
@@ -16,14 +19,25 @@
             android:id="@+id/ivOriginal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/very_small_padding"
             android:background="?selectableItemBackground"
             android:clickable="true"
-            android:focusable="true"/>
+            android:focusable="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/flCleaned"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <FrameLayout
+            android:id="@+id/flCleaned"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/gradient_end_color">
+            android:layout_marginEnd="@dimen/very_small_padding"
+            android:background="@color/gradient_end_color"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/ivOriginal"
+            app:layout_constraintTop_toTopOf="parent">
 
             <ProgressBar
                 android:id="@+id/pbLoading"
@@ -41,5 +55,21 @@
                 android:scaleType="centerCrop"/>
         </FrameLayout>
 
-    </LinearLayout>
+        <TextView
+            android:id="@+id/tvOriginalImageInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="@id/ivOriginal"
+            app:layout_constraintStart_toStartOf="@id/ivOriginal"
+            app:layout_constraintTop_toBottomOf="@id/ivOriginal"/>
+
+        <TextView
+            android:id="@+id/tvCleanedImageInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="@id/flCleaned"
+            app:layout_constraintStart_toStartOf="@id/flCleaned"
+            app:layout_constraintTop_toBottomOf="@id/flCleaned"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>
