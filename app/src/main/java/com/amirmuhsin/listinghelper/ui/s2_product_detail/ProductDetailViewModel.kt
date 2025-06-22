@@ -2,6 +2,8 @@ package com.amirmuhsin.listinghelper.ui.s2_product_detail
 
 import androidx.lifecycle.viewModelScope
 import com.amirmuhsin.listinghelper.core_views.base.viewmodel.BaseViewModel
+import com.amirmuhsin.listinghelper.domain.model.AddPhotoItemButton
+import com.amirmuhsin.listinghelper.domain.model.PhotoItem
 import com.amirmuhsin.listinghelper.domain.product.ProductRepository
 import com.amirmuhsin.listinghelper.networking.model.product.ProductAM
 import com.amirmuhsin.listinghelper.domain.model.PhotoPair
@@ -16,7 +18,7 @@ class ProductDetailViewModel(
     private val _fProduct: MutableStateFlow<ProductAM?> = MutableStateFlow(null)
     val fProduct = _fProduct.asStateFlow()
 
-    private val _flCleanedPhotos: MutableStateFlow<List<PhotoPair>> = MutableStateFlow(emptyList())
+    private val _flCleanedPhotos: MutableStateFlow<List<PhotoItem>> = MutableStateFlow(listOf(AddPhotoItemButton))
     val flCleanedPhotos = _flCleanedPhotos.asStateFlow()
 
     fun onBarcodeChanged(sku: String) {
@@ -26,8 +28,16 @@ class ProductDetailViewModel(
         }
     }
 
-    fun setCleanedPhotos(cleanedPhotoPairs: List<PhotoPair>) {
-        _flCleanedPhotos.value = cleanedPhotoPairs
+    fun setCleanedPhotos(cleanedPhotoPairs: List<PhotoItem>) {
+        // check if the list contains AddPhotoItemButton, and if so, remove it
+        val cleanedPhotos = cleanedPhotoPairs.filterNot { it is AddPhotoItemButton }
+        // add AddPhotoItemButton at the end of the list
+        val updatedList = cleanedPhotos.toMutableList().apply {
+            if (isEmpty() || last() !is AddPhotoItemButton) {
+                add(AddPhotoItemButton)
+            }
+        }
+        _flCleanedPhotos.value = updatedList
     }
 
 }

@@ -12,7 +12,7 @@ data class PhotoPair(
     var bgCleanStatus: BgCleanStatus = BgCleanStatus.PENDING,
     var order: Int,
     var uploadStatus: UploadStatus = UploadStatus.PENDING,
-): Parcelable {
+): Parcelable, PhotoItem() {
 
     enum class BgCleanStatus {
         PENDING,

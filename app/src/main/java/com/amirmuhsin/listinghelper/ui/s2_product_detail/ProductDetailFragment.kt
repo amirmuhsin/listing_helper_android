@@ -1,5 +1,6 @@
 package com.amirmuhsin.listinghelper.ui.s2_product_detail
 
+import CleanedPhotoAdapter
 import android.view.View
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.setFragmentResultListener
@@ -13,7 +14,6 @@ import com.amirmuhsin.listinghelper.R
 import com.amirmuhsin.listinghelper.core_views.base.ui.BaseFragment
 import com.amirmuhsin.listinghelper.databinding.FragmentProductDetailBinding
 import com.amirmuhsin.listinghelper.domain.model.PhotoPair
-import com.amirmuhsin.listinghelper.ui.s2_product_detail.list.CleanedPhotoAdapter
 import com.amirmuhsin.listinghelper.ui.s5_review_upload.ReviewUploadFragment
 import com.amirmuhsin.listinghelper.util.parcelableList
 import com.journeyapps.barcodescanner.ScanContract
@@ -42,7 +42,13 @@ class ProductDetailFragment: BaseFragment<FragmentProductDetailBinding, ProductD
             val cleanedPairs = bundle.parcelableList<PhotoPair>(ARG_IMAGE_URI) ?: emptyList()
             viewModel.setCleanedPhotos(cleanedPairs)
         }
-        cleanedPhotosAdapter = CleanedPhotoAdapter(requireContext(), {})
+        cleanedPhotosAdapter = CleanedPhotoAdapter(
+            requireContext(),
+            onPhotoClick = {
+                // TODO: open full screen photo viewer
+            }, onAddClick = {
+                // TODO: open File Chooser
+            })
     }
 
     override fun prepareUI() {
@@ -67,7 +73,8 @@ class ProductDetailFragment: BaseFragment<FragmentProductDetailBinding, ProductD
             val product = viewModel.fProduct.value
             val hasProduct = product != null
             if (hasProduct) {
-                val args = ReviewUploadFragment.createArgs(product.id, viewModel.flCleanedPhotos.value)
+                val cleanedPhotos = viewModel.flCleanedPhotos.value.filterIsInstance<PhotoPair>()
+                val args = ReviewUploadFragment.createArgs(product.id, cleanedPhotos)
                 findNavController().navigate(R.id.action_open_review_upload, args)
             } else {
                 showErrorSnackbar("Product not found")
