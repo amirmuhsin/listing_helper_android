@@ -3,7 +3,7 @@ package com.amirmuhsin.listinghelper.ui.s5_review_upload
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.amirmuhsin.listinghelper.networking.ProductNetworkModule
+import com.amirmuhsin.listinghelper.data.networking.ProductNetworkModule
 import com.amirmuhsin.listinghelper.repository.ProductRepositoryImpl
 
 class ReviewUploadViewModelFactory(

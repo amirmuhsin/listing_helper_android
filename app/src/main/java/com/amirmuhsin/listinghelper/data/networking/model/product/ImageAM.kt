@@ -1,4 +1,4 @@
-package com.amirmuhsin.listinghelper.networking.model.product
+package com.amirmuhsin.listinghelper.data.networking.model.product
 
 import com.google.gson.annotations.SerializedName
 

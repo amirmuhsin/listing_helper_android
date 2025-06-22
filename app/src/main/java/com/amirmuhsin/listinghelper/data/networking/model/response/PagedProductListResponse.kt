@@ -1,9 +1,7 @@
-package com.amirmuhsin.listinghelper.networking.model.response
+package com.amirmuhsin.listinghelper.data.networking.model.response
 
-import com.amirmuhsin.listinghelper.networking.model.product.ProductAM
+import com.amirmuhsin.listinghelper.data.networking.model.product.ProductAM
 import com.google.gson.annotations.SerializedName
-import kotlinx.serialization.SerialName
-import java.io.Serial
 
 data class PagedProductListResponse(
     @SerializedName("TotalItems") val totalItems: Int,

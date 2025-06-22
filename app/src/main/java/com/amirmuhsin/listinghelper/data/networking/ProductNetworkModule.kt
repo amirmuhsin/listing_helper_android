@@ -1,7 +1,7 @@
-package com.amirmuhsin.listinghelper.networking
+package com.amirmuhsin.listinghelper.data.networking
 
-import com.amirmuhsin.listinghelper.networking.api.ImageService
-import com.amirmuhsin.listinghelper.networking.api.ProductService
+import com.amirmuhsin.listinghelper.data.networking.api.ImageService
+import com.amirmuhsin.listinghelper.data.networking.api.ProductService
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Request

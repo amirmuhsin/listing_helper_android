@@ -1,6 +1,6 @@
-package com.amirmuhsin.listinghelper.networking
+package com.amirmuhsin.listinghelper.data.networking
 
-import com.amirmuhsin.listinghelper.networking.api.PhotoRoomService
+import com.amirmuhsin.listinghelper.data.networking.api.PhotoRoomService
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Request

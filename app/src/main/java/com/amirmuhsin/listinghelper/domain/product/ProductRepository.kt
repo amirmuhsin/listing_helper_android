@@ -1,9 +1,8 @@
 package com.amirmuhsin.listinghelper.domain.product
 
 import android.net.Uri
-import com.amirmuhsin.listinghelper.networking.model.product.ImageAM
-import com.amirmuhsin.listinghelper.networking.model.product.ProductAM
-import com.amirmuhsin.listinghelper.networking.model.request.UploadProductImageRequest
+import com.amirmuhsin.listinghelper.data.networking.model.product.ImageAM
+import com.amirmuhsin.listinghelper.data.networking.model.product.ProductAM
 
 interface ProductRepository {
 

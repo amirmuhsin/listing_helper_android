@@ -1,7 +1,7 @@
-package com.amirmuhsin.listinghelper.networking.api
+package com.amirmuhsin.listinghelper.data.networking.api
 
-import com.amirmuhsin.listinghelper.networking.model.product.ImageAM
-import com.amirmuhsin.listinghelper.networking.model.request.UploadProductImageRequest
+import com.amirmuhsin.listinghelper.data.networking.model.product.ImageAM
+import com.amirmuhsin.listinghelper.data.networking.model.request.UploadProductImageRequest
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET

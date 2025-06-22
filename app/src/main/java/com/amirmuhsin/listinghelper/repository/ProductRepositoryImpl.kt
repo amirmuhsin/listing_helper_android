@@ -4,11 +4,11 @@ import android.content.Context
 import android.net.Uri
 import android.util.Base64
 import com.amirmuhsin.listinghelper.domain.product.ProductRepository
-import com.amirmuhsin.listinghelper.networking.api.ImageService
-import com.amirmuhsin.listinghelper.networking.api.ProductService
-import com.amirmuhsin.listinghelper.networking.model.product.ImageAM
-import com.amirmuhsin.listinghelper.networking.model.product.ProductAM
-import com.amirmuhsin.listinghelper.networking.model.request.UploadProductImageRequest
+import com.amirmuhsin.listinghelper.data.networking.api.ImageService
+import com.amirmuhsin.listinghelper.data.networking.api.ProductService
+import com.amirmuhsin.listinghelper.data.networking.model.product.ImageAM
+import com.amirmuhsin.listinghelper.data.networking.model.product.ProductAM
+import com.amirmuhsin.listinghelper.data.networking.model.request.UploadProductImageRequest
 import retrofit2.HttpException
 
 class ProductRepositoryImpl(

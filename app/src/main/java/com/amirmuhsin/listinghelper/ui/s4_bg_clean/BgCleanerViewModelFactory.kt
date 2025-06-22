@@ -3,7 +3,7 @@ package com.amirmuhsin.listinghelper.ui.s4_bg_clean
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.amirmuhsin.listinghelper.networking.api.PhotoRoomService
+import com.amirmuhsin.listinghelper.data.networking.api.PhotoRoomService
 
 class BgCleanerViewModelFactory(
     private val service: PhotoRoomService,

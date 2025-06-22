@@ -1,7 +1,7 @@
-package com.amirmuhsin.listinghelper.networking.api
+package com.amirmuhsin.listinghelper.data.networking.api
 
-import com.amirmuhsin.listinghelper.networking.model.product.ProductAM
-import com.amirmuhsin.listinghelper.networking.model.response.PagedProductListResponse
+import com.amirmuhsin.listinghelper.data.networking.model.product.ProductAM
+import com.amirmuhsin.listinghelper.data.networking.model.response.PagedProductListResponse
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
