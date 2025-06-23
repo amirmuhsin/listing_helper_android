@@ -1,9 +1,12 @@
 package com.amirmuhsin.listinghelper.ui.s1_home
 
+import android.widget.CompoundButton
+import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.amirmuhsin.listinghelper.R
 import com.amirmuhsin.listinghelper.core_views.base.ui.BaseFragment
+import com.amirmuhsin.listinghelper.data.networking.PhotoRoomNetworkModule
 import com.amirmuhsin.listinghelper.databinding.FragmentHomeBinding
 import io.cloudx.sdk.AdViewListener
 import io.cloudx.sdk.CloudX
@@ -56,9 +59,25 @@ class HomeFragment: BaseFragment<FragmentHomeBinding, HomeViewModel>(
         bannerAd.show()
     }
 
+    override fun assignObjects() {
+        binding.chSandbox.isChecked = PhotoRoomNetworkModule.isSandbox
+    }
+
     override fun setListeners() {
         binding.fabAdd.setOnClickListener {
             findNavController().navigate(R.id.action_open_product_details)
         }
+
+        binding.chSandbox.setOnCheckedChangeListener(object: CompoundButton.OnCheckedChangeListener {
+            override fun onCheckedChanged(p0: CompoundButton?, p1: Boolean) {
+                if (p1) {
+                    PhotoRoomNetworkModule.isSandbox = true
+                    Toast.makeText(requireContext(), "Sandbox mode ON", Toast.LENGTH_SHORT).show()
+                } else {
+                    PhotoRoomNetworkModule.isSandbox = false
+                    Toast.makeText(requireContext(), "Sandbox mode OFF", Toast.LENGTH_SHORT).show()
+                }
+            }
+        })
     }
 }

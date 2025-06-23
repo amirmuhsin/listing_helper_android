@@ -11,15 +11,16 @@ import retrofit2.converter.scalars.ScalarsConverterFactory
 object PhotoRoomNetworkModule {
 
     private const val BASE_URL = "https://image-api.photoroom.com/"
+    var isSandbox = true
 
     // Replace with your real key (or sandbox_ prefix for test)
-    private const val SANDBOX_API_KEY = "sandbox_sk_pr_74e5a0c21657ff03d7ab5fbb600af85de5e18b2b"
-    private const val LIVE_API_KEY = "sk_pr_default_77bc8dcb1351f648fe972ef949ecb8e2abb950d3"
+    private const val SANDBOX_API_KEY = "sandbox_sk_pr_default_4fd9275a5e7f58371893b8130c73ee4e682fbc10"
+    private const val LIVE_API_KEY = "sk_pr_default_4fd9275a5e7f58371893b8130c73ee4e682fbc10"
 
     private val apiKeyInterceptor = Interceptor { chain ->
         val original: Request = chain.request()
         val requestWithKey = original.newBuilder()
-            .addHeader("x-api-key", SANDBOX_API_KEY)
+            .addHeader("x-api-key", getApiKey())
             .build()
         chain.proceed(requestWithKey)
     }
@@ -41,4 +42,8 @@ object PhotoRoomNetworkModule {
 
     val photoRoomService: PhotoRoomService =
         retrofit.create(PhotoRoomService::class.java)
+
+    private fun getApiKey(): String {
+        return if (isSandbox) SANDBOX_API_KEY else LIVE_API_KEY
+    }
 }
