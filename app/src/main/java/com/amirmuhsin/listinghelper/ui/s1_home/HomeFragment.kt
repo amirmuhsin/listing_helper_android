@@ -1,5 +1,6 @@
 package com.amirmuhsin.listinghelper.ui.s1_home
 
+import android.R.attr.versionCode
 import android.widget.CompoundButton
 import android.widget.Toast
 import androidx.fragment.app.viewModels
@@ -79,5 +80,14 @@ class HomeFragment: BaseFragment<FragmentHomeBinding, HomeViewModel>(
                 }
             }
         })
+    }
+
+    override fun prepareUI() {
+        val packageManager = requireContext().packageManager
+        val packageName = requireContext().packageName
+        val packageInfo = packageManager.getPackageInfo(packageName, 0)
+        val versionName = packageInfo.versionName
+
+        binding.tvVersion.text = "Version: $versionName"
     }
 }
