@@ -7,8 +7,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.amirmuhsin.listinghelper.domain.model.AddPhotoItemButton
 import com.amirmuhsin.listinghelper.domain.model.PhotoItem
 import com.amirmuhsin.listinghelper.domain.model.PhotoPair
-import com.amirmuhsin.listinghelper.ui.s2_product_detail.list.AddPhotoItemLayout
-import com.amirmuhsin.listinghelper.ui.s2_product_detail.list.CleanedPhotoItemLayout
+import com.amirmuhsin.listinghelper.ui.s2_0_product_detail.list.AddPhotoItemLayout
+import com.amirmuhsin.listinghelper.ui.s2_0_product_detail.list.CleanedPhotoItemLayout
 
 class CleanedPhotoAdapter(
     private val context: Context,

@@ -1,4 +1,4 @@
-package com.amirmuhsin.listinghelper.ui.s2_product_detail
+package com.amirmuhsin.listinghelper.ui.s2_0_product_detail
 
 import CleanedPhotoAdapter
 import android.view.View
@@ -14,12 +14,14 @@ import com.amirmuhsin.listinghelper.R
 import com.amirmuhsin.listinghelper.core_views.base.ui.BaseFragment
 import com.amirmuhsin.listinghelper.databinding.FragmentProductDetailBinding
 import com.amirmuhsin.listinghelper.domain.model.PhotoPair
+import com.amirmuhsin.listinghelper.ui.s2_1_barcode_scanner.BarcodeScannerActivity
 import com.amirmuhsin.listinghelper.ui.s5_review_upload.ReviewUploadFragment
 import com.amirmuhsin.listinghelper.util.parcelableList
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanOptions
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlin.jvm.java
 
 class ProductDetailFragment: BaseFragment<FragmentProductDetailBinding, ProductDetailViewModel>(
     FragmentProductDetailBinding::inflate
@@ -108,6 +110,7 @@ class ProductDetailFragment: BaseFragment<FragmentProductDetailBinding, ProductD
             setPrompt("Scan a barcode")
             setBeepEnabled(true)
             setDesiredBarcodeFormats(ScanOptions.ONE_D_CODE_TYPES)
+            setCaptureActivity(BarcodeScannerActivity::class.java)
         }
         barcodeLauncher.launch(options)
     }

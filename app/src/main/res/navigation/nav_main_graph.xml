@@ -17,7 +17,7 @@
 
     <fragment
         android:id="@+id/productDetailFragment"
-        android:name="com.amirmuhsin.listinghelper.ui.s2_product_detail.ProductDetailFragment"
+        android:name="com.amirmuhsin.listinghelper.ui.s2_0_product_detail.ProductDetailFragment"
         tools:layout="@layout/fragment_product_detail">
         <action
             android:id="@+id/action_open_photo_capture"

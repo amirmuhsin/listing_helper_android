@@ -16,7 +16,7 @@ import com.amirmuhsin.listinghelper.R
 import com.amirmuhsin.listinghelper.core_views.base.ui.BaseFragment
 import com.amirmuhsin.listinghelper.databinding.FragmentBgCleanerBinding
 import com.amirmuhsin.listinghelper.data.networking.PhotoRoomNetworkModule
-import com.amirmuhsin.listinghelper.ui.s2_product_detail.ProductDetailFragment
+import com.amirmuhsin.listinghelper.ui.s2_0_product_detail.ProductDetailFragment
 import com.amirmuhsin.listinghelper.ui.s4_bg_clean.list.BgCleanerAdapter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach

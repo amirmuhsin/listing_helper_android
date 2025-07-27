@@ -42,6 +42,12 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".ui.s2_1_barcode_scanner.BarcodeScannerActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+
+
         <!-- FileProvider for sharing temp image files with CameraX -->
         <provider
             android:name="androidx.core.content.FileProvider"
