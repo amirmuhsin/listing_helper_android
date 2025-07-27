@@ -88,6 +88,6 @@ class HomeFragment: BaseFragment<FragmentHomeBinding, HomeViewModel>(
         val packageInfo = packageManager.getPackageInfo(packageName, 0)
         val versionName = packageInfo.versionName
 
-        binding.tvVersion.text = "Version: $versionName"
+        binding.tvVersion.text = "Version: $versionName | 23-June-2025"
     }
 }
