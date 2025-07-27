@@ -18,49 +18,6 @@ dependencyResolutionManagement {
         google()
         maven { url 'https://jitpack.io' }
         mavenCentral()
-        maven { url "https://dl-maven-android.mintegral.com/repository/mbridge_android_sdk_oversea" }
-        maven {
-            url = uri("https://maven.pkg.github.com/cloudx-xenoss/cloudexchange.android.sdk")
-            credentials {
-                username = "amirmuhsin"
-                password = "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"
-            }
-        }
-//        maven {
-//            url = uri("https://maven.pkg.github.com/cloudx-xenoss/cloudxchange.android.adapter-meta")
-//            credentials {
-//                username = "amirmuhsin"
-//                password = "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"
-//            }
-//        }
-//        maven {
-//            url = uri("https://maven.pkg.github.com/cloudx-xenoss/cloudxchange.android.adapter-mintegral")
-//            credentials {
-//                username = "amirmuhsin"
-//                password = "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"
-//            }
-//        }
-//        maven {
-//            url = uri("https://maven.pkg.github.com/cloudx-xenoss/cloudxchange.android.adapter-cloudx")
-//            credentials {
-//                username = "amirmuhsin"
-//                password = "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"
-//            }
-//        }
-//        maven {
-//            url = uri("https://maven.pkg.github.com/cloudx-xenoss/cloudxchange.android.adapter-testbidder")
-//            credentials {
-//                username = "amirmuhsin"
-//                password = "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"
-//            }
-//        }
-//        maven {
-//            url = uri("https://maven.pkg.github.com/cloudx-xenoss/cloudxchange.android.adapter-google")
-//            credentials {
-//                username = "amirmuhsin"
-//                password = "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"
-//            }
-//        }
     }
 }
 
