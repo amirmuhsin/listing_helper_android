@@ -8,6 +8,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.amirmuhsin.listinghelper.R
 import com.amirmuhsin.listinghelper.core_views.base.ui.BaseFragment
 import com.amirmuhsin.listinghelper.core_views.events.command.Command
 import com.amirmuhsin.listinghelper.databinding.FragmentReviewUploadBinding
@@ -81,6 +82,11 @@ class ReviewUploadFragment: BaseFragment<FragmentReviewUploadBinding, ReviewUplo
                     showSuccessSnackbar("All images uploaded successfully!")
                     binding.btnDone.visibility = View.VISIBLE
                     binding.btnUpload.visibility = View.GONE
+
+                    findNavController().navigate(
+                        R.id.action_reviewUpload_to_home
+                    )
+
                 } else {
                     showErrorSnackbar("Some images failed to upload. Please try again.")
                     binding.btnDone.visibility = View.GONE
