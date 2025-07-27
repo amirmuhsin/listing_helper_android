@@ -11,11 +11,15 @@ import android.hardware.camera2.CameraManager
 import android.net.Uri
 import android.util.Log
 import android.util.Size
+import android.view.MotionEvent
+import android.view.ScaleGestureDetector
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.camera.core.Camera
 import androidx.camera.core.CameraSelector
+import androidx.camera.core.FocusMeteringAction
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
@@ -54,6 +58,9 @@ class PhotoCaptureFragment: BaseFragment<FragmentPhotoCaptureBinding, PhotoCaptu
 
     private lateinit var sizeAdapter: ArrayAdapter<String>
     private val squareSizes = mutableListOf<Size>()
+
+    private lateinit var camera: Camera
+    private lateinit var scaleGestureDetector: ScaleGestureDetector
 
     private val requestPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
@@ -95,6 +102,21 @@ class PhotoCaptureFragment: BaseFragment<FragmentPhotoCaptureBinding, PhotoCaptu
                 checkCameraPermission()
             }, ContextCompat.getMainExecutor(requireContext()))
         }
+        scaleGestureDetector = ScaleGestureDetector(requireContext(),
+            object : ScaleGestureDetector.SimpleOnScaleGestureListener() {
+                override fun onScale(detector: ScaleGestureDetector): Boolean {
+                    val zoomState = camera.cameraInfo.zoomState.value
+                    val currentZoom = zoomState?.zoomRatio ?: 1f
+                    val minZoom = zoomState?.minZoomRatio ?: 1f
+                    val maxZoom = minOf(2f, zoomState?.maxZoomRatio ?: 10f)
+
+                    val newZoom = (currentZoom * detector.scaleFactor).coerceIn(minZoom, maxZoom)
+
+                    camera.cameraControl.setZoomRatio(newZoom)
+                    updateZoomLevelText(newZoom)
+                    return true
+                }
+            })
     }
 
     override fun setListeners() {
@@ -120,6 +142,22 @@ class PhotoCaptureFragment: BaseFragment<FragmentPhotoCaptureBinding, PhotoCaptu
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {}
+        }
+        binding.previewView.setOnTouchListener { view, motionEvent ->
+            scaleGestureDetector.onTouchEvent(motionEvent)
+
+            if (motionEvent.action == MotionEvent.ACTION_UP) {
+                val factory = binding.previewView.meteringPointFactory
+                val point = factory.createPoint(motionEvent.x, motionEvent.y)
+                val action = FocusMeteringAction.Builder(point)
+                    .disableAutoCancel()
+                    .build()
+                camera.cameraControl.startFocusAndMetering(action)
+
+                view.performClick()
+            }
+
+            true
         }
     }
 
@@ -187,7 +225,7 @@ class PhotoCaptureFragment: BaseFragment<FragmentPhotoCaptureBinding, PhotoCaptu
             .setTargetRotation(binding.previewView.display.rotation)
             .build()
 
-        cameraProvider.bindToLifecycle(
+        camera = cameraProvider.bindToLifecycle(
             viewLifecycleOwner,
             CameraSelector.DEFAULT_BACK_CAMERA,
             preview,
@@ -241,5 +279,10 @@ class PhotoCaptureFragment: BaseFragment<FragmentPhotoCaptureBinding, PhotoCaptu
 
         return emptyList()
     }
+
+    private fun updateZoomLevelText(zoom: Float) {
+        binding.tvZoomLevel.text = "Zoom: %.1fx".format(zoom)
+    }
+
 }
 
