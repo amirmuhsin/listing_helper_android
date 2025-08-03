@@ -90,7 +90,6 @@ class FullScreenViewerFragment: BaseFragment<FragmentFullScreenImageBinding, Ful
         binding.btnDelete.setOnClickListener {
             val currentItemPosition = binding.viewPager.currentItem
             viewModel.deletePhotoPair(currentItemPosition)
-
         }
         // Register the back press callback
         binding.viewPager.registerOnPageChangeCallback(object: ViewPager2.OnPageChangeCallback() {
@@ -141,6 +140,8 @@ class FullScreenViewerFragment: BaseFragment<FragmentFullScreenImageBinding, Ful
         val imageSizeInKB = getReadableSize(fileSizeBytes)
         binding.tvImageResolution.text = imageResolution
         binding.tvImageSize.text = imageSizeInKB
+
+        binding.tvCount.text = "${position + 1} / ${list.size}"
     }
 
     private fun toggleSystemUI() {
