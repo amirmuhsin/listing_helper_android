@@ -101,9 +101,9 @@ class ProductDetailFragment: BaseFragment<FragmentProductDetailBinding, ProductD
         binding.btnReview.setOnClickListener {
             val product = viewModel.fProduct.value
             val hasProduct = product != null
-            if (hasProduct || true) {
+            if (hasProduct) {
                 val cleanedPhotos = viewModel.flCleanedPhotos.value.filterIsInstance<PhotoPair>()
-                val args = ReviewUploadFragment.createArgs(product?.id ?: 1, cleanedPhotos)
+                val args = ReviewUploadFragment.createArgs(product.id, cleanedPhotos)
                 findNavController().navigate(R.id.action_open_review_upload, args)
             } else {
                 showErrorSnackbar("Product not found")
