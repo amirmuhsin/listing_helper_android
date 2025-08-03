@@ -1,6 +1,13 @@
 package com.amirmuhsin.listinghelper.ui.common.fullscreen_image
 
 import android.os.Bundle
+import android.view.View
+import android.view.ViewGroup
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
+import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.amirmuhsin.listinghelper.core_views.base.ui.BaseFragment
@@ -16,12 +23,17 @@ class FullScreenViewerFragment: BaseFragment<FragmentFullScreenImageBinding, Ful
     override val viewModel: FullScreenViewerViewModel by viewModels()
 
     private lateinit var adapter: FullScreenImagePagerAdapter
+    private var isUiVisible = true
 
     override fun assignObjects() {
+        WindowCompat.setDecorFitsSystemWindows(requireActivity().window, false)
+
         val photoPairs = arguments?.parcelableList<PhotoPair>(ARG_PHOTO_LIST) ?: emptyList()
         val startIndex = arguments?.getInt(ARG_START_INDEX) ?: 0
 
-        adapter = FullScreenImagePagerAdapter(requireContext(), photoPairs)
+        adapter = FullScreenImagePagerAdapter(requireContext(), photoPairs) {
+            toggleSystemUI()
+        }
         binding.viewPager.adapter = adapter
         binding.viewPager.setCurrentItem(startIndex.coerceIn(photoPairs.indices), false)
     }
@@ -34,6 +46,36 @@ class FullScreenViewerFragment: BaseFragment<FragmentFullScreenImageBinding, Ful
         binding.btnClose.setOnClickListener {
             findNavController().popBackStack()
         }
+        // Ensure proper margin below status bar
+        ViewCompat.setOnApplyWindowInsetsListener(binding.btnClose) { view, insets ->
+            val topInset = insets.getInsets(WindowInsetsCompat.Type.systemBars()).top
+            view.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                topMargin = topInset + 0
+                marginEnd = 0
+            }
+            insets
+        }
+
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, insets ->
+            // Return the insets unmodified — tells the system we handled it
+            WindowInsetsCompat.CONSUMED
+        }
+    }
+
+    private fun toggleSystemUI() {
+        val window = requireActivity().window
+        val controller = WindowCompat.getInsetsController(window, binding.root ) ?: return
+
+        if (isUiVisible) {
+            controller.hide(WindowInsetsCompat.Type.systemBars())
+            controller.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+            binding.btnClose.visibility = View.GONE
+        } else {
+            controller.show(WindowInsetsCompat.Type.systemBars())
+            binding.btnClose.visibility = View.VISIBLE
+        }
+
+        isUiVisible = !isUiVisible
     }
 
     companion object {

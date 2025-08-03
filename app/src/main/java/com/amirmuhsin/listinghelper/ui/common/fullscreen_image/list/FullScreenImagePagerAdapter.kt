@@ -10,7 +10,8 @@ import com.amirmuhsin.listinghelper.domain.model.PhotoPair
 
 class FullScreenImagePagerAdapter(
     private val context: Context,
-    private val items: List<PhotoPair>
+    private val items: List<PhotoPair>,
+    private val onImageClick: ((PhotoPair) -> Unit)? = null
 ): RecyclerView.Adapter<FullScreenImagePagerAdapter.ImageViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewHolder {
@@ -31,6 +32,9 @@ class FullScreenImagePagerAdapter(
             val uriToLoad = pair.cleanedUri ?: pair.originalUri
             binding.ivFullscreen.load(uriToLoad) {
                 crossfade(true)
+            }
+            binding.ivFullscreen.setOnClickListener {
+                onImageClick?.invoke(pair)
             }
         }
     }
