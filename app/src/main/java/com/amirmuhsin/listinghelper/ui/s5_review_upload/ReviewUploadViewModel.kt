@@ -27,6 +27,10 @@ class ReviewUploadViewModel(
         _pairs.value = _pairs.value.filter { it.internalId != pair.internalId }
     }
 
+    fun setReorderedPairs(reordered: List<PhotoPair>) {
+        _pairs.value = reordered
+    }
+
     fun uploadAll(productItemId: Long) {
         val list = _pairs.value
 
@@ -77,5 +81,4 @@ class ReviewUploadViewModel(
             }
         }
     }
-
 }

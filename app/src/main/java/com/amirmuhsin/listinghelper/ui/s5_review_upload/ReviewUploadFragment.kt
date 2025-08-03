@@ -6,14 +6,17 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.SimpleItemAnimator
 import com.amirmuhsin.listinghelper.R
 import com.amirmuhsin.listinghelper.core_views.base.ui.BaseFragment
 import com.amirmuhsin.listinghelper.core_views.events.command.Command
 import com.amirmuhsin.listinghelper.databinding.FragmentReviewUploadBinding
 import com.amirmuhsin.listinghelper.domain.model.PhotoPair
 import com.amirmuhsin.listinghelper.ui.s5_review_upload.command.ReviewUploadCommands
+import com.amirmuhsin.listinghelper.ui.s5_review_upload.list.DragDropCallback
 import com.amirmuhsin.listinghelper.ui.s5_review_upload.list.ReviewUploadAdapter
 import com.amirmuhsin.listinghelper.util.parcelableList
 import kotlinx.coroutines.flow.launchIn
@@ -27,6 +30,7 @@ class ReviewUploadFragment: BaseFragment<FragmentReviewUploadBinding, ReviewUplo
 
     private lateinit var adapter: ReviewUploadAdapter
     private var productItemId: Long = -1L
+    private var touchHelper: ItemTouchHelper? = null
 
     override fun assignObjects() {
         productItemId = requireArguments().getLong(ARG_PRODUCT_ITEM_ID, -1L)
@@ -34,8 +38,12 @@ class ReviewUploadFragment: BaseFragment<FragmentReviewUploadBinding, ReviewUplo
 
         adapter = ReviewUploadAdapter(
             requireContext(),
-            onPhotoClick = { pair -> /* open full screen */ },
-            onPhotoRemove = { pair -> viewModel.removePair(pair) }
+            onPhotoClick = { pair ->
+
+            },
+            onPhotoRemove = { pair -> viewModel.removePair(pair) },
+            startDragListener = { viewHolder -> touchHelper?.startDrag(viewHolder) },
+            onReordered = { reorderedList -> viewModel.setReorderedPairs(reorderedList) }
         )
         viewModel.setInitialPairs(pairs)
     }
@@ -43,9 +51,6 @@ class ReviewUploadFragment: BaseFragment<FragmentReviewUploadBinding, ReviewUplo
     override fun prepareUI() {
         binding.rvConfirmation.layoutManager = LinearLayoutManager(requireContext(), RecyclerView.VERTICAL, false)
         binding.rvConfirmation.adapter = adapter
-        // Enable drag & drop
-//        val touchHelper = ItemTouchHelper(viewModel.dragCallback(adapter))
-//        touchHelper.attachToRecyclerView(binding.rvConfirmation)
     }
 
     override fun setListeners() {
@@ -58,12 +63,17 @@ class ReviewUploadFragment: BaseFragment<FragmentReviewUploadBinding, ReviewUplo
         binding.btnDone.setOnClickListener {
             findNavController().popBackStack()
         }
+        val callback = DragDropCallback(adapter)
+        touchHelper = ItemTouchHelper(callback)
+        touchHelper?.attachToRecyclerView(binding.rvConfirmation)
     }
 
     override fun setObservers() {
         viewModel.pairs
             .flowWithLifecycle(viewLifecycleOwner.lifecycle)
-            .onEach { adapter.submitList(it) }
+            .onEach {
+                adapter.submitList(it)
+            }
             .launchIn(lifecycleScope)
 
         viewModel.uploadProgress

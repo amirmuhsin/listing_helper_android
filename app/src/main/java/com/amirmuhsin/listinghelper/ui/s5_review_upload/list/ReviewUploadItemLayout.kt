@@ -2,6 +2,7 @@ package com.amirmuhsin.listinghelper.ui.s5_review_upload.list
 
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.widget.RelativeLayout
 import androidx.core.view.isVisible
 import coil.load
@@ -28,7 +29,7 @@ class ReviewUploadItemLayout(
         binding.btnRemove.setOnClickListener { current?.let(onRemoveClick) }
     }
 
-    fun fillContent(pair: PhotoPair) {
+    fun fillContent(pair: PhotoPair, startDragListener: () -> Unit) {
         current = pair
 
         val fileSizeBytes = getImageSizeInBytes(context, pair.cleanedUri)
@@ -67,6 +68,13 @@ class ReviewUploadItemLayout(
                 binding.ivUploadStatus.isVisible = true
                 binding.ivUploadStatus.setImageResource(R.drawable.ic_warning)
             }
+        }
+
+        binding.btnHandle.setOnTouchListener { _, event ->
+            if (event.actionMasked == MotionEvent.ACTION_DOWN) {
+                startDragListener()
+            }
+            false
         }
     }
 }

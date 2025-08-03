@@ -63,7 +63,6 @@ class ProductDetailFragment: BaseFragment<FragmentProductDetailBinding, ProductD
                     uploadStatus = PhotoPair.UploadStatus.PENDING
                 )
             }
-            println("Setting cleaned photos: $photoPairs")
             viewModel.setCleanedPhotos(photoPairs)
         }
 
@@ -103,9 +102,9 @@ class ProductDetailFragment: BaseFragment<FragmentProductDetailBinding, ProductD
         binding.btnReview.setOnClickListener {
             val product = viewModel.fProduct.value
             val hasProduct = product != null
-            if (hasProduct) {
+            if (hasProduct || true) {
                 val cleanedPhotos = viewModel.flCleanedPhotos.value.filterIsInstance<PhotoPair>()
-                val args = ReviewUploadFragment.createArgs(product.id, cleanedPhotos)
+                val args = ReviewUploadFragment.createArgs(product?.id ?: 1, cleanedPhotos)
                 findNavController().navigate(R.id.action_open_review_upload, args)
             } else {
                 showErrorSnackbar("Product not found")
