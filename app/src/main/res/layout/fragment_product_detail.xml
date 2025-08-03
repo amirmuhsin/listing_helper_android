@@ -98,10 +98,12 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/medium_padding"
         android:layout_marginBottom="@dimen/huge_padding"
+        android:visibility="gone"
         app:backgroundTint="@color/primary"
         app:layout_constraintBottom_toTopOf="@id/flBottomContainer"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/ic_add_a_photo_24"/>
+        app:srcCompat="@drawable/ic_add_a_photo_24"
+        tools:visibility="visible"/>
 
     <FrameLayout
         android:id="@+id/flBottomContainer"
