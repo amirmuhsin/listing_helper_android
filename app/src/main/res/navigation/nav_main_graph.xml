@@ -6,6 +6,10 @@
     android:id="@+id/nav_main"
     app:startDestination="@id/homeFragment">
 
+    <action
+        android:id="@+id/action_global_fullScreenImage"
+        app:destination="@id/fullScreenImageFragment"/>
+
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.amirmuhsin.listinghelper.ui.s1_home.HomeFragment"
@@ -56,8 +60,13 @@
             android:id="@+id/action_reviewUpload_to_home"
             app:destination="@id/homeFragment"
             app:popUpTo="@id/homeFragment"
-            app:popUpToInclusive="false" />
+            app:popUpToInclusive="false"/>
 
     </fragment>
+
+    <fragment
+        android:id="@+id/fullScreenImageFragment"
+        android:name="com.amirmuhsin.listinghelper.ui.common.fullscreen_image.FullScreenViewerFragment"
+        tools:layout="@layout/fragment_full_screen_image" />
 
 </navigation>

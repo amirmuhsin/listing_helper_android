@@ -15,6 +15,7 @@ import com.amirmuhsin.listinghelper.R
 import com.amirmuhsin.listinghelper.core_views.base.ui.BaseFragment
 import com.amirmuhsin.listinghelper.databinding.FragmentProductDetailBinding
 import com.amirmuhsin.listinghelper.domain.model.PhotoPair
+import com.amirmuhsin.listinghelper.ui.common.fullscreen_image.FullScreenViewerFragment
 import com.amirmuhsin.listinghelper.ui.s2_1_barcode_scanner.BarcodeScannerActivity
 import com.amirmuhsin.listinghelper.ui.s5_review_upload.ReviewUploadFragment
 import com.amirmuhsin.listinghelper.util.parcelableList
@@ -63,8 +64,13 @@ class ProductDetailFragment: BaseFragment<FragmentProductDetailBinding, ProductD
 
         cleanedPhotosAdapter = CleanedPhotoAdapter(
             requireContext(),
-            onPhotoClick = {
-                // TODO: open full screen photo viewer
+            onPhotoClick = { clickedPhotoPair ->
+                val allPhotoPairs = viewModel.flCleanedPhotos.value.filterIsInstance<PhotoPair>()
+                val startIndex = allPhotoPairs.indexOfFirst { it.internalId == clickedPhotoPair.internalId }
+                if (startIndex >= 0) {
+                    val args = FullScreenViewerFragment.createArgs(allPhotoPairs, startIndex)
+                    findNavController().navigate(R.id.action_global_fullScreenImage, args)
+                }
             }, onAddClick = {
                 // TODO: open File Chooser
             })
