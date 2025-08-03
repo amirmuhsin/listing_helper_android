@@ -1,6 +1,7 @@
 package com.amirmuhsin.listinghelper.ui.s2_0_product_detail
 
 import CleanedPhotoAdapter
+import android.net.Uri
 import android.view.View
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.setFragmentResultListener
@@ -21,7 +22,7 @@ import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanOptions
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlin.jvm.java
+import java.util.UUID
 
 class ProductDetailFragment: BaseFragment<FragmentProductDetailBinding, ProductDetailViewModel>(
     FragmentProductDetailBinding::inflate
@@ -44,6 +45,22 @@ class ProductDetailFragment: BaseFragment<FragmentProductDetailBinding, ProductD
             val cleanedPairs = bundle.parcelableList<PhotoPair>(ARG_IMAGE_URI) ?: emptyList()
             viewModel.setCleanedPhotos(cleanedPairs)
         }
+        val sharedUris = arguments?.parcelableList<Uri>(ARG_IMAGE_URI) ?: emptyList()
+        if (sharedUris.isNotEmpty()) {
+            val photoPairs = sharedUris.mapIndexed { index, uri ->
+                PhotoPair(
+                    internalId = UUID.randomUUID().toString(),
+                    originalUri = uri,
+                    cleanedUri = uri,
+                    bgCleanStatus = PhotoPair.BgCleanStatus.COMPLETED,
+                    order = index + 1,
+                    uploadStatus = PhotoPair.UploadStatus.PENDING
+                )
+            }
+            println("Setting cleaned photos: $photoPairs")
+            viewModel.setCleanedPhotos(photoPairs)
+        }
+
         cleanedPhotosAdapter = CleanedPhotoAdapter(
             requireContext(),
             onPhotoClick = {
