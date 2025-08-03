@@ -162,10 +162,12 @@ class FullScreenViewerFragment: BaseFragment<FragmentFullScreenImageBinding, Ful
     }
 
     private fun goBackList() {
-        val latestList = viewModel.flPhotos.value
-        setFragmentResult(RK_PHOTO_LIST, Bundle().apply {
-            putParcelableArrayList(ARG_PHOTO_LIST, ArrayList(latestList))
-        })
+        if (viewModel.isListChanged) {
+            val latestList = viewModel.flPhotos.value
+            setFragmentResult(RK_PHOTO_LIST, Bundle().apply {
+                putParcelableArrayList(ARG_PHOTO_LIST, ArrayList(latestList))
+            })
+        }
         findNavController().popBackStack()
     }
 

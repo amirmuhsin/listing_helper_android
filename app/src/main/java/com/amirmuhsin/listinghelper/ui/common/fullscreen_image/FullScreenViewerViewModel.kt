@@ -17,11 +17,14 @@ class FullScreenViewerViewModel(
     private val _flStartIndex = MutableStateFlow(startIndex)
     val flStartIndexFlow: StateFlow<Int> = _flStartIndex
 
+    var isListChanged = false
+
     fun deletePhotoPair(index: Int) {
         val currentList = _flPhotos.value.toMutableList()
         if (index in currentList.indices) {
             currentList.removeAt(index)
             _flPhotos.value = currentList
+            isListChanged = true
 
             if (currentList.isEmpty()) {
                 sendCommand(FullScreenCommands.AllImagesDeleted)
