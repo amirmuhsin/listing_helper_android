@@ -35,7 +35,6 @@ class FullScreenViewerFragment: BaseFragment<FragmentFullScreenImageBinding, Ful
         )
     }
 
-    // Define the callback for back press
     private val backPressedCallback = object: OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
             goBackList()
@@ -55,7 +54,7 @@ class FullScreenViewerFragment: BaseFragment<FragmentFullScreenImageBinding, Ful
     }
 
     override fun prepareUI() {
-        ViewCompat.setOnApplyWindowInsetsListener(binding.btnClose) { view, insets ->
+        ViewCompat.setOnApplyWindowInsetsListener(binding.clToolbar) { view, insets ->
             val topInset = insets.getInsets(WindowInsetsCompat.Type.systemBars()).top
             view.updateLayoutParams<ViewGroup.MarginLayoutParams> {
                 topMargin = topInset
@@ -123,11 +122,11 @@ class FullScreenViewerFragment: BaseFragment<FragmentFullScreenImageBinding, Ful
         if (isUiVisible) {
             controller.hide(WindowInsetsCompat.Type.navigationBars())
             controller.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-            binding.btnClose.visibility = View.GONE
+            binding.clToolbar.visibility = View.GONE
             binding.clActionPanel.visibility = View.GONE
         } else {
             controller.show(WindowInsetsCompat.Type.navigationBars())
-            binding.btnClose.visibility = View.VISIBLE
+            binding.clToolbar.visibility = View.VISIBLE
             binding.clActionPanel.visibility = View.VISIBLE
         }
 
