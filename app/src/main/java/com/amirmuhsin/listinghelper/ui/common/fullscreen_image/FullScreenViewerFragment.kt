@@ -26,7 +26,8 @@ class FullScreenViewerFragment: BaseFragment<FragmentFullScreenImageBinding, Ful
     private var isUiVisible = true
 
     override fun assignObjects() {
-        WindowCompat.setDecorFitsSystemWindows(requireActivity().window, false)
+        val window = requireActivity().window
+        WindowCompat.setDecorFitsSystemWindows(window, false)
 
         val photoPairs = arguments?.parcelableList<PhotoPair>(ARG_PHOTO_LIST) ?: emptyList()
         val startIndex = arguments?.getInt(ARG_START_INDEX) ?: 0
@@ -55,23 +56,25 @@ class FullScreenViewerFragment: BaseFragment<FragmentFullScreenImageBinding, Ful
             }
             insets
         }
-
-        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, insets ->
-            // Return the insets unmodified — tells the system we handled it
-            WindowInsetsCompat.CONSUMED
+        ViewCompat.setOnApplyWindowInsetsListener(binding.viewPager) { view, insets ->
+            val topInset = insets.getInsets(WindowInsetsCompat.Type.systemBars()).top
+            view.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                topMargin = topInset
+            }
+            insets
         }
     }
 
     private fun toggleSystemUI() {
         val window = requireActivity().window
-        val controller = WindowCompat.getInsetsController(window, binding.root ) ?: return
+        val controller = WindowCompat.getInsetsController(window, binding.root) ?: return
 
         if (isUiVisible) {
-            controller.hide(WindowInsetsCompat.Type.systemBars())
+            controller.hide(WindowInsetsCompat.Type.navigationBars())
             controller.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
             binding.btnClose.visibility = View.GONE
         } else {
-            controller.show(WindowInsetsCompat.Type.systemBars())
+            controller.show(WindowInsetsCompat.Type.navigationBars())
             binding.btnClose.visibility = View.VISIBLE
         }
 
