@@ -21,21 +21,13 @@ class FullScreenViewerViewModel(
         val currentList = _flPhotos.value.toMutableList()
         if (index in currentList.indices) {
             currentList.removeAt(index)
+            _flPhotos.value = currentList
 
-            // Reassign order starting from 1
-            val reorderedList = currentList.mapIndexed { i, item ->
-                item.copy(order = i + 1)
-            }
-
-            _flPhotos.value = reorderedList
-
-            if (reorderedList.isEmpty()) {
+            if (currentList.isEmpty()) {
                 sendCommand(FullScreenCommands.AllImagesDeleted)
             } else {
                 sendCommand(FullScreenCommands.ImageDeleted)
             }
         }
     }
-
-
 }
