@@ -6,9 +6,14 @@ import android.net.Uri
 
 fun getImageSizeInBytes(context: Context, uri: Uri?): Long {
     if (uri == null) return -1
-    return context.contentResolver.openAssetFileDescriptor(uri, "r")?.use {
-        it.length
-    } ?: -1
+    return try {
+        context.contentResolver.openAssetFileDescriptor(uri, "r")?.use {
+            it.length
+        } ?: -1
+    } catch (e: Exception) {
+        e.printStackTrace()
+        -1
+    }
 }
 
 fun getImageResolution(context: Context, uri: Uri?): Pair<Int, Int>? {
@@ -32,8 +37,10 @@ fun getImageResolution(context: Context, uri: Uri?): Pair<Int, Int>? {
 }
 
 fun getReadableSize(fileSizeBytes: Long): String {
-    val readableSize = if (fileSizeBytes > 0) {
-        "%.2f MB".format(fileSizeBytes / 1024f / 1024f)
-    } else "Unknown"
-    return readableSize
+    return when {
+        fileSizeBytes <= 0 -> "Unknown"
+        fileSizeBytes < 1024 -> "$fileSizeBytes B"
+        fileSizeBytes < 1024 * 1024 -> "%.1f KB".format(fileSizeBytes / 1024f)
+        else -> "%.2f MB".format(fileSizeBytes / 1024f / 1024f)
+    }
 }

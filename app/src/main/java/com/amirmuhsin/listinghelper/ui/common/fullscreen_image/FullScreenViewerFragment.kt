@@ -14,12 +14,16 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.viewpager2.widget.ViewPager2
 import com.amirmuhsin.listinghelper.core_views.base.ui.BaseFragment
 import com.amirmuhsin.listinghelper.core_views.events.command.Command
 import com.amirmuhsin.listinghelper.databinding.FragmentFullScreenImageBinding
 import com.amirmuhsin.listinghelper.domain.model.PhotoPair
 import com.amirmuhsin.listinghelper.ui.common.fullscreen_image.command.FullScreenCommands
 import com.amirmuhsin.listinghelper.ui.common.fullscreen_image.list.FullScreenImagePagerAdapter
+import com.amirmuhsin.listinghelper.util.getImageResolution
+import com.amirmuhsin.listinghelper.util.getImageSizeInBytes
+import com.amirmuhsin.listinghelper.util.getReadableSize
 import com.amirmuhsin.listinghelper.util.parcelableList
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -79,21 +83,22 @@ class FullScreenViewerFragment: BaseFragment<FragmentFullScreenImageBinding, Ful
     }
 
     override fun setListeners() {
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, backPressedCallback)
         binding.btnClose.setOnClickListener {
             goBackList()
         }
         binding.btnDelete.setOnClickListener {
             val currentItemPosition = binding.viewPager.currentItem
             viewModel.deletePhotoPair(currentItemPosition)
+
         }
         // Register the back press callback
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, backPressedCallback)
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        backPressedCallback.remove()
-        setFitSystemWindows(true)
+        binding.viewPager.registerOnPageChangeCallback(object: ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                updatePhotoMeta(position)
+            }
+        })
     }
 
     override fun setObservers() {
@@ -105,6 +110,7 @@ class FullScreenViewerFragment: BaseFragment<FragmentFullScreenImageBinding, Ful
         viewModel.flStartIndexFlow.flowWithLifecycle(lifecycle)
             .onEach { startIndex ->
                 binding.viewPager.setCurrentItem(startIndex.coerceIn(viewModel.flPhotos.value.indices), false)
+                updatePhotoMeta(startIndex)
             }.launchIn(lifecycleScope)
     }
 
@@ -112,7 +118,29 @@ class FullScreenViewerFragment: BaseFragment<FragmentFullScreenImageBinding, Ful
         super.handleCommand(command)
         if (command is FullScreenCommands.AllImagesDeleted) {
             goBackList()
+        } else if (command is FullScreenCommands.ImageDeleted) {
+            val currentItemPosition = binding.viewPager.currentItem
+            updatePhotoMeta(currentItemPosition)
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        backPressedCallback.remove()
+        setFitSystemWindows(true)
+    }
+
+    private fun updatePhotoMeta(position: Int) {
+        val list = viewModel.flPhotos.value
+        val pair = list.getOrNull(position) ?: return
+
+        val fileSizeBytes = getImageSizeInBytes(requireContext(), pair.cleanedUri)
+        val resolution = getImageResolution(requireContext(), pair.cleanedUri)
+
+        val imageResolution = resolution?.let { "${it.first} x ${it.second}" } ?: "Unknown"
+        val imageSizeInKB = getReadableSize(fileSizeBytes)
+        binding.tvImageResolution.text = imageResolution
+        binding.tvImageSize.text = imageSizeInKB
     }
 
     private fun toggleSystemUI() {

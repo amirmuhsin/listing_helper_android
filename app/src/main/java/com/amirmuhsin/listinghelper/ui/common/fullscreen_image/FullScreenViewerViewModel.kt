@@ -25,6 +25,8 @@ class FullScreenViewerViewModel(
 
             if (currentList.isEmpty()) {
                 sendCommand(FullScreenCommands.AllImagesDeleted)
+            } else {
+                sendCommand(FullScreenCommands.ImageDeleted)
             }
         }
     }
