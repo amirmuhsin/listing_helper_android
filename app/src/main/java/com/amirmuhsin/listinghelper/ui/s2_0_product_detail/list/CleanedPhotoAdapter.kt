@@ -28,7 +28,16 @@ class CleanedPhotoAdapter(
             }
 
             override fun areContentsTheSame(a: PhotoItem, b: PhotoItem): Boolean {
-                return a == b
+                return when {
+                    a is PhotoPair && b is PhotoPair ->
+                        a.cleanedUri == b.cleanedUri &&
+                                a.bgCleanStatus == b.bgCleanStatus &&
+                                a.internalId == b.internalId // defensive
+
+                    a is AddPhotoItemButton && b is AddPhotoItemButton -> true
+
+                    else -> false
+                }
             }
         }
 

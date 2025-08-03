@@ -47,17 +47,17 @@ class ReviewUploadViewModel(
                     // todo: assign the imageAM to the pair or return Image model from the upload function instead of ImageAM (define it in domain)
 
                     println("Image uploaded successfully: $imageAM")
-                    pair.uploadStatus = PhotoPair.UploadStatus.UPLOADED
+                    val updatedPair = pair.copy(uploadStatus = PhotoPair.UploadStatus.UPLOADED)
                     println("hop: VM: updating pair to UPLOADED: $pair")
-                    updatePair(pair)
+                    updatePair(updatedPair)
 
                     uploadCount++
                     sendCommand(ReviewUploadCommands.UploadItemProgress(uploadCount, total))
                 } catch (e: Exception) {
                     showErrorSnackbar("Upload failed: ${e.message}")
 
-                    pair.uploadStatus = PhotoPair.UploadStatus.FAILED
-                    updatePair(pair)
+                    val failedPair = pair.copy(uploadStatus = PhotoPair.UploadStatus.FAILED)
+                    updatePair(failedPair)
                 }
 
                 // progress should be based on the upload count

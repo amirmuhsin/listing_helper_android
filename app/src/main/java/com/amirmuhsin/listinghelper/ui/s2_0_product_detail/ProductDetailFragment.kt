@@ -79,6 +79,7 @@ class ProductDetailFragment: BaseFragment<FragmentProductDetailBinding, ProductD
             }, onAddClick = {
                 // TODO: open File Chooser
             })
+        cleanedPhotosAdapter.setHasStableIds(true)
     }
 
     override fun prepareUI() {
