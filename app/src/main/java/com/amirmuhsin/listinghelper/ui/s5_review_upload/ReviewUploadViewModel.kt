@@ -27,8 +27,11 @@ class ReviewUploadViewModel(
         _pairs.value = _pairs.value.filter { it.internalId != pair.internalId }
     }
 
-    fun setReorderedPairs(reordered: List<PhotoPair>) {
-        _pairs.value = reordered
+    fun setReorderedPairsSilently(reordered: List<PhotoPair>) {
+        (_pairs.value as? MutableList<PhotoPair>)?.apply {
+            clear()
+            addAll(reordered)
+        }
     }
 
     fun uploadAll(productItemId: Long) {

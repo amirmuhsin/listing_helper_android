@@ -43,7 +43,7 @@ class ReviewUploadFragment: BaseFragment<FragmentReviewUploadBinding, ReviewUplo
             },
             onPhotoRemove = { pair -> viewModel.removePair(pair) },
             startDragListener = { viewHolder -> touchHelper?.startDrag(viewHolder) },
-            onReordered = { reorderedList -> viewModel.setReorderedPairs(reorderedList) }
+            onReordered = { reorderedList -> viewModel.setReorderedPairsSilently(reorderedList) }
         )
         viewModel.setInitialPairs(pairs)
     }

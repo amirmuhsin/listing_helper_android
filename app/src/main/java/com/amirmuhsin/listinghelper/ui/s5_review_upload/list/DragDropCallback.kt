@@ -20,6 +20,7 @@ class DragDropCallback(
             myAdapter.submitList(reordered) {
                 myAdapter.notifyDataSetChanged() // ← this disables animation artifacts
             }
+            myAdapter.onReordered.invoke(reordered)
         }
     }
 
