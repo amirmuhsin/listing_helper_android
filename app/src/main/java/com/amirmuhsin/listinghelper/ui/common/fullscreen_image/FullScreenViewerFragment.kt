@@ -46,8 +46,7 @@ class FullScreenViewerFragment: BaseFragment<FragmentFullScreenImageBinding, Ful
     private var isUiVisible = true
 
     override fun assignObjects() {
-        val window = requireActivity().window
-        WindowCompat.setDecorFitsSystemWindows(window, false)
+        setFitSystemWindows(false)
 
         adapter = FullScreenImagePagerAdapter {
             toggleSystemUI()
@@ -95,6 +94,7 @@ class FullScreenViewerFragment: BaseFragment<FragmentFullScreenImageBinding, Ful
     override fun onDestroyView() {
         super.onDestroyView()
         backPressedCallback.remove()
+        setFitSystemWindows(true)
     }
 
     override fun setObservers() {
@@ -140,6 +140,10 @@ class FullScreenViewerFragment: BaseFragment<FragmentFullScreenImageBinding, Ful
             putParcelableArrayList(ARG_PHOTO_LIST, ArrayList(latestList))
         })
         findNavController().popBackStack()
+    }
+
+    private fun setFitSystemWindows(isEnabled: Boolean) {
+        WindowCompat.setDecorFitsSystemWindows(requireActivity().window, isEnabled)
     }
 
     companion object {
