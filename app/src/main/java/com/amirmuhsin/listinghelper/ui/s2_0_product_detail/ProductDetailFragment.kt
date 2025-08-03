@@ -3,6 +3,7 @@ package com.amirmuhsin.listinghelper.ui.s2_0_product_detail
 import CleanedPhotoAdapter
 import android.net.Uri
 import android.view.View
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
@@ -41,6 +42,22 @@ class ProductDetailFragment: BaseFragment<FragmentProductDetailBinding, ProductD
         }
     }
 
+    private val pickImagesLauncher = registerForActivityResult(ActivityResultContracts.GetMultipleContents()) { uris ->
+        if (!uris.isNullOrEmpty()) {
+            val newPairs = uris.mapIndexed { index, uri ->
+                PhotoPair(
+                    internalId = UUID.randomUUID().toString(),
+                    originalUri = uri,
+                    cleanedUri = uri, // or null if not cleaned yet
+                    bgCleanStatus = PhotoPair.BgCleanStatus.COMPLETED,
+                    order = viewModel.flCleanedPhotos.value.filterIsInstance<PhotoPair>().size + index + 1,
+                    uploadStatus = PhotoPair.UploadStatus.PENDING
+                )
+            }
+            viewModel.appendCleanedPhotos(newPairs)
+        }
+    }
+
     override fun assignObjects() {
         setFragmentResultListener(RK_CLEANED_PHOTOS) { _, bundle ->
             val cleanedPairs = bundle.parcelableList<PhotoPair>(ARG_IMAGE_URI) ?: emptyList()
@@ -75,7 +92,7 @@ class ProductDetailFragment: BaseFragment<FragmentProductDetailBinding, ProductD
                     findNavController().navigate(R.id.action_global_fullScreenImage, args)
                 }
             }, onAddClick = {
-                // TODO: open File Chooser
+                pickImagesLauncher.launch("image/*")
             })
         cleanedPhotosAdapter.setHasStableIds(true)
     }
