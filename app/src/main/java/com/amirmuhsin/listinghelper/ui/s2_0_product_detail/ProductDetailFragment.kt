@@ -42,6 +42,8 @@ class ProductDetailFragment: BaseFragment<FragmentProductDetailBinding, ProductD
         }
     }
 
+    private var isBarcodeLaunchRequired = true
+
     private val pickImagesLauncher = registerForActivityResult(ActivityResultContracts.GetMultipleContents()) { uris ->
         if (!uris.isNullOrEmpty()) {
             val newPairs = uris.mapIndexed { index, uri ->
@@ -80,6 +82,11 @@ class ProductDetailFragment: BaseFragment<FragmentProductDetailBinding, ProductD
                 )
             }
             viewModel.setCleanedPhotos(photoPairs)
+
+            if (isBarcodeLaunchRequired) {
+                isBarcodeLaunchRequired = false
+                openBarcodeScanner()
+            }
         }
 
         cleanedPhotosAdapter = CleanedPhotoAdapter(
