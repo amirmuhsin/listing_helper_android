@@ -20,12 +20,6 @@ class MainActivity: BaseActivity<ActivityMainBinding, MainViewModel>(ActivityMai
         handleSharedImagesIfAny(intent)
     }
 
-    override fun onBackPressed() {
-        if (!navController.popBackStack()) {
-            super.onBackPressed()
-        }
-    }
-
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
         intent?.let { handleSharedImagesIfAny(it) }

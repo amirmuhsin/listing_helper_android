@@ -3,25 +3,44 @@ package com.amirmuhsin.listinghelper.ui.common.fullscreen_image
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.updateLayoutParams
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.amirmuhsin.listinghelper.core_views.base.ui.BaseFragment
+import com.amirmuhsin.listinghelper.core_views.events.command.Command
 import com.amirmuhsin.listinghelper.databinding.FragmentFullScreenImageBinding
 import com.amirmuhsin.listinghelper.domain.model.PhotoPair
+import com.amirmuhsin.listinghelper.ui.common.fullscreen_image.command.FullScreenCommands
 import com.amirmuhsin.listinghelper.ui.common.fullscreen_image.list.FullScreenImagePagerAdapter
 import com.amirmuhsin.listinghelper.util.parcelableList
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 class FullScreenViewerFragment: BaseFragment<FragmentFullScreenImageBinding, FullScreenViewerViewModel>(
     FragmentFullScreenImageBinding::inflate
 ) {
 
-    override val viewModel: FullScreenViewerViewModel by viewModels()
+    override val viewModel: FullScreenViewerViewModel by viewModels {
+        FullScreenViewerViewModelFactory(
+            photoPairs = arguments?.parcelableList(ARG_PHOTO_LIST) ?: emptyList(),
+            startIndex = arguments?.getInt(ARG_START_INDEX) ?: 0
+        )
+    }
+
+    // Define the callback for back press
+    private val backPressedCallback = object: OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            goBackList()
+        }
+    }
 
     private lateinit var adapter: FullScreenImagePagerAdapter
     private var isUiVisible = true
@@ -30,14 +49,10 @@ class FullScreenViewerFragment: BaseFragment<FragmentFullScreenImageBinding, Ful
         val window = requireActivity().window
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
-        val photoPairs = arguments?.parcelableList<PhotoPair>(ARG_PHOTO_LIST) ?: emptyList()
-        val startIndex = arguments?.getInt(ARG_START_INDEX) ?: 0
-
-        adapter = FullScreenImagePagerAdapter(requireContext(), photoPairs) {
+        adapter = FullScreenImagePagerAdapter {
             toggleSystemUI()
         }
         binding.viewPager.adapter = adapter
-        binding.viewPager.setCurrentItem(startIndex.coerceIn(photoPairs.indices), false)
     }
 
     override fun prepareUI() {
@@ -67,10 +82,37 @@ class FullScreenViewerFragment: BaseFragment<FragmentFullScreenImageBinding, Ful
 
     override fun setListeners() {
         binding.btnClose.setOnClickListener {
-            findNavController().popBackStack()
+            goBackList()
         }
         binding.btnDelete.setOnClickListener {
-            Toast.makeText(requireContext(), "Delete image feature is not implemented yet", Toast.LENGTH_SHORT).show()
+            val currentItemPosition = binding.viewPager.currentItem
+            viewModel.deletePhotoPair(currentItemPosition)
+        }
+        // Register the back press callback
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, backPressedCallback)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        backPressedCallback.remove()
+    }
+
+    override fun setObservers() {
+        viewModel.flPhotos.flowWithLifecycle(lifecycle)
+            .onEach { images ->
+                adapter.submitList(images)
+            }.launchIn(lifecycleScope)
+
+        viewModel.flStartIndexFlow.flowWithLifecycle(lifecycle)
+            .onEach { startIndex ->
+                binding.viewPager.setCurrentItem(startIndex.coerceIn(viewModel.flPhotos.value.indices), false)
+            }.launchIn(lifecycleScope)
+    }
+
+    override fun handleCommand(command: Command) {
+        super.handleCommand(command)
+        if (command is FullScreenCommands.AllImagesDeleted) {
+            goBackList()
         }
     }
 
@@ -92,10 +134,19 @@ class FullScreenViewerFragment: BaseFragment<FragmentFullScreenImageBinding, Ful
         isUiVisible = !isUiVisible
     }
 
+    private fun goBackList() {
+        val latestList = viewModel.flPhotos.value
+        setFragmentResult(RK_PHOTO_LIST, Bundle().apply {
+            putParcelableArrayList(ARG_PHOTO_LIST, ArrayList(latestList))
+        })
+        findNavController().popBackStack()
+    }
+
     companion object {
 
         const val ARG_PHOTO_LIST = "arg:photo_list"
         const val ARG_START_INDEX = "arg:start_index"
+        const val RK_PHOTO_LIST = "rk:photo_list"
 
         fun createArgs(photoList: List<PhotoPair>, startIndex: Int) = Bundle().apply {
             putParcelableArrayList(ARG_PHOTO_LIST, ArrayList(photoList))

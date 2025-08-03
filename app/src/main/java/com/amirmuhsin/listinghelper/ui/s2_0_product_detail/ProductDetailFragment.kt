@@ -3,6 +3,7 @@ package com.amirmuhsin.listinghelper.ui.s2_0_product_detail
 import CleanedPhotoAdapter
 import android.net.Uri
 import android.view.View
+import androidx.activity.OnBackPressedCallback
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
@@ -45,6 +46,10 @@ class ProductDetailFragment: BaseFragment<FragmentProductDetailBinding, ProductD
         setFragmentResultListener(RK_CLEANED_PHOTOS) { _, bundle ->
             val cleanedPairs = bundle.parcelableList<PhotoPair>(ARG_IMAGE_URI) ?: emptyList()
             viewModel.setCleanedPhotos(cleanedPairs)
+        }
+        setFragmentResultListener(FullScreenViewerFragment.RK_PHOTO_LIST) { _, bundle ->
+            val pairs = bundle.parcelableList<PhotoPair>(FullScreenViewerFragment.ARG_PHOTO_LIST) ?: emptyList()
+            viewModel.setCleanedPhotos(pairs)
         }
         val sharedUris = arguments?.parcelableList<Uri>(ARG_IMAGE_URI) ?: emptyList()
         if (sharedUris.isNotEmpty()) {
