@@ -2,6 +2,7 @@ package com.amirmuhsin.listinghelper.ui.s5_review_upload
 
 import android.view.View
 import androidx.core.os.bundleOf
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
@@ -9,12 +10,12 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.SimpleItemAnimator
 import com.amirmuhsin.listinghelper.R
 import com.amirmuhsin.listinghelper.core_views.base.ui.BaseFragment
 import com.amirmuhsin.listinghelper.core_views.events.command.Command
 import com.amirmuhsin.listinghelper.databinding.FragmentReviewUploadBinding
 import com.amirmuhsin.listinghelper.domain.model.PhotoPair
+import com.amirmuhsin.listinghelper.ui.common.fullscreen_image.FullScreenViewerFragment
 import com.amirmuhsin.listinghelper.ui.s5_review_upload.command.ReviewUploadCommands
 import com.amirmuhsin.listinghelper.ui.s5_review_upload.list.DragDropCallback
 import com.amirmuhsin.listinghelper.ui.s5_review_upload.list.ReviewUploadAdapter
@@ -33,19 +34,28 @@ class ReviewUploadFragment: BaseFragment<FragmentReviewUploadBinding, ReviewUplo
     private var touchHelper: ItemTouchHelper? = null
 
     override fun assignObjects() {
+        setFragmentResultListener(FullScreenViewerFragment.RK_PHOTO_LIST) { _, bundle ->
+            val pairs = bundle.parcelableList<PhotoPair>(FullScreenViewerFragment.ARG_PHOTO_LIST) ?: emptyList()
+            viewModel.setPhotoPairs(pairs)
+        }
         productItemId = requireArguments().getLong(ARG_PRODUCT_ITEM_ID, -1L)
         val pairs = requireArguments().parcelableList<PhotoPair>(ARG_PAIRS) ?: emptyList()
 
         adapter = ReviewUploadAdapter(
             requireContext(),
-            onPhotoClick = { pair ->
-
+            onPhotoClick = { clickedPair ->
+                val allPhotoPairs = viewModel.pairs.value
+                val startIndex = allPhotoPairs.indexOfFirst { it.internalId == clickedPair.internalId }
+                if (startIndex >= 0) {
+                    val args = FullScreenViewerFragment.createArgs(allPhotoPairs, startIndex)
+                    findNavController().navigate(R.id.action_global_fullScreenImage, args)
+                }
             },
             onPhotoRemove = { pair -> viewModel.removePair(pair) },
             startDragListener = { viewHolder -> touchHelper?.startDrag(viewHolder) },
             onReordered = { reorderedList -> viewModel.setReorderedPairsSilently(reorderedList) }
         )
-        viewModel.setInitialPairs(pairs)
+        viewModel.setPhotoPairs(pairs)
     }
 
     override fun prepareUI() {

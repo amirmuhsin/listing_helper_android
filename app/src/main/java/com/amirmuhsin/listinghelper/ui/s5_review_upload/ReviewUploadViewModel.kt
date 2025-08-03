@@ -19,7 +19,7 @@ class ReviewUploadViewModel(
     private val _uploadProgress = MutableStateFlow(0)
     val uploadProgress = _uploadProgress.asStateFlow()
 
-    fun setInitialPairs(list: List<PhotoPair>) {
+    fun setPhotoPairs(list: List<PhotoPair>) {
         _pairs.value = list
     }
 

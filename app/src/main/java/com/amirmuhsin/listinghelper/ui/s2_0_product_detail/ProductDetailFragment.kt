@@ -3,7 +3,6 @@ package com.amirmuhsin.listinghelper.ui.s2_0_product_detail
 import CleanedPhotoAdapter
 import android.net.Uri
 import android.view.View
-import androidx.activity.OnBackPressedCallback
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
