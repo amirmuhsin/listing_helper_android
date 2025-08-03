@@ -9,12 +9,12 @@ import retrofit2.http.Query
 
 interface ProductService {
 
-    @GET("v1/items")
+    @GET("items")
     suspend fun getProductBySKU(
         @Query("searchKeyWord") searchKeyWord: String
     ): Response<PagedProductListResponse>
 
-    @GET("v1/items/{itemId}")
+    @GET("items/{itemId}")
     suspend fun getProductById(
         @Path("itemId") itemId: Long
     ): Response<ProductAM>

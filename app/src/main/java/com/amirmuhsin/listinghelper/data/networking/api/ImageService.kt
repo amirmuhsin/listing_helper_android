@@ -10,23 +10,23 @@ import retrofit2.http.Path
 
 interface ImageService {
 
-    @GET("v1/items/{itemId}/images")
+    @GET("items/{itemId}/images")
     suspend fun getProductImages(
         @Path("itemId") itemId: Long
     ): Response<List<ImageAM>>
 
-    @GET("v1/items/imagedata/{imageId}")
+    @GET("items/imagedata/{imageId}")
     suspend fun getProductImageData(
         @Path("imageId") imageId: Long
     ): Response<ImageAM>
 
-    @GET("v1/items/{itemId}/images/{imageId}")
+    @GET("items/{itemId}/images/{imageId}")
     suspend fun getProductImage(
         @Path("itemId") itemId: Long,
         @Path("imageId") imageId: Long
     ): Response<ImageAM>
 
-    @POST("v1/items/{itemId}/images")
+    @POST("items/{itemId}/images")
     suspend fun uploadProductImage(
         @Path("itemId") itemId: Long,
         @Body request: UploadProductImageRequest
