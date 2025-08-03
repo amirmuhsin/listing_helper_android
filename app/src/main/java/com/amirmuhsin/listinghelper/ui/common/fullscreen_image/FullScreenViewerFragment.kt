@@ -3,6 +3,7 @@ package com.amirmuhsin.listinghelper.ui.common.fullscreen_image
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
@@ -40,18 +41,10 @@ class FullScreenViewerFragment: BaseFragment<FragmentFullScreenImageBinding, Ful
     }
 
     override fun prepareUI() {
-        // Optional: toggle system UI visibility here
-    }
-
-    override fun setListeners() {
-        binding.btnClose.setOnClickListener {
-            findNavController().popBackStack()
-        }
-        // Ensure proper margin below status bar
         ViewCompat.setOnApplyWindowInsetsListener(binding.btnClose) { view, insets ->
             val topInset = insets.getInsets(WindowInsetsCompat.Type.systemBars()).top
             view.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                topMargin = topInset + 0
+                topMargin = topInset
                 marginEnd = 0
             }
             insets
@@ -63,6 +56,22 @@ class FullScreenViewerFragment: BaseFragment<FragmentFullScreenImageBinding, Ful
             }
             insets
         }
+        ViewCompat.setOnApplyWindowInsetsListener(binding.clActionPanel) { view, insets ->
+            val bottomInset = insets.getInsets(WindowInsetsCompat.Type.systemBars()).bottom
+            view.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                bottomMargin = bottomInset
+            }
+            insets
+        }
+    }
+
+    override fun setListeners() {
+        binding.btnClose.setOnClickListener {
+            findNavController().popBackStack()
+        }
+        binding.btnDelete.setOnClickListener {
+            Toast.makeText(requireContext(), "Delete image feature is not implemented yet", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun toggleSystemUI() {
@@ -73,9 +82,11 @@ class FullScreenViewerFragment: BaseFragment<FragmentFullScreenImageBinding, Ful
             controller.hide(WindowInsetsCompat.Type.navigationBars())
             controller.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
             binding.btnClose.visibility = View.GONE
+            binding.clActionPanel.visibility = View.GONE
         } else {
             controller.show(WindowInsetsCompat.Type.navigationBars())
             binding.btnClose.visibility = View.VISIBLE
+            binding.clActionPanel.visibility = View.VISIBLE
         }
 
         isUiVisible = !isUiVisible
