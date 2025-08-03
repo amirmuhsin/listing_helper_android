@@ -16,10 +16,6 @@ class ReviewUploadAdapter(
     val onReordered: (List<PhotoPair>) -> Unit
 ): ListAdapter<PhotoPair, ReviewUploadAdapter.VH>(DIFF), ItemTouchHelperAdapter {
 
-    init {
-        setHasStableIds(true)
-    }
-
     private val internalList = mutableListOf<PhotoPair>()
 
     companion object {
@@ -30,10 +26,6 @@ class ReviewUploadAdapter(
             override fun areContentsTheSame(a: PhotoPair, b: PhotoPair) =
                 a.order == b.order && a.cleanedUri == b.cleanedUri && a.uploadStatus == b.uploadStatus
         }
-    }
-
-    override fun getItemId(position: Int): Long {
-        return getItem(position).internalId.hashCode().toLong()
     }
 
     override fun submitList(list: List<PhotoPair>?) {
