@@ -50,7 +50,7 @@ class ReviewUploadViewModel(
             list.forEachIndexed { index, pair ->
                 // start uploading
                 try {
-                    val imageAM = repo.uploadImage(productItemId, pair.cleanedUri!!, "1-1-1")
+                    val imageAM = repo.uploadImage(productItemId, pair.internalId, pair.cleanedUri!!, "1-1-1")
                     // todo: assign the imageAM to the pair or return Image model from the upload function instead of ImageAM (define it in domain)
 
                     println("Image uploaded successfully: $imageAM")

@@ -46,7 +46,7 @@ class ProductRepositoryImpl(
         return resp.body()!!
     }
 
-    override suspend fun uploadImage(itemId: Long, uri: Uri, channelId: String): ImageAM {
+    override suspend fun uploadImage(itemId: Long, photoId: String, uri: Uri, channelId: String): ImageAM {
         val inputStream = context.contentResolver.openInputStream(uri)
             ?: throw IllegalArgumentException("Cannot open URI: $uri")
         val bytes = inputStream.use { it.readBytes() }
@@ -55,6 +55,7 @@ class ProductRepositoryImpl(
 
         val request = UploadProductImageRequest(
             itemData = base64Data,
+            fileName = "${itemId}_${photoId}.jpg", // or derive a better name
             salesChannelId = channelId
         )
 

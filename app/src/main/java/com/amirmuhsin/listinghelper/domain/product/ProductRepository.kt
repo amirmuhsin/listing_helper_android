@@ -14,6 +14,7 @@ interface ProductRepository {
 
     suspend fun uploadImage(
         itemId: Long,
+        photoId: String,
         uri: Uri,
         channelId: String
     ): ImageAM

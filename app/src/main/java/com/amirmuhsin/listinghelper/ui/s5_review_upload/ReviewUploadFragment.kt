@@ -103,9 +103,11 @@ class ReviewUploadFragment: BaseFragment<FragmentReviewUploadBinding, ReviewUplo
                     binding.btnDone.visibility = View.VISIBLE
                     binding.btnUpload.visibility = View.GONE
 
-                    findNavController().navigate(
-                        R.id.action_reviewUpload_to_home
-                    )
+                    binding.btnUpload.postDelayed({
+                        findNavController().navigate(
+                            R.id.action_reviewUpload_to_home
+                        )
+                    }, 1000)
 
                 } else {
                     showErrorSnackbar("Some images failed to upload. Please try again.")
