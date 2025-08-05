@@ -2,7 +2,7 @@ package com.amirmuhsin.listinghelper.ui.s5_review_upload
 
 import androidx.lifecycle.viewModelScope
 import com.amirmuhsin.listinghelper.core_views.base.viewmodel.BaseViewModel
-import com.amirmuhsin.listinghelper.domain.model.PhotoPair
+import com.amirmuhsin.listinghelper.domain.photo.PhotoPair
 import com.amirmuhsin.listinghelper.domain.product.ProductRepository
 import com.amirmuhsin.listinghelper.ui.s5_review_upload.command.ReviewUploadCommands
 import kotlinx.coroutines.flow.MutableStateFlow

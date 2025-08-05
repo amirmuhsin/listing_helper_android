@@ -1,4 +1,4 @@
-package com.amirmuhsin.listinghelper.domain.model
+package com.amirmuhsin.listinghelper.domain.photo
 
 sealed class PhotoItem
 

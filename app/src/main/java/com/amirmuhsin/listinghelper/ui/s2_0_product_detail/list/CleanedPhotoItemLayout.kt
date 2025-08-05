@@ -6,7 +6,7 @@ import android.widget.FrameLayout
 import coil.load
 import coil.size.ViewSizeResolver
 import com.amirmuhsin.listinghelper.databinding.ItemLayoutCleanedPhotoBinding
-import com.amirmuhsin.listinghelper.domain.model.PhotoPair
+import com.amirmuhsin.listinghelper.domain.photo.PhotoPair
 
 class CleanedPhotoItemLayout(
     context: Context,

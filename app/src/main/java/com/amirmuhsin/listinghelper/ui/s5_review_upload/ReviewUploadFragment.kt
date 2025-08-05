@@ -14,7 +14,7 @@ import com.amirmuhsin.listinghelper.R
 import com.amirmuhsin.listinghelper.core_views.base.ui.BaseFragment
 import com.amirmuhsin.listinghelper.core_views.events.command.Command
 import com.amirmuhsin.listinghelper.databinding.FragmentReviewUploadBinding
-import com.amirmuhsin.listinghelper.domain.model.PhotoPair
+import com.amirmuhsin.listinghelper.domain.photo.PhotoPair
 import com.amirmuhsin.listinghelper.ui.common.fullscreen_image.FullScreenViewerFragment
 import com.amirmuhsin.listinghelper.ui.s5_review_upload.command.ReviewUploadCommands
 import com.amirmuhsin.listinghelper.ui.s5_review_upload.list.DragDropCallback

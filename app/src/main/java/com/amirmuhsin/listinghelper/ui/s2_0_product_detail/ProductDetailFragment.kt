@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.amirmuhsin.listinghelper.R
 import com.amirmuhsin.listinghelper.core_views.base.ui.BaseFragment
 import com.amirmuhsin.listinghelper.databinding.FragmentProductDetailBinding
-import com.amirmuhsin.listinghelper.domain.model.PhotoPair
+import com.amirmuhsin.listinghelper.domain.photo.PhotoPair
 import com.amirmuhsin.listinghelper.ui.common.fullscreen_image.FullScreenViewerFragment
 import com.amirmuhsin.listinghelper.ui.s2_1_barcode_scanner.BarcodeScannerActivity
 import com.amirmuhsin.listinghelper.ui.s5_review_upload.ReviewUploadFragment

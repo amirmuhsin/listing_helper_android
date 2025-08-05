@@ -1,4 +1,4 @@
-package com.amirmuhsin.listinghelper.domain.model
+package com.amirmuhsin.listinghelper.domain.product
 
 data class Product(
     val id: Long,

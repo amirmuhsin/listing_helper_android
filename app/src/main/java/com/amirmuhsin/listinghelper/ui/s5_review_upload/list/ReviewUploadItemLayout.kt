@@ -9,8 +9,8 @@ import coil.load
 import coil.size.ViewSizeResolver
 import com.amirmuhsin.listinghelper.R
 import com.amirmuhsin.listinghelper.databinding.ItemLayoutConfirmationPhotoBinding
-import com.amirmuhsin.listinghelper.domain.model.PhotoPair
-import com.amirmuhsin.listinghelper.domain.model.PhotoPair.UploadStatus
+import com.amirmuhsin.listinghelper.domain.photo.PhotoPair
+import com.amirmuhsin.listinghelper.domain.photo.PhotoPair.UploadStatus
 import com.amirmuhsin.listinghelper.util.getImageResolution
 import com.amirmuhsin.listinghelper.util.getImageSizeInBytes
 import com.amirmuhsin.listinghelper.util.getReadableSize

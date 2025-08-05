@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.amirmuhsin.listinghelper.databinding.ItemFullScreenImageBinding
-import com.amirmuhsin.listinghelper.domain.model.PhotoPair
+import com.amirmuhsin.listinghelper.domain.photo.PhotoPair
 
 class FullScreenImagePagerAdapter(
     private val onUiToggle: (() -> Unit)? = null

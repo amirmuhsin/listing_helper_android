@@ -1,7 +1,7 @@
 package com.amirmuhsin.listinghelper.ui.common.fullscreen_image
 
 import com.amirmuhsin.listinghelper.core_views.base.viewmodel.BaseViewModel
-import com.amirmuhsin.listinghelper.domain.model.PhotoPair
+import com.amirmuhsin.listinghelper.domain.photo.PhotoPair
 import com.amirmuhsin.listinghelper.ui.common.fullscreen_image.command.FullScreenCommands
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

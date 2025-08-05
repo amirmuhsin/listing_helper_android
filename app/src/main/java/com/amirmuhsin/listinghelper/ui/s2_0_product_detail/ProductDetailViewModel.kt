@@ -3,9 +3,9 @@ package com.amirmuhsin.listinghelper.ui.s2_0_product_detail
 import androidx.lifecycle.viewModelScope
 import com.amirmuhsin.listinghelper.core_views.base.viewmodel.BaseViewModel
 import com.amirmuhsin.listinghelper.data.networking.model.product.ProductAM
-import com.amirmuhsin.listinghelper.domain.model.AddPhotoItemButton
-import com.amirmuhsin.listinghelper.domain.model.PhotoItem
-import com.amirmuhsin.listinghelper.domain.model.PhotoPair
+import com.amirmuhsin.listinghelper.domain.photo.AddPhotoItemButton
+import com.amirmuhsin.listinghelper.domain.photo.PhotoItem
+import com.amirmuhsin.listinghelper.domain.photo.PhotoPair
 import com.amirmuhsin.listinghelper.domain.product.ProductRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

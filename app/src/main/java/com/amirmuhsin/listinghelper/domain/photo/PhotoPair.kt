@@ -1,4 +1,4 @@
-package com.amirmuhsin.listinghelper.domain.model
+package com.amirmuhsin.listinghelper.domain.photo
 
 import android.net.Uri
 import android.os.Parcelable

@@ -2,7 +2,7 @@ package com.amirmuhsin.listinghelper.ui.common.fullscreen_image
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.amirmuhsin.listinghelper.domain.model.PhotoPair
+import com.amirmuhsin.listinghelper.domain.photo.PhotoPair
 
 class FullScreenViewerViewModelFactory(
     private val photoPairs: List<PhotoPair>,
