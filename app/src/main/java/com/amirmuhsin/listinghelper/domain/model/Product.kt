@@ -1,6 +1,6 @@
-package com.amirmuhsin.listinghelper.data.db.model
+package com.amirmuhsin.listinghelper.domain.model
 
-data class ProductEntity(
+data class Product(
     val id: Long,
     val sku: String,
     val isActive: Boolean,
@@ -8,6 +8,5 @@ data class ProductEntity(
     val description: String,
     val shortDescription: String,
     val addedTime: String,
-    val changedTime: String,
-    val photos: List<PhotoPairEntity>
+    val changedTime: String
 )

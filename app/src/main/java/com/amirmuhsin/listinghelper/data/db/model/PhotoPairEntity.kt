@@ -1,6 +1,6 @@
-package com.amirmuhsin.listinghelper.data.model
+package com.amirmuhsin.listinghelper.data.db.model
 
-data class ProductDM(
+data class PhotoPairEntity(
     val id: Long,
     val sku: String,
     val isActive: Boolean,
@@ -8,5 +8,5 @@ data class ProductDM(
     val description: String,
     val shortDescription: String,
     val addedTime: String,
-    val changedTime: String
+    val changedTime: String,
 )

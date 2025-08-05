@@ -1,6 +1,5 @@
 package com.amirmuhsin.listinghelper.ui.common.fullscreen_image
 
-import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.amirmuhsin.listinghelper.domain.model.PhotoPair
