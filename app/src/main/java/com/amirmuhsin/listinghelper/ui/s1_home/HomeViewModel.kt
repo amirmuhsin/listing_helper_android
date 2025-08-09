@@ -15,6 +15,10 @@ class HomeViewModel(
     private val _fProducts = MutableStateFlow<List<Product>>(emptyList())
     val fProducts = _fProducts
 
+    init {
+        getAllProducts()
+    }
+
     fun createNewProduct() {
         viewModelScope.launch {
             val newProduct = Product.createEmpty()
@@ -27,7 +31,8 @@ class HomeViewModel(
     fun getAllProducts() {
         viewModelScope.launch {
             val products = productLocalRepository.getAll()
-            // Handle the list of products as needed, e.g., update UI or state
+
+            _fProducts.value = products
         }
     }
 }
