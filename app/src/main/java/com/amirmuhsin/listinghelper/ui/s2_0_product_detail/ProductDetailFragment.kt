@@ -19,6 +19,7 @@ import com.amirmuhsin.listinghelper.domain.photo.PhotoPair
 import com.amirmuhsin.listinghelper.ui.common.fullscreen_image.FullScreenViewerFragment
 import com.amirmuhsin.listinghelper.ui.s2_1_barcode_scanner.BarcodeScannerActivity
 import com.amirmuhsin.listinghelper.ui.s5_review_upload.ReviewUploadFragment
+import com.amirmuhsin.listinghelper.util.ImageStore
 import com.amirmuhsin.listinghelper.util.parcelableList
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanOptions
@@ -49,11 +50,13 @@ class ProductDetailFragment: BaseFragment<FragmentProductDetailBinding, ProductD
     //                openBarcodeScanner()
     //            }
 
-    private val pickImagesLauncher = registerForActivityResult(ActivityResultContracts.GetMultipleContents()) { uris ->
-        if (!uris.isNullOrEmpty()) {
-            viewModel.addNewCleanedPhotos(uris)
+    private val pickImagesLauncher =
+        registerForActivityResult(ActivityResultContracts.GetMultipleContents()) { uris ->
+            if (!uris.isNullOrEmpty()) {
+                val localUris = uris.map { ImageStore.copyToAppFiles(requireContext(), it) }
+                viewModel.addNewCleanedPhotos(localUris)
+            }
         }
-    }
 
     override fun assignObjects() {
         productId = arguments?.getLong(ARG_PRODUCT_ID, -1L) ?: -1L

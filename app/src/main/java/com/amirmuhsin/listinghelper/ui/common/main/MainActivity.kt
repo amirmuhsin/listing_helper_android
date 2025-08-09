@@ -10,6 +10,7 @@ import com.amirmuhsin.listinghelper.core_views.events.command.Command
 import com.amirmuhsin.listinghelper.databinding.ActivityMainBinding
 import com.amirmuhsin.listinghelper.ui.common.main.command.MainCommands
 import com.amirmuhsin.listinghelper.ui.s2_0_product_detail.ProductDetailFragment
+import com.amirmuhsin.listinghelper.util.ImageStore
 
 class MainActivity: BaseActivity<ActivityMainBinding, MainViewModel>(ActivityMainBinding::inflate) {
 
@@ -39,14 +40,27 @@ class MainActivity: BaseActivity<ActivityMainBinding, MainViewModel>(ActivityMai
     }
 
     private fun handleSharedImagesIfAny(intent: Intent) {
-        val uris: List<Uri>? = when (intent.action) {
-            Intent.ACTION_SEND -> listOfNotNull(intent.getParcelableExtra(Intent.EXTRA_STREAM) as? Uri)
-            Intent.ACTION_SEND_MULTIPLE -> intent.getParcelableArrayListExtra(Intent.EXTRA_STREAM)
+        val incoming: List<Uri>? = when (intent.action) {
+            Intent.ACTION_SEND ->
+                listOfNotNull(
+                    if (android.os.Build.VERSION.SDK_INT >= 33)
+                        intent.getParcelableExtra(Intent.EXTRA_STREAM, Uri::class.java)
+                    else @Suppress("DEPRECATION")
+                    intent.getParcelableExtra(Intent.EXTRA_STREAM)
+                )
+
+            Intent.ACTION_SEND_MULTIPLE ->
+                if (android.os.Build.VERSION.SDK_INT >= 33)
+                    intent.getParcelableArrayListExtra(Intent.EXTRA_STREAM, Uri::class.java)
+                else @Suppress("DEPRECATION")
+                intent.getParcelableArrayListExtra(Intent.EXTRA_STREAM)
+
             else -> null
         }
 
-        if (!uris.isNullOrEmpty()) {
-            viewModel.createNewProductWithPhotos(uris)
+        if (!incoming.isNullOrEmpty()) {
+            val localUris = incoming.map { ImageStore.copyToAppFiles(this, it) }
+            viewModel.createNewProductWithPhotos(localUris)
         }
     }
 
