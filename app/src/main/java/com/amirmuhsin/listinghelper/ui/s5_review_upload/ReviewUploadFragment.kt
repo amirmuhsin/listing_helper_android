@@ -30,7 +30,7 @@ class ReviewUploadFragment: BaseFragment<FragmentReviewUploadBinding, ReviewUplo
     override val viewModel: ReviewUploadViewModel by viewModels { ReviewUploadViewModelFactory(requireContext()) }
 
     private lateinit var adapter: ReviewUploadAdapter
-    private var productItemId: Long = -1L
+    private var productId: Long = -1L
     private var touchHelper: ItemTouchHelper? = null
 
     override fun assignObjects() {
@@ -38,8 +38,7 @@ class ReviewUploadFragment: BaseFragment<FragmentReviewUploadBinding, ReviewUplo
             val pairs = bundle.parcelableList<PhotoPair>(FullScreenViewerFragment.ARG_PHOTO_LIST) ?: emptyList()
             viewModel.setPhotoPairs(pairs)
         }
-        productItemId = requireArguments().getLong(ARG_PRODUCT_ITEM_ID, -1L)
-        val pairs = requireArguments().parcelableList<PhotoPair>(ARG_PAIRS) ?: emptyList()
+        productId = requireArguments().getLong(ARG_PRODUCT_ID, -1L)
 
         adapter = ReviewUploadAdapter(
             requireContext(),
@@ -55,7 +54,6 @@ class ReviewUploadFragment: BaseFragment<FragmentReviewUploadBinding, ReviewUplo
             startDragListener = { viewHolder -> touchHelper?.startDrag(viewHolder) },
             onReordered = { reorderedList -> viewModel.setReorderedPairsSilently(reorderedList) }
         )
-        viewModel.setPhotoPairs(pairs)
     }
 
     override fun prepareUI() {
@@ -65,7 +63,7 @@ class ReviewUploadFragment: BaseFragment<FragmentReviewUploadBinding, ReviewUplo
 
     override fun setListeners() {
         binding.btnUpload.setOnClickListener {
-            viewModel.uploadAll(productItemId)
+            viewModel.uploadAll(productId)
         }
         binding.toolbar.ibBack.setOnClickListener {
             findNavController().popBackStack()
@@ -128,13 +126,11 @@ class ReviewUploadFragment: BaseFragment<FragmentReviewUploadBinding, ReviewUplo
 
     companion object {
 
-        private const val ARG_PAIRS = "arg:pairs"
-        private const val ARG_PRODUCT_ITEM_ID = "arg:product_item_id"
+        private const val ARG_PRODUCT_ID = "arg:product_item_id"
 
         fun createArgs(
-            productItemId: Long,
-            pairs: List<PhotoPair>
-        ) = bundleOf(ARG_PAIRS to pairs, ARG_PRODUCT_ITEM_ID to productItemId)
+            productId: Long,
+        ) = bundleOf(ARG_PRODUCT_ID to productId)
     }
 }
 

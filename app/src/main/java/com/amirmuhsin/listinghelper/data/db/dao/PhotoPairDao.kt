@@ -11,9 +11,15 @@ interface PhotoPairDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun upsertAll(photos: List<PhotoPairEntity>)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun upsert(photo: PhotoPairEntity): Long
+
     @Query("SELECT * FROM photo_pairs_table WHERE productId = :productId ORDER BY sortOrder ASC")
     suspend fun getByProductId(productId: Long): List<PhotoPairEntity>
 
     @Query("DELETE FROM photo_pairs_table WHERE productId = :productId")
     suspend fun deleteByProductId(productId: Long)
+
+    @Query("SELECT * FROM photo_pairs_table WHERE id = :id")
+    suspend fun getById(id: Long): PhotoPairEntity?
 }

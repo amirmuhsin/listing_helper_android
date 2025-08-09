@@ -46,7 +46,7 @@ class MainActivity: BaseActivity<ActivityMainBinding, MainViewModel>(ActivityMai
         }
 
         if (!uris.isNullOrEmpty()) {
-            viewModel.createNewProductWithImages(uris)
+            viewModel.createNewProductWithPhotos(uris)
         }
     }
 

@@ -24,7 +24,6 @@ import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanOptions
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import java.util.UUID
 
 class ProductDetailFragment: BaseFragment<FragmentProductDetailBinding, ProductDetailViewModel>(
     FragmentProductDetailBinding::inflate
@@ -52,35 +51,27 @@ class ProductDetailFragment: BaseFragment<FragmentProductDetailBinding, ProductD
 
     private val pickImagesLauncher = registerForActivityResult(ActivityResultContracts.GetMultipleContents()) { uris ->
         if (!uris.isNullOrEmpty()) {
-            val newPairs = uris.mapIndexed { index, uri ->
-                PhotoPair(
-                    internalId = UUID.randomUUID().toString(),
-                    productId = -1,
-                    originalUri = uri,
-                    cleanedUri = uri, // or null if not cleaned yet
-                    bgCleanStatus = PhotoPair.BgCleanStatus.COMPLETED,
-                    order = viewModel.flCleanedPhotos.value.filterIsInstance<PhotoPair>().size + index + 1,
-                    uploadStatus = PhotoPair.UploadStatus.PENDING
-                )
-            }
-            viewModel.appendCleanedPhotos(newPairs)
+            viewModel.addNewCleanedPhotos(uris)
         }
     }
 
     override fun assignObjects() {
         productId = arguments?.getLong(ARG_PRODUCT_ID, -1L) ?: -1L
+
+        // TODO: OLD results
         setFragmentResultListener(RK_CLEANED_PHOTOS) { _, bundle ->
             val cleanedPairs = bundle.parcelableList<PhotoPair>(ARG_IMAGE_URI) ?: emptyList()
-            viewModel.setCleanedPhotos(cleanedPairs)
+//            viewModel.setCleanedPhotos(cleanedPairs)
         }
         setFragmentResultListener(FullScreenViewerFragment.RK_PHOTO_LIST) { _, bundle ->
             val pairs = bundle.parcelableList<PhotoPair>(FullScreenViewerFragment.ARG_PHOTO_LIST) ?: emptyList()
-            viewModel.setCleanedPhotos(pairs)
+//            viewModel.setCleanedPhotos(pairs)
         }
+
         cleanedPhotosAdapter = CleanedPhotoAdapter(
             requireContext(),
             onPhotoClick = { clickedPhotoPair ->
-                val allPhotoPairs = viewModel.flCleanedPhotos.value.filterIsInstance<PhotoPair>()
+                val allPhotoPairs = viewModel.flPhotoPairs.value.filterIsInstance<PhotoPair>()
                 val startIndex = allPhotoPairs.indexOfFirst { it.internalId == clickedPhotoPair.internalId }
                 if (startIndex >= 0) {
                     val args = FullScreenViewerFragment.createArgs(allPhotoPairs, startIndex)
@@ -105,21 +96,14 @@ class ProductDetailFragment: BaseFragment<FragmentProductDetailBinding, ProductD
             findNavController().navigate(R.id.action_open_photo_capture)
         }
         binding.etBarcode.doAfterTextChanged {
-            val barcode = it.toString()
-            if (barcode.isNotEmpty()) {
-                viewModel.onBarcodeChanged(barcode)
+            val barcodeOfSku = it.toString()
+            if (barcodeOfSku.isNotEmpty()) {
+                viewModel.fetchAndUpdateBySku(barcodeOfSku)
             }
         }
         binding.btnReview.setOnClickListener {
-            val product = viewModel.fProduct.value
-            val hasProduct = product != null
-            if (hasProduct) {
-                val cleanedPhotos = viewModel.flCleanedPhotos.value.filterIsInstance<PhotoPair>()
-                val args = ReviewUploadFragment.createArgs(product.id, cleanedPhotos)
-                findNavController().navigate(R.id.action_open_review_upload, args)
-            } else {
-                showErrorSnackbar("Product not found")
-            }
+            val args = ReviewUploadFragment.createArgs(productId)
+            findNavController().navigate(R.id.action_open_review_upload, args)
         }
         binding.toolbar.ibBack.setOnClickListener {
             findNavController().popBackStack()
@@ -137,13 +121,13 @@ class ProductDetailFragment: BaseFragment<FragmentProductDetailBinding, ProductD
                 }
             }.launchIn(lifecycleScope)
 
-        viewModel.flCleanedPhotos.flowWithLifecycle(lifecycle)
-            .onEach { cleanedPhotos ->
-                cleanedPhotosAdapter.submitList(cleanedPhotos)
-                binding.btnReview.isEnabled = cleanedPhotos.size >= 2
+        viewModel.flPhotoPairs.flowWithLifecycle(lifecycle)
+            .onEach { photoPairs ->
+                cleanedPhotosAdapter.submitList(photoPairs)
+                binding.btnReview.isEnabled = photoPairs.size >= 2 // todo: product status OR non uploaded image count
             }.launchIn(lifecycleScope)
 
-        viewModel.
+        viewModel.getLocalProductByIdInFull(productId)
     }
 
     private fun openBarcodeScanner() {

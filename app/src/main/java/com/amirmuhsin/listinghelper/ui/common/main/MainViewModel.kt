@@ -16,7 +16,7 @@ class MainViewModel(
     private val photoRepo: PhotoPairLocalRepository
 ): BaseViewModel() {
 
-    fun createNewProductWithImages(uris: List<Uri>) {
+    fun createNewProductWithPhotos(uris: List<Uri>) {
         viewModelScope.launch {
             val productId = productRepo.create(Product.createEmpty())
 

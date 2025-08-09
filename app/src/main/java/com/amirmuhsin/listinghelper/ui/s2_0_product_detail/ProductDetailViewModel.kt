@@ -1,8 +1,8 @@
 package com.amirmuhsin.listinghelper.ui.s2_0_product_detail
 
+import android.net.Uri
 import androidx.lifecycle.viewModelScope
 import com.amirmuhsin.listinghelper.core_views.base.viewmodel.BaseViewModel
-import com.amirmuhsin.listinghelper.data.networking.model.product.ProductAM
 import com.amirmuhsin.listinghelper.domain.photo.AddPhotoItemButton
 import com.amirmuhsin.listinghelper.domain.photo.PhotoItem
 import com.amirmuhsin.listinghelper.domain.photo.PhotoPair
@@ -13,6 +13,7 @@ import com.amirmuhsin.listinghelper.domain.product.ProductRemoteRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import java.util.UUID
 
 class ProductDetailViewModel(
     private val productLocalRepository: ProductLocalRepository,
@@ -20,48 +21,72 @@ class ProductDetailViewModel(
     private val productRemoteRepository: ProductRemoteRepository,
 ): BaseViewModel() {
 
-//    private val _fProduct: MutableStateFlow<ProductAM?> = MutableStateFlow(null)
-//    val fProduct = _fProduct.asStateFlow()
-
-        private val _fProduct: MutableStateFlow<Product?> = MutableStateFlow(null)
+    private val _fProduct: MutableStateFlow<Product?> = MutableStateFlow(null)
     val fProduct = _fProduct.asStateFlow()
 
-    private val _flCleanedPhotos: MutableStateFlow<List<PhotoItem>> = MutableStateFlow(listOf(AddPhotoItemButton))
-    val flCleanedPhotos = _flCleanedPhotos.asStateFlow()
+    private val _flPhotoPairs: MutableStateFlow<List<PhotoItem>> = MutableStateFlow(listOf(AddPhotoItemButton))
+    val flPhotoPairs = _flPhotoPairs.asStateFlow()
 
-    fun onBarcodeChanged(sku: String) {
+    private var productId: Long = -1L
+
+    fun fetchAndUpdateBySku(sku: String) {
         viewModelScope.launch {
-            val product = productRemoteRepository.getProductsBySku(sku)
-            _fProduct.value = product
-        }
-    }
+            val productAM = productRemoteRepository.getProductsBySku(sku)
+            val product = _fProduct.value
 
-    fun setCleanedPhotos(cleanedPhotoPairs: List<PhotoItem>) {
-        val cleanedPhotos = cleanedPhotoPairs.filterNot { it is AddPhotoItemButton }
-        // add AddPhotoItemButton at the end of the list
-        val updatedList = cleanedPhotos.toMutableList().apply {
-            if (isEmpty() || last() !is AddPhotoItemButton) {
-                add(AddPhotoItemButton)
+            // update product model with productAM and save locally
+            val updatedProduct = product?.copy(
+                sku = productAM.sku,
+                isActive = productAM.isActive,
+                name = productAM.name,
+                description = productAM.description,
+                shortDescription = productAM.shortDescription,
+            ) ?: run {
+                showErrorSnackbar("Product not found")
+                return@launch
             }
-        }
-        _flCleanedPhotos.value = updatedList
-    }
 
-    fun appendCleanedPhotos(newPhotos: List<PhotoPair>) {
-        val existingPairs = _flCleanedPhotos.value.filterIsInstance<PhotoPair>()
-        val updatedPhotos = newPhotos.mapIndexed { index, photo ->
-            photo.copy(order = existingPairs.size + index + 1)
+            productLocalRepository.update(updatedProduct)
+            _fProduct.value = updatedProduct
         }
-        val updatedList = (existingPairs + updatedPhotos).toMutableList<PhotoItem>().apply {
-            add(AddPhotoItemButton)
-        }
-        _flCleanedPhotos.value = updatedList
     }
 
     fun getLocalProductByIdInFull(productId: Long) {
+        this.productId = productId
         viewModelScope.launch {
-            val product = productRemoteRepository.getProductByIdInFull(productId)
-            _fProduct.value = product
+            notifyProduct()
+            notifyPhotoPairs()
         }
+    }
+
+    fun addNewCleanedPhotos(uris: List<Uri>) {
+        viewModelScope.launch {
+            val base = _flPhotoPairs.value.count { it is PhotoPair }
+            uris.forEachIndexed { i, uri ->
+                photoPairLocalRepository.create(
+                    PhotoPair(
+                        internalId = UUID.randomUUID().toString(),
+                        productId = productId,
+                        originalUri = uri,
+                        cleanedUri = uri,
+                        bgCleanStatus = PhotoPair.BgCleanStatus.COMPLETED,
+                        order = base + i, // zero-based is simpler
+                        uploadStatus = PhotoPair.UploadStatus.PENDING
+                    )
+                )
+            }
+            notifyPhotoPairs()
+        }
+    }
+
+
+    private suspend fun notifyProduct() {
+        val product = productLocalRepository.getById(productId)
+        _fProduct.value = product
+    }
+
+    private suspend fun notifyPhotoPairs() {
+        val photoPairs = photoPairLocalRepository.getAllByProductId(productId)
+        _flPhotoPairs.value = photoPairs + AddPhotoItemButton
     }
 }
