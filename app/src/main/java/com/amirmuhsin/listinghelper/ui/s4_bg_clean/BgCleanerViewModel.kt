@@ -37,6 +37,7 @@ class BgCleanerViewModel(
             pairs.add(
                 PhotoPair(
                     internalId = id,
+                    productId = -1,
                     originalUri = uri,
                     cleanedUri = null,
                     bgCleanStatus = PhotoPair.BgCleanStatus.PENDING,

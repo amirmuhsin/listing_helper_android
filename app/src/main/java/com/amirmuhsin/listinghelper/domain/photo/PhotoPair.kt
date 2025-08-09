@@ -7,11 +7,12 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class PhotoPair(
     val internalId: String,
+    val productId: Long,
     val originalUri: Uri,
     val cleanedUri: Uri?,
     val bgCleanStatus: BgCleanStatus = BgCleanStatus.PENDING,
     val order: Int,
-    val uploadStatus: UploadStatus = UploadStatus.PENDING,
+    val uploadStatus: UploadStatus = UploadStatus.PENDING
 ): Parcelable, PhotoItem() {
 
     enum class BgCleanStatus {

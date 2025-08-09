@@ -1,12 +1,15 @@
 package com.amirmuhsin.listinghelper.data.db.model
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity(tableName = "photo_pairs_table")
 data class PhotoPairEntity(
-    val id: Long,
-    val sku: String,
-    val isActive: Boolean,
-    val name: String,
-    val description: String,
-    val shortDescription: String,
-    val addedTime: String,
-    val changedTime: String,
+    @PrimaryKey val id: String,
+    val productId: Long,
+    val originalUri: String?,
+    val cleanedUri: String?,
+    val bgCleanStatus: String,
+    val sortOrder: Int,
+    val uploadStatus: String
 )

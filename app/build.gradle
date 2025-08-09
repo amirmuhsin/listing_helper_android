@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     id 'kotlin-parcelize'
+    id 'androidx.room'
+
 }
 
 android {
@@ -42,6 +44,10 @@ android {
     buildFeatures {
         viewBinding true
     }
+
+    room {
+        schemaDirectory "$projectDir/schemas"
+    }
 }
 
 dependencies {
@@ -78,6 +84,16 @@ dependencies {
 
     implementation "com.google.guava:guava:33.0.0-android"
 
+    // Room
+    def room_version = "2.7.2"
+
+    implementation "androidx.room:room-runtime:$room_version"
+
+    annotationProcessor "androidx.room:room-compiler:$room_version"
+
+    // optional - Guava support for Room, including Optional and ListenableFuture
+    implementation "androidx.room:room-guava:$room_version"
+    implementation "androidx.room:room-paging:$room_version"
 
     implementation libs.coil
 

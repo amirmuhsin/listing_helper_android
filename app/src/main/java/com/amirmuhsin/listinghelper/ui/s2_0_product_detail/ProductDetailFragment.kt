@@ -49,6 +49,7 @@ class ProductDetailFragment: BaseFragment<FragmentProductDetailBinding, ProductD
             val newPairs = uris.mapIndexed { index, uri ->
                 PhotoPair(
                     internalId = UUID.randomUUID().toString(),
+                    productId = -1,
                     originalUri = uri,
                     cleanedUri = uri, // or null if not cleaned yet
                     bgCleanStatus = PhotoPair.BgCleanStatus.COMPLETED,
@@ -74,6 +75,7 @@ class ProductDetailFragment: BaseFragment<FragmentProductDetailBinding, ProductD
             val photoPairs = sharedUris.mapIndexed { index, uri ->
                 PhotoPair(
                     internalId = UUID.randomUUID().toString(),
+                    productId = -1,
                     originalUri = uri,
                     cleanedUri = uri,
                     bgCleanStatus = PhotoPair.BgCleanStatus.COMPLETED,
