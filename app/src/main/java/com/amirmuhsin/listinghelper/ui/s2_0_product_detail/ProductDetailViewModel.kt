@@ -6,16 +6,24 @@ import com.amirmuhsin.listinghelper.data.networking.model.product.ProductAM
 import com.amirmuhsin.listinghelper.domain.photo.AddPhotoItemButton
 import com.amirmuhsin.listinghelper.domain.photo.PhotoItem
 import com.amirmuhsin.listinghelper.domain.photo.PhotoPair
+import com.amirmuhsin.listinghelper.domain.photo.PhotoPairLocalRepository
+import com.amirmuhsin.listinghelper.domain.product.Product
+import com.amirmuhsin.listinghelper.domain.product.ProductLocalRepository
 import com.amirmuhsin.listinghelper.domain.product.ProductRemoteRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class ProductDetailViewModel(
+    private val productLocalRepository: ProductLocalRepository,
+    private val photoPairLocalRepository: PhotoPairLocalRepository,
     private val productRemoteRepository: ProductRemoteRepository,
 ): BaseViewModel() {
 
-    private val _fProduct: MutableStateFlow<ProductAM?> = MutableStateFlow(null)
+//    private val _fProduct: MutableStateFlow<ProductAM?> = MutableStateFlow(null)
+//    val fProduct = _fProduct.asStateFlow()
+
+        private val _fProduct: MutableStateFlow<Product?> = MutableStateFlow(null)
     val fProduct = _fProduct.asStateFlow()
 
     private val _flCleanedPhotos: MutableStateFlow<List<PhotoItem>> = MutableStateFlow(listOf(AddPhotoItemButton))
@@ -48,5 +56,12 @@ class ProductDetailViewModel(
             add(AddPhotoItemButton)
         }
         _flCleanedPhotos.value = updatedList
+    }
+
+    fun getLocalProductByIdInFull(productId: Long) {
+        viewModelScope.launch {
+            val product = productRemoteRepository.getProductByIdInFull(productId)
+            _fProduct.value = product
+        }
     }
 }

@@ -1,17 +1,21 @@
-package com.amirmuhsin.listinghelper
+package com.amirmuhsin.listinghelper.ui.common.main
 
 import android.content.Intent
 import android.net.Uri
-import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.navigation.fragment.NavHostFragment
+import com.amirmuhsin.listinghelper.R
 import com.amirmuhsin.listinghelper.core_views.base.ui.BaseActivity
+import com.amirmuhsin.listinghelper.core_views.events.command.Command
 import com.amirmuhsin.listinghelper.databinding.ActivityMainBinding
-import kotlin.collections.isNullOrEmpty
+import com.amirmuhsin.listinghelper.ui.common.main.command.MainCommands
+import com.amirmuhsin.listinghelper.ui.s2_0_product_detail.ProductDetailFragment
 
 class MainActivity: BaseActivity<ActivityMainBinding, MainViewModel>(ActivityMainBinding::inflate) {
 
-    override val viewModel: MainViewModel by viewModels()
+    override val viewModel: MainViewModel by viewModels {
+        MainViewModelFactory(applicationContext)
+    }
 
     private val navHostFragment by lazy { supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment }
     private val navController by lazy { navHostFragment.navController }
@@ -22,7 +26,16 @@ class MainActivity: BaseActivity<ActivityMainBinding, MainViewModel>(ActivityMai
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
+
         intent?.let { handleSharedImagesIfAny(it) }
+    }
+
+    override fun handleCommand(command: Command) {
+        when (command) {
+            is MainCommands.NewProductWithImagesCreated -> {
+                openProductDetails(command.productId)
+            }
+        }
     }
 
     private fun handleSharedImagesIfAny(intent: Intent) {
@@ -33,13 +46,12 @@ class MainActivity: BaseActivity<ActivityMainBinding, MainViewModel>(ActivityMai
         }
 
         if (!uris.isNullOrEmpty()) {
-            // Navigate to your fragment and pass the URIs
-            val bundle = Bundle().apply {
-                putParcelableArrayList("arg:image_uri", ArrayList(uris))
-            }
-
-            navController.navigate(R.id.productDetailFragment, bundle)
+            viewModel.createNewProductWithImages(uris)
         }
     }
 
+    private fun openProductDetails(productId: Long) {
+        val args = ProductDetailFragment.createArgs(productId)
+        navController.navigate(R.id.productDetailFragment, args)
+    }
 }

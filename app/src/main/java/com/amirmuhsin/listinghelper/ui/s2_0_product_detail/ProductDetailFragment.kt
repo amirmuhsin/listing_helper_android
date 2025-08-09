@@ -1,7 +1,6 @@
 package com.amirmuhsin.listinghelper.ui.s2_0_product_detail
 
 import CleanedPhotoAdapter
-import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
@@ -32,7 +31,7 @@ class ProductDetailFragment: BaseFragment<FragmentProductDetailBinding, ProductD
 ) {
 
     override val viewModel: ProductDetailViewModel by viewModels {
-        ProductDetailViewModelFactory(requireContext())
+        ProductDetailViewModelFactory(requireContext().applicationContext)
     }
 
     private lateinit var cleanedPhotosAdapter: CleanedPhotoAdapter
@@ -43,7 +42,13 @@ class ProductDetailFragment: BaseFragment<FragmentProductDetailBinding, ProductD
         }
     }
 
+    private var productId: Long = -1L
     private var isBarcodeLaunchRequired = true
+
+    // if (isBarcodeLaunchRequired) {
+    //                isBarcodeLaunchRequired = false
+    //                openBarcodeScanner()
+    //            }
 
     private val pickImagesLauncher = registerForActivityResult(ActivityResultContracts.GetMultipleContents()) { uris ->
         if (!uris.isNullOrEmpty()) {
@@ -63,6 +68,7 @@ class ProductDetailFragment: BaseFragment<FragmentProductDetailBinding, ProductD
     }
 
     override fun assignObjects() {
+        productId = arguments?.getLong(ARG_PRODUCT_ID, -1L) ?: -1L
         setFragmentResultListener(RK_CLEANED_PHOTOS) { _, bundle ->
             val cleanedPairs = bundle.parcelableList<PhotoPair>(ARG_IMAGE_URI) ?: emptyList()
             viewModel.setCleanedPhotos(cleanedPairs)
@@ -71,27 +77,6 @@ class ProductDetailFragment: BaseFragment<FragmentProductDetailBinding, ProductD
             val pairs = bundle.parcelableList<PhotoPair>(FullScreenViewerFragment.ARG_PHOTO_LIST) ?: emptyList()
             viewModel.setCleanedPhotos(pairs)
         }
-        val sharedUris = arguments?.parcelableList<Uri>(ARG_IMAGE_URI) ?: emptyList()
-        if (sharedUris.isNotEmpty()) {
-            val photoPairs = sharedUris.mapIndexed { index, uri ->
-                PhotoPair(
-                    internalId = UUID.randomUUID().toString(),
-                    productId = -1,
-                    originalUri = uri,
-                    cleanedUri = uri,
-                    bgCleanStatus = PhotoPair.BgCleanStatus.COMPLETED,
-                    order = index + 1,
-                    uploadStatus = PhotoPair.UploadStatus.PENDING
-                )
-            }
-            viewModel.setCleanedPhotos(photoPairs)
-
-            if (isBarcodeLaunchRequired) {
-                isBarcodeLaunchRequired = false
-                openBarcodeScanner()
-            }
-        }
-
         cleanedPhotosAdapter = CleanedPhotoAdapter(
             requireContext(),
             onPhotoClick = { clickedPhotoPair ->
@@ -157,6 +142,8 @@ class ProductDetailFragment: BaseFragment<FragmentProductDetailBinding, ProductD
                 cleanedPhotosAdapter.submitList(cleanedPhotos)
                 binding.btnReview.isEnabled = cleanedPhotos.size >= 2
             }.launchIn(lifecycleScope)
+
+        viewModel.
     }
 
     private fun openBarcodeScanner() {
@@ -172,8 +159,8 @@ class ProductDetailFragment: BaseFragment<FragmentProductDetailBinding, ProductD
     companion object {
 
         const val RK_CLEANED_PHOTOS = "rk:cleaned_photos"
-        const val ARG_IMAGE_URI = "arg:image_uri"
 
+        const val ARG_IMAGE_URI = "arg:image_uri"
         private const val ARG_PRODUCT_ID = "arg:product_id"
 
         fun createArgs(productId: Long): Bundle {
