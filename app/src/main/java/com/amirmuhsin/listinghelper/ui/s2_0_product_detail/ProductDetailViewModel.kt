@@ -6,13 +6,13 @@ import com.amirmuhsin.listinghelper.data.networking.model.product.ProductAM
 import com.amirmuhsin.listinghelper.domain.photo.AddPhotoItemButton
 import com.amirmuhsin.listinghelper.domain.photo.PhotoItem
 import com.amirmuhsin.listinghelper.domain.photo.PhotoPair
-import com.amirmuhsin.listinghelper.domain.product.ProductRepository
+import com.amirmuhsin.listinghelper.domain.product.ProductRemoteRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class ProductDetailViewModel(
-    private val productRepository: ProductRepository,
+    private val productRemoteRepository: ProductRemoteRepository,
 ): BaseViewModel() {
 
     private val _fProduct: MutableStateFlow<ProductAM?> = MutableStateFlow(null)
@@ -23,7 +23,7 @@ class ProductDetailViewModel(
 
     fun onBarcodeChanged(sku: String) {
         viewModelScope.launch {
-            val product = productRepository.getProductsBySku(sku)
+            val product = productRemoteRepository.getProductsBySku(sku)
             _fProduct.value = product
         }
     }

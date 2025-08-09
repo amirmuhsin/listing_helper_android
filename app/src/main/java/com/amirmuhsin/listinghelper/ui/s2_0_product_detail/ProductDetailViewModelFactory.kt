@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.amirmuhsin.listinghelper.data.networking.ProductNetworkModule
-import com.amirmuhsin.listinghelper.repository.ProductRepositoryImpl
+import com.amirmuhsin.listinghelper.repository.ProductRemoteRepositoryImpl
 
 class ProductDetailViewModelFactory(
     private val context: Context
@@ -14,7 +14,7 @@ class ProductDetailViewModelFactory(
         if (modelClass.isAssignableFrom(ProductDetailViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
             return ProductDetailViewModel(
-                productRepository = ProductRepositoryImpl(
+                productRemoteRepository = ProductRemoteRepositoryImpl(
                     context = context,
                     ProductNetworkModule.productService,
                     ProductNetworkModule.imageService

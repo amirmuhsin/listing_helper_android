@@ -3,7 +3,7 @@ package com.amirmuhsin.listinghelper.repository
 import android.content.Context
 import android.net.Uri
 import android.util.Base64
-import com.amirmuhsin.listinghelper.domain.product.ProductRepository
+import com.amirmuhsin.listinghelper.domain.product.ProductRemoteRepository
 import com.amirmuhsin.listinghelper.data.networking.api.ImageService
 import com.amirmuhsin.listinghelper.data.networking.api.ProductService
 import com.amirmuhsin.listinghelper.data.networking.model.product.ImageAM
@@ -11,11 +11,11 @@ import com.amirmuhsin.listinghelper.data.networking.model.product.ProductAM
 import com.amirmuhsin.listinghelper.data.networking.model.request.UploadProductImageRequest
 import retrofit2.HttpException
 
-class ProductRepositoryImpl(
+class ProductRemoteRepositoryImpl(
     private val context: Context,
     private val productService: ProductService,
     private val imageService: ImageService
-): ProductRepository {
+): ProductRemoteRepository {
 
     override suspend fun getProductsBySku(sku: String): ProductAM {
         val resp = productService.getProductBySKU(sku)

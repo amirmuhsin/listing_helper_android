@@ -2,6 +2,7 @@ package com.amirmuhsin.listinghelper.ui.s2_0_product_detail
 
 import CleanedPhotoAdapter
 import android.net.Uri
+import android.os.Bundle
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.widget.doAfterTextChanged
@@ -172,5 +173,13 @@ class ProductDetailFragment: BaseFragment<FragmentProductDetailBinding, ProductD
 
         const val RK_CLEANED_PHOTOS = "rk:cleaned_photos"
         const val ARG_IMAGE_URI = "arg:image_uri"
+
+        private const val ARG_PRODUCT_ID = "arg:product_id"
+
+        fun createArgs(productId: Long): Bundle {
+            return Bundle().apply {
+                putLong(ARG_PRODUCT_ID, productId)
+            }
+        }
     }
 }

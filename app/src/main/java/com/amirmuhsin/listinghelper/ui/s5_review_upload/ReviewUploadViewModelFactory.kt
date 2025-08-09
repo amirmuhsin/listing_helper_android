@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.amirmuhsin.listinghelper.data.networking.ProductNetworkModule
-import com.amirmuhsin.listinghelper.repository.ProductRepositoryImpl
+import com.amirmuhsin.listinghelper.repository.ProductRemoteRepositoryImpl
 
 class ReviewUploadViewModelFactory(
     private val context: Context
@@ -14,7 +14,7 @@ class ReviewUploadViewModelFactory(
         if (modelClass.isAssignableFrom(ReviewUploadViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
             return ReviewUploadViewModel(
-                ProductRepositoryImpl(
+                ProductRemoteRepositoryImpl(
                     context = context,
                     productService = ProductNetworkModule.productService,
                     imageService = ProductNetworkModule.imageService

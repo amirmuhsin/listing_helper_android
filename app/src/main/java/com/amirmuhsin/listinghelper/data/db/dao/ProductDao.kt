@@ -10,7 +10,7 @@ import com.amirmuhsin.listinghelper.data.db.model.ProductEntity
 interface ProductDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun upsert(product: ProductEntity)
+    suspend fun upsert(product: ProductEntity): Long
 
     @Query("SELECT * FROM product_table WHERE id = :productId")
     suspend fun getById(productId: Long): ProductEntity?

@@ -3,14 +3,14 @@ package com.amirmuhsin.listinghelper.ui.s5_review_upload
 import androidx.lifecycle.viewModelScope
 import com.amirmuhsin.listinghelper.core_views.base.viewmodel.BaseViewModel
 import com.amirmuhsin.listinghelper.domain.photo.PhotoPair
-import com.amirmuhsin.listinghelper.domain.product.ProductRepository
+import com.amirmuhsin.listinghelper.domain.product.ProductRemoteRepository
 import com.amirmuhsin.listinghelper.ui.s5_review_upload.command.ReviewUploadCommands
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class ReviewUploadViewModel(
-    private val repo: ProductRepository,
+    private val repo: ProductRemoteRepository,
 ): BaseViewModel() {
 
     private val _pairs = MutableStateFlow<List<PhotoPair>>(emptyList())

@@ -4,7 +4,7 @@ import android.net.Uri
 import com.amirmuhsin.listinghelper.data.networking.model.product.ImageAM
 import com.amirmuhsin.listinghelper.data.networking.model.product.ProductAM
 
-interface ProductRepository {
+interface ProductRemoteRepository {
 
     suspend fun getProductsBySku(sku: String): ProductAM
 
