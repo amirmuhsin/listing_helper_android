@@ -24,9 +24,6 @@ class FullScreenViewerViewModel(
     // keep a local cache to operate on
     private var photoPairs: List<PhotoPair> = emptyList()
 
-    var isListChanged = false
-        private set
-
     init {
         getPhotoPairs()
     }
@@ -61,7 +58,6 @@ class FullScreenViewerViewModel(
             photoPairs = updated
             _flPhotos.value = updated to -1
 
-            isListChanged = true
             if (updated.isEmpty()) {
                 sendCommand(FullScreenCommands.AllImagesDeleted)
             } else {

@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.widget.doAfterTextChanged
-import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
@@ -54,16 +53,6 @@ class ProductDetailFragment: BaseFragment<FragmentProductDetailBinding, ProductD
     override fun assignObjects() {
         productId = arguments?.getLong(ARG_PRODUCT_ID, -1L) ?: -1L
         isBarcodeLaunchRequired = arguments?.getBoolean(ARG_IS_BARCODE_LAUNCH_REQUIRED, false) ?: false
-
-        // TODO: OLD results
-        setFragmentResultListener(RK_CLEANED_PHOTOS) { _, bundle ->
-//            bundle.parcelableList<PhotoPair>(ARG_IMAGE_URI) ?: emptyList()
-//            viewModel.setCleanedPhotos(cleanedPairs)
-        }
-        setFragmentResultListener(FullScreenViewerFragment.RK_PHOTO_LIST_CHANGED) { _, bundle ->
-//            bundle.parcelableList<PhotoPair>(FullScreenViewerFragment.ARG_PHOTO_LIST) ?: emptyList()
-//            viewModel.setCleanedPhotos(pairs)
-        }
 
         cleanedPhotosAdapter = CleanedPhotoAdapter(
             requireContext(),

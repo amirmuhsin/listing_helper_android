@@ -2,7 +2,6 @@ package com.amirmuhsin.listinghelper.ui.s5_review_upload
 
 import android.view.View
 import androidx.core.os.bundleOf
-import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
@@ -14,12 +13,10 @@ import com.amirmuhsin.listinghelper.R
 import com.amirmuhsin.listinghelper.core_views.base.ui.BaseFragment
 import com.amirmuhsin.listinghelper.core_views.events.command.Command
 import com.amirmuhsin.listinghelper.databinding.FragmentReviewUploadBinding
-import com.amirmuhsin.listinghelper.domain.photo.PhotoPair
 import com.amirmuhsin.listinghelper.ui.common.fullscreen_image.FullScreenViewerFragment
 import com.amirmuhsin.listinghelper.ui.s5_review_upload.command.ReviewUploadCommands
 import com.amirmuhsin.listinghelper.ui.s5_review_upload.list.DragDropCallback
 import com.amirmuhsin.listinghelper.ui.s5_review_upload.list.ReviewUploadAdapter
-import com.amirmuhsin.listinghelper.util.parcelableList
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
@@ -34,10 +31,6 @@ class ReviewUploadFragment: BaseFragment<FragmentReviewUploadBinding, ReviewUplo
     private var touchHelper: ItemTouchHelper? = null
 
     override fun assignObjects() {
-        setFragmentResultListener(FullScreenViewerFragment.RK_PHOTO_LIST_CHANGED) { _, bundle ->
-//            val pairs = bundle.parcelableList<PhotoPair>(FullScreenViewerFragment.ARG_PHOTO_LIST) ?: emptyList()
-//            viewModel.setPhotoPairs(pairs)
-        }
         productId = requireArguments().getLong(ARG_PRODUCT_ID, -1L)
 
         adapter = ReviewUploadAdapter(

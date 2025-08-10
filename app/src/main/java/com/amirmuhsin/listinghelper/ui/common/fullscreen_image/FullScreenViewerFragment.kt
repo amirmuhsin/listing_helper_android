@@ -9,7 +9,6 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.updateLayoutParams
-import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
@@ -40,7 +39,7 @@ class FullScreenViewerFragment: BaseFragment<FragmentFullScreenImageBinding, Ful
 
     private val backPressedCallback = object: OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
-            goBackList()
+            goBack()
         }
     }
 
@@ -84,7 +83,7 @@ class FullScreenViewerFragment: BaseFragment<FragmentFullScreenImageBinding, Ful
     override fun setListeners() {
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, backPressedCallback)
         binding.btnClose.setOnClickListener {
-            goBackList()
+            goBack()
         }
         binding.btnDelete.setOnClickListener {
             val currentItemPosition = binding.viewPager.currentItem
@@ -121,7 +120,7 @@ class FullScreenViewerFragment: BaseFragment<FragmentFullScreenImageBinding, Ful
     override fun handleCommand(command: Command) {
         super.handleCommand(command)
         if (command is FullScreenCommands.AllImagesDeleted) {
-            goBackList()
+            goBack()
         } else if (command is FullScreenCommands.ImageDeleted) {
             val currentItemPosition = binding.viewPager.currentItem
             updatePhotoMeta(currentItemPosition)
@@ -170,10 +169,7 @@ class FullScreenViewerFragment: BaseFragment<FragmentFullScreenImageBinding, Ful
         isUiVisible = !isUiVisible
     }
 
-    private fun goBackList() {
-        if (viewModel.isListChanged) {
-            setFragmentResult(RK_PHOTO_LIST_CHANGED, Bundle.EMPTY)
-        }
+    private fun goBack() {
         findNavController().popBackStack()
     }
 
