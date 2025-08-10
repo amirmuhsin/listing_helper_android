@@ -10,12 +10,12 @@ data class Product(
     val addedTime: String, // store as dd-MM-yyyy HH:mm:ss
     val changedTime: String, // store as dd-MM-yyyy HH:mm:ss
 
-    val status: Status = Status.IN_PROGRESS,
+    val status: Status = Status.DRAFT,
     val totalImageCount: Int = 0
 ) {
 
     enum class Status {
-        IN_PROGRESS, DONE, HAS_FAILURE
+        DRAFT, DONE, HAS_FAILURE
     }
 
     companion object {
@@ -27,7 +27,7 @@ data class Product(
                 isActive = true,
                 name = "New Product",
                 description = "",
-                shortDescription = "",
+                shortDescription = "No Description",
                 addedTime = "",
                 changedTime = ""
             )

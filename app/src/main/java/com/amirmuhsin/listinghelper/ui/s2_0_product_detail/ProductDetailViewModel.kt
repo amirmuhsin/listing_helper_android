@@ -79,7 +79,7 @@ class ProductDetailViewModel(
 
             val product = _fProduct.value ?: Product.createEmpty()
             _fProduct.value = product.copy(
-                status = Product.Status.IN_PROGRESS,
+                status = Product.Status.DRAFT,
                 totalImageCount = _flPhotoPairs.value.count { it is PhotoPair })
             productLocalRepository.update(_fProduct.value!!)
         }

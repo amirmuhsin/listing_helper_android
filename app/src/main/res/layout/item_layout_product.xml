@@ -6,80 +6,124 @@
     android:id="@+id/clRoot"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?selectableItemBackground"
     android:clickable="true"
-    android:focusable="true">
+    android:clipChildren="false"
+    android:clipToPadding="false"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground">
 
+    <!-- Name -->
     <TextView
         android:id="@+id/tvName"
         style="@style/Body_3_TextAppearance"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/medium_padding"
-        android:layout_marginTop="@dimen/small_padding"
-        android:layout_marginEnd="@dimen/medium_padding"
-        android:ellipsize="marquee"
-        android:lines="1"
+        android:layout_marginTop="@dimen/medium_padding"
+        android:ellipsize="end"
         android:maxLines="1"
-        app:layout_constraintEnd_toStartOf="@id/tvPhotoCount"
+        android:textColor="@color/primary_text"
+        app:layout_constraintEnd_toStartOf="@id/tvBadgePhotoCount"
+        app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="Product Name"/>
+        tools:text="Product Name That Might Be Long"/>
 
+    <!-- Photo count badge -->
     <TextView
-        android:id="@+id/tvShortDescription"
+        android:id="@+id/tvBadgePhotoCount"
         style="@style/Body_5_TextAppearance"
         android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/medium_padding"
+        android:background="@drawable/bg_badge_neutral"
+        android:includeFontPadding="false"
+        android:minHeight="0dp"
+        android:paddingStart="@dimen/small_padding"
+        android:paddingTop="@dimen/very_small_padding"
+        android:paddingEnd="@dimen/small_padding"
+        android:paddingBottom="@dimen/very_small_padding"
+        android:textColor="@color/secondary_text"
+        app:layout_constraintBottom_toBottomOf="@id/tvName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tvName"
+        tools:text="5 photos"/>
+
+    <!-- Short description -->
+    <TextView
+        android:id="@+id/tvShortDescription"
+        style="@style/Body_4_TextAppearance"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/medium_padding"
+        android:layout_marginTop="@dimen/very_small_padding"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:textColor="@color/secondary_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvName"
+        tools:text="This is a short description. Two lines max, then ellipsize."/>
+
+    <!-- Status chip + icon -->
+    <LinearLayout
+        android:id="@+id/llStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/small_padding"
+        android:layout_marginEnd="@dimen/medium_padding"
+        android:layout_marginBottom="@dimen/medium_padding"
+        android:background="@drawable/bg_chip_neutral"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/small_padding"
+        android:paddingTop="@dimen/very_small_padding"
+        android:paddingEnd="@dimen/small_padding"
+        android:paddingBottom="@dimen/very_small_padding"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvShortDescription">
+
+        <ImageView
+            android:id="@+id/ivStatus"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_gravity="bottom|end"
+            android:layout_marginEnd="@dimen/very_small_padding"
+            tools:src="@drawable/ic_warning"
+            tools:visibility="visible"/>
+
+        <TextView
+            android:id="@+id/tvChipStatus"
+            style="@style/Body_5_TextAppearance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="IN PROGRESS"/>
+
+    </LinearLayout>
+
+    <!-- Date under description (left), shares row with status chip (right) -->
+    <TextView
+        android:id="@+id/tvDate"
+        style="@style/Body_6_TextAppearance"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/medium_padding"
         android:layout_marginTop="@dimen/small_padding"
-        android:layout_marginBottom="@dimen/small_padding"
-        android:lines="2"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginEnd="@dimen/small_padding"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="@color/third_text"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvName"
-        tools:text="This is a short description"/>
-
-    <ImageView
-        android:id="@+id/ivUploadStatus"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/small_padding"
-        android:src="@drawable/ic_warning"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        tools:visibility="visible"/>
-
-    <TextView
-        android:id="@+id/tvStatus"
-        style="@style/Body_5_TextAppearance"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/small_padding"
-        app:layout_constraintBottom_toBottomOf="@id/ivUploadStatus"
-        app:layout_constraintEnd_toStartOf="@id/ivUploadStatus"
-        app:layout_constraintTop_toTopOf="@id/ivUploadStatus"
-        tools:text="IN PROGRESS"/>
-
-    <TextView
-        android:id="@+id/tvPhotoCount"
-        style="@style/Body_5_TextAppearance"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/small_padding"
-        android:layout_marginEnd="@dimen/small_padding"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="total image: 5"/>
-
-<!--    TODO: TextView to show last modified date-->
+        app:layout_constraintTop_toBottomOf="@id/tvShortDescription"
+        app:layout_constraintEnd_toStartOf="@id/llStatus"
+        app:layout_constraintBottom_toBottomOf="@id/llStatus"
+        tools:text="Updated • 2025-08-10 14:32"/>
 
     <View
-        android:id="@+id/divider"
+        android:id="@+id/vDivider"
         android:layout_width="0dp"
         android:layout_height="1dp"
-        android:background="@color/primary"
+        android:background="@color/divider_color"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>
