@@ -182,8 +182,6 @@ class FullScreenViewerFragment: BaseFragment<FragmentFullScreenImageBinding, Ful
         const val ARG_PRODUCT_ID = "arg:product_id"
         const val ARG_START_PHOTO_ID = "arg:start_photo_id"
 
-        const val RK_PHOTO_LIST_CHANGED = "rk:photo_list"
-
         fun createArgs(productId: Long, startPhotoId: String) = Bundle().apply {
             putLong(ARG_PRODUCT_ID, productId)
             putString(ARG_START_PHOTO_ID, startPhotoId)
