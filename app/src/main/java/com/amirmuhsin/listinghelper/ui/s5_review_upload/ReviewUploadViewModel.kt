@@ -84,26 +84,42 @@ class ReviewUploadViewModel(
     }
 
     fun uploadAll(productItemId: Long) {
-        val list = inMemory.toList() // snapshot of current order
+        // Only upload PENDING (and optionally FAILED on retry)
+        val candidates =
+            inMemory.filter { it.uploadStatus == PhotoPair.UploadStatus.PENDING || it.uploadStatus == PhotoPair.UploadStatus.FAILED }
 
-        // set all pairs to UPLOADING
-        println("hop: VM: updating all to UPLOADING")
-        _pairs.value = _pairs.value.map { it.copy(uploadStatus = PhotoPair.UploadStatus.UPLOADING) }
+        if (candidates.isEmpty()) {
+            showErrorSnackbar("Nothing to upload.")
+            sendCommand(ReviewUploadCommands.UploadCompleted(uploaded = 0, total = 0))
+            return
+        }
 
-
+        // Mark only candidates as UPLOADING in the UI
+        _pairs.value = _pairs.value.map { p ->
+            if (candidates.any { it.internalId == p.internalId }) {
+                p.copy(uploadStatus = PhotoPair.UploadStatus.UPLOADING)
+            } else {
+                p
+            }
+        }
         viewModelScope.launch {
-            val total = list.size
+            val total = candidates.size
             var uploaded = 0
 
-            list.forEachIndexed { index, pair ->
+            candidates.forEachIndexed { index, pair ->
                 // start uploading
                 try {
-                    val imageAM = productRemoteRepository.uploadImage(productItemId, pair.internalId, pair.cleanedUri!!, "1-1-1")
-                    // todo: assign the imageAM to the pair or return Image model from the upload function instead of ImageAM (define it in domain)
+                    val imageAM = productRemoteRepository.uploadImage(
+                        productItemId,
+                        pair.internalId,
+                        pair.cleanedUri!!,
+                        "1-1-1"
+                    )
 
-                    println("Image uploaded successfully: $imageAM")
-                    val updatedPair = pair.copy(uploadStatus = PhotoPair.UploadStatus.UPLOADED, uploadItemId = imageAM.imageId)
-                    println("hop: VM: updating pair to UPLOADED: $pair")
+                    val updatedPair = pair.copy(
+                        uploadStatus = PhotoPair.UploadStatus.UPLOADED,
+                        uploadItemId = imageAM.imageId
+                    )
                     updatePair(updatedPair)
 
                     uploaded++
