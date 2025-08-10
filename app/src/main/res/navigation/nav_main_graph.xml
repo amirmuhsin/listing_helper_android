@@ -54,7 +54,15 @@
     <fragment
         android:id="@+id/reviewUploadFragment"
         android:name="com.amirmuhsin.listinghelper.ui.s5_review_upload.ReviewUploadFragment"
-        tools:layout="@layout/fragment_review_upload"/>
+        tools:layout="@layout/fragment_review_upload">
+
+        <action
+            android:id="@+id/action_reviewUpload_to_home"
+            app:destination="@id/homeFragment"
+            app:popUpTo="@id/homeFragment"
+            app:popUpToInclusive="false"/>
+
+    </fragment>
 
     <fragment
         android:id="@+id/fullScreenImageFragment"
