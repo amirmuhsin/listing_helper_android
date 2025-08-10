@@ -70,15 +70,20 @@ class ProductDetailViewModel(
                         originalUri = uri,
                         cleanedUri = uri,
                         bgCleanStatus = PhotoPair.BgCleanStatus.COMPLETED,
-                        order = base + i, // zero-based is simpler
+                        order = base + i,
                         uploadStatus = PhotoPair.UploadStatus.PENDING
                     )
                 )
             }
             notifyPhotoPairs()
+
+            val product = _fProduct.value ?: Product.createEmpty()
+            _fProduct.value = product.copy(
+                status = Product.Status.IN_PROGRESS,
+                totalImageCount = _flPhotoPairs.value.count { it is PhotoPair })
+            productLocalRepository.update(_fProduct.value!!)
         }
     }
-
 
     private suspend fun notifyProduct() {
         val product = productLocalRepository.getById(productId)

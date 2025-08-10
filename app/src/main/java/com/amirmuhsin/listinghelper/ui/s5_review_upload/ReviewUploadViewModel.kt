@@ -4,6 +4,8 @@ import androidx.lifecycle.viewModelScope
 import com.amirmuhsin.listinghelper.core_views.base.viewmodel.BaseViewModel
 import com.amirmuhsin.listinghelper.domain.photo.PhotoPair
 import com.amirmuhsin.listinghelper.domain.photo.PhotoPairLocalRepository
+import com.amirmuhsin.listinghelper.domain.product.Product
+import com.amirmuhsin.listinghelper.domain.product.ProductLocalRepository
 import com.amirmuhsin.listinghelper.domain.product.ProductRemoteRepository
 import com.amirmuhsin.listinghelper.ui.s5_review_upload.command.ReviewUploadCommands
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -11,6 +13,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class ReviewUploadViewModel(
+    private val productLocalRepository: ProductLocalRepository,
     private val photoPairLocalRepository: PhotoPairLocalRepository,
     private val productRemoteRepository: ProductRemoteRepository,
 ): BaseViewModel() {
@@ -52,25 +55,39 @@ class ReviewUploadViewModel(
     }
 
     fun removePair(pair: PhotoPair) {
-        inMemory.removeAll { it.internalId == pair.internalId }
+        // 1) remove from in-memory
+        val removed = inMemory.removeAll { it.internalId == pair.internalId }
+        if (!removed) return
 
-        // reindex cache contiguously (1-based)
-        for (i in inMemory.indices) {
-            val order = i + 1
-            if (inMemory[i].order != order) {
-                inMemory[i] = inMemory[i].copy(order = order)
+        // 2) reindex memory (1-based) and track only changed items
+        val changed = ArrayList<PhotoPair>()
+        inMemory.forEachIndexed { i, item ->
+            val want = i + 1
+            if (item.order != want) {
+                val updated = item.copy(order = want)
+                inMemory[i] = updated
+                changed += updated
             }
         }
 
+        // 3) emit to UI immediately
         _pairs.value = inMemory.toList()
 
+        // 4) persist using existing APIs
         viewModelScope.launch {
-            photoPairLocalRepository.delete(pair)
-            inMemory.forEachIndexed { idx, p ->
-                photoPairLocalRepository.updateOrder(p.internalId, idx + 1)
+            try {
+                photoPairLocalRepository.delete(pair)
+                for (p in changed) {
+                    photoPairLocalRepository.updateOrder(p.internalId, p.order)
+                }
+                productLocalRepository.updateImageCount(productId, inMemory.size)
+            } catch (e: Exception) {
+                // optional: revert UI or show a toast/snackbar
+                // showErrorSnackbar("Failed to persist changes: ${e.message}")
             }
         }
     }
+
 
     fun setReorderedPairsSilently(reordered: List<PhotoPair>) {
         inMemory.clear()
@@ -136,6 +153,14 @@ class ReviewUploadViewModel(
             }
 
             sendCommand(ReviewUploadCommands.UploadCompleted(uploaded, total))
+
+            val fullyDone = finalizeProductStatus(productId, uploaded, total)
+            if (!fullyDone && uploaded != total) {
+                showErrorSnackbar("Some images failed to upload. Please try again.")
+            } else if (fullyDone) {
+                sendCommand(ReviewUploadCommands.UploadFullyCompleted)
+            }
+
         }
     }
 
@@ -157,5 +182,21 @@ class ReviewUploadViewModel(
         viewModelScope.launch {
             photoPairLocalRepository.update(updated)
         }
+    }
+
+    // In your ViewModel (or a small domain/use-case class)
+
+    private suspend fun finalizeProductStatus(
+        productId: Long,
+        uploaded: Int,
+        total: Int
+    ): Boolean {
+        val newStatus = if (uploaded == total) {
+            Product.Status.DONE
+        } else {
+            Product.Status.HAS_FAILURE
+        }
+        productLocalRepository.updateStatus(productId, newStatus)
+        return newStatus == Product.Status.DONE
     }
 }

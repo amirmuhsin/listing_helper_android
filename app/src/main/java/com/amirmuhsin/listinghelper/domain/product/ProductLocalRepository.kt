@@ -8,5 +8,7 @@ interface ProductLocalRepository {
 
     suspend fun getById(id: Long): Product?
     suspend fun getAll(): List<Product>
+    suspend fun updateStatus(productId: Long, status: Product.Status)
+    suspend fun updateImageCount(productId: Long, count: Int)
 
 }

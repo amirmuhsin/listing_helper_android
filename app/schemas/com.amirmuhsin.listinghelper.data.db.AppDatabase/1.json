@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "fdb0a5bba628e9529ea598bf6f3f60f4",
+    "identityHash": "b2c6fdc9645f0993b13b7ae07288320f",
     "entities": [
       {
         "tableName": "product_table",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `sku` TEXT NOT NULL, `isActive` INTEGER NOT NULL, `name` TEXT NOT NULL, `description` TEXT NOT NULL, `shortDescription` TEXT NOT NULL, `addedTime` TEXT NOT NULL, `changedTime` TEXT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `sku` TEXT NOT NULL, `isActive` INTEGER NOT NULL, `name` TEXT NOT NULL, `description` TEXT NOT NULL, `shortDescription` TEXT NOT NULL, `addedTime` TEXT NOT NULL, `changedTime` TEXT NOT NULL, `status` TEXT NOT NULL, `totalImageCount` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -54,6 +54,18 @@
             "fieldPath": "changedTime",
             "columnName": "changedTime",
             "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "status",
+            "columnName": "status",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "totalImageCount",
+            "columnName": "totalImageCount",
+            "affinity": "INTEGER",
             "notNull": true
           }
         ],
@@ -124,7 +136,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'fdb0a5bba628e9529ea598bf6f3f60f4')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'b2c6fdc9645f0993b13b7ae07288320f')"
     ]
   }
 }

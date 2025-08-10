@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.amirmuhsin.listinghelper.data.db.AppDatabase
 import com.amirmuhsin.listinghelper.data.networking.ProductNetworkModule
 import com.amirmuhsin.listinghelper.repository.PhotoPairLocalRepositoryImpl
+import com.amirmuhsin.listinghelper.repository.ProductLocalRepositoryImpl
 import com.amirmuhsin.listinghelper.repository.ProductRemoteRepositoryImpl
 
 class ReviewUploadViewModelFactory(
@@ -19,6 +20,7 @@ class ReviewUploadViewModelFactory(
 
             @Suppress("UNCHECKED_CAST")
             return ReviewUploadViewModel(
+                productLocalRepository = ProductLocalRepositoryImpl(db.productDao()),
                 photoPairLocalRepository = PhotoPairLocalRepositoryImpl(db.photoPairDao()),
                 productRemoteRepository = ProductRemoteRepositoryImpl(
                     context = context,

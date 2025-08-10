@@ -36,4 +36,12 @@ class ProductLocalRepositoryImpl(
     override suspend fun getAll(): List<Product> = withContext(Dispatchers.IO) {
         productDao.getAll().map { it.toDomain() }
     }
+
+    override suspend fun updateStatus(productId: Long, status: Product.Status) = withContext(Dispatchers.IO) {
+        productDao.updateStatus(productId, status.name)
+    }
+
+    override suspend fun updateImageCount(productId: Long, count: Int) = withContext(Dispatchers.IO) {
+        productDao.updateImageCount(productId, count)
+    }
 }

@@ -20,4 +20,12 @@ interface ProductDao {
 
     @Query("DELETE FROM product_table WHERE id = :productId")
     suspend fun delete(productId: Long)
+
+    @Query("UPDATE product_table SET status = :status WHERE id = :productId")
+    suspend fun updateStatus(productId: Long, status: String)
+
+    @Query("UPDATE product_table SET totalImageCount = :count WHERE id = :productId")
+    suspend fun updateImageCount(productId: Long, count: Int)
+
+
 }

@@ -8,8 +8,15 @@ data class Product(
     val description: String,
     val shortDescription: String,
     val addedTime: String, // store as dd-MM-yyyy HH:mm:ss
-    val changedTime: String // store as dd-MM-yyyy HH:mm:ss
+    val changedTime: String, // store as dd-MM-yyyy HH:mm:ss
+
+    val status: Status = Status.IN_PROGRESS,
+    val totalImageCount: Int = 0
 ) {
+
+    enum class Status {
+        IN_PROGRESS, DONE, HAS_FAILURE
+    }
 
     companion object {
 

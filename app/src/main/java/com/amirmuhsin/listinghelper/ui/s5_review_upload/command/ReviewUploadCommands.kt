@@ -4,5 +4,6 @@ import com.amirmuhsin.listinghelper.core_views.events.command.Command
 
 sealed class ReviewUploadCommands: Command {
     data class UploadCompleted(val uploaded: Int, val total: Int): ReviewUploadCommands()
+    object UploadFullyCompleted: ReviewUploadCommands()
     data class UploadItemProgress(val uploaded: Int, val total: Int): ReviewUploadCommands()
 }

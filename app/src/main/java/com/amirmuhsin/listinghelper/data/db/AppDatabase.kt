@@ -14,7 +14,7 @@ import com.amirmuhsin.listinghelper.data.db.model.ProductEntity
         ProductEntity::class,
         PhotoPairEntity::class
     ],
-    version = 2,
+    version = 1,
     exportSchema = true
 )
 abstract class AppDatabase: RoomDatabase() {

@@ -23,8 +23,8 @@ interface PhotoPairDao {
     @Query("DELETE FROM photo_pairs_table WHERE id = :internalId")
     suspend fun deleteById(internalId: String)
 
-    @Query("SELECT * FROM photo_pairs_table WHERE id = :id")
-    suspend fun getById(id: Long): PhotoPairEntity?
+    @Query("SELECT * FROM photo_pairs_table WHERE id = :internalId")
+    suspend fun getById(internalId: Long): PhotoPairEntity?
 
     @Query("UPDATE photo_pairs_table SET sortOrder = :order WHERE id = :internalId")
     suspend fun updateOrder(internalId: String, order: Int)

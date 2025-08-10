@@ -12,5 +12,8 @@ data class ProductEntity(
     val description: String,
     val shortDescription: String,
     val addedTime: String,
-    val changedTime: String
+    val changedTime: String,
+
+    val status: String,
+    val totalImageCount: Int = 0,
 )

@@ -6,7 +6,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -88,25 +87,22 @@ class ReviewUploadFragment: BaseFragment<FragmentReviewUploadBinding, ReviewUplo
     override fun handleCommand(command: Command) {
         when (command) {
             is ReviewUploadCommands.UploadCompleted -> {
-                val areAllUploaded = command.uploaded == command.total
-                if (areAllUploaded) {
-                    showSuccessSnackbar("All images uploaded successfully!")
-                    binding.btnDone.visibility = View.VISIBLE
-                    binding.btnUpload.visibility = View.GONE
+                binding.btnDone.visibility = View.GONE
+                binding.btnUpload.visibility = View.VISIBLE
+                binding.btnUpload.isEnabled = true
+                binding.btnUpload.text = "Retry Upload"
+            }
 
-                    binding.btnUpload.postDelayed({
-                        findNavController().navigate(
-                            R.id.action_reviewUpload_to_home
-                        )
-                    }, 1000)
+            is ReviewUploadCommands.UploadFullyCompleted -> {
+                showSuccessSnackbar("All images uploaded successfully!")
+                binding.btnDone.visibility = View.VISIBLE
+                binding.btnUpload.visibility = View.GONE
 
-                } else {
-                    showErrorSnackbar("Some images failed to upload. Please try again.")
-                    binding.btnDone.visibility = View.GONE
-                    binding.btnUpload.visibility = View.VISIBLE
-                    binding.btnUpload.isEnabled = true
-                    binding.btnUpload.text = "Retry Upload"
-                }
+                binding.btnUpload.postDelayed({
+                    findNavController().navigate(
+                        R.id.action_reviewUpload_to_home
+                    )
+                }, 1000)
             }
 
             is ReviewUploadCommands.UploadItemProgress -> {
@@ -115,15 +111,6 @@ class ReviewUploadFragment: BaseFragment<FragmentReviewUploadBinding, ReviewUplo
                 binding.btnUpload.text = "Uploading ${percent}% (${command.uploaded}/${command.total})"
             }
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        binding.rvConfirmation.itemAnimator = null
-        // Re-enable animations after a short delay if needed
-        binding.rvConfirmation.postDelayed({
-            binding.rvConfirmation.itemAnimator = DefaultItemAnimator()
-        }, 100)
     }
 
     companion object {

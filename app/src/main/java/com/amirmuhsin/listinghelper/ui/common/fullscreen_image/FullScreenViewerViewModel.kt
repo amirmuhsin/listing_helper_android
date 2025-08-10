@@ -5,6 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.amirmuhsin.listinghelper.core_views.base.viewmodel.BaseViewModel
 import com.amirmuhsin.listinghelper.domain.photo.PhotoPair
 import com.amirmuhsin.listinghelper.domain.photo.PhotoPairLocalRepository
+import com.amirmuhsin.listinghelper.domain.product.Product
+import com.amirmuhsin.listinghelper.domain.product.ProductLocalRepository
 import com.amirmuhsin.listinghelper.ui.common.fullscreen_image.command.FullScreenCommands
 import com.amirmuhsin.listinghelper.util.ImageStore
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,6 +17,7 @@ class FullScreenViewerViewModel(
     private val appContext: Context,
     val productId: Long,
     val startPhotoPairId: String,
+    val productLocalRepository: ProductLocalRepository,
     val photoPairLocalRepository: PhotoPairLocalRepository
 ) : BaseViewModel() {
 
@@ -57,6 +60,15 @@ class FullScreenViewerViewModel(
             val updated = photoPairs.toMutableList().apply { removeAt(index) }.toList()
             photoPairs = updated
             _flPhotos.value = updated to -1
+
+            // 4) update product image count (no read needed)
+            productLocalRepository.updateImageCount(productId, updated.size)
+
+            if (updated.isEmpty()) {
+                sendCommand(FullScreenCommands.AllImagesDeleted)
+            } else {
+                sendCommand(FullScreenCommands.ImageDeleted)
+            }
 
             if (updated.isEmpty()) {
                 sendCommand(FullScreenCommands.AllImagesDeleted)
