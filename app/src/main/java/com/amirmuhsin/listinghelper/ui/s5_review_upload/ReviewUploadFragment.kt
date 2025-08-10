@@ -61,7 +61,9 @@ class ReviewUploadFragment: BaseFragment<FragmentReviewUploadBinding, ReviewUplo
             findNavController().popBackStack()
         }
         binding.btnDone.setOnClickListener {
-            findNavController().popBackStack()
+            findNavController().navigate(
+                R.id.action_reviewUpload_to_home
+            )
         }
         val callback = DragDropCallback(adapter)
         touchHelper = ItemTouchHelper(callback)
@@ -97,12 +99,6 @@ class ReviewUploadFragment: BaseFragment<FragmentReviewUploadBinding, ReviewUplo
                 showSuccessSnackbar("All images uploaded successfully!")
                 binding.btnDone.visibility = View.VISIBLE
                 binding.btnUpload.visibility = View.GONE
-
-                binding.btnUpload.postDelayed({
-                    findNavController().navigate(
-                        R.id.action_reviewUpload_to_home
-                    )
-                }, 1000)
             }
 
             is ReviewUploadCommands.UploadItemProgress -> {
