@@ -10,16 +10,15 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.viewbinding.ViewBinding
+import com.amirmuhsin.listinghelper.R
 import com.amirmuhsin.listinghelper.core_views.base.viewmodel.BaseViewModel
 import com.amirmuhsin.listinghelper.core_views.events.command.Command
 import com.amirmuhsin.listinghelper.core_views.progress.ProcessProgressDialog
-import com.amirmuhsin.listinghelper.R
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 
 abstract class BaseFragment<VB: ViewBinding, VM: BaseViewModel>(
     private val inflate: (LayoutInflater, ViewGroup?, Boolean) -> VB
@@ -67,25 +66,33 @@ abstract class BaseFragment<VB: ViewBinding, VM: BaseViewModel>(
     protected open fun handleCommand(command: Command) {}
 
     private fun setBaseObservers() {
-        viewModel.flLoading.flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
-            .onEach { isLoading ->
-                if (isLoading) showProgressDialog() else hideProgressDialog()
-            }.launchIn(lifecycleScope)
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    viewModel.flLoading.collect { isLoading ->
+                        if (isLoading) showProgressDialog() else hideProgressDialog()
+                    }
+                }
 
-        viewModel.flCommand.flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
-            .onEach { command ->
-                handleCommand(command)
-            }.launchIn(lifecycleScope)
+                launch {
+                    viewModel.flCommand.collect { command ->
+                        handleCommand(command)
+                    }
+                }
 
-        viewModel.flSuccessSnackbar.flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
-            .onEach { message ->
-                showSuccessSnackbar(message)
+                launch {
+                    viewModel.flSuccessSnackbar.collect { message ->
+                        showSuccessSnackbar(message)
+                    }
+                }
+
+                launch {
+                    viewModel.flErrorSnackbar.collect { message ->
+                        showErrorSnackbar(message)
+                    }
+                }
             }
-            .launchIn(lifecycleScope)
-
-        viewModel.flErrorSnackbar.flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
-            .onEach { message -> showErrorSnackbar(message) }
-            .launchIn(lifecycleScope)
+        }
     }
 
     protected fun showProgressDialog() {

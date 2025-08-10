@@ -3,8 +3,9 @@ package com.amirmuhsin.listinghelper.ui.s1_home
 import android.widget.CompoundButton
 import android.widget.Toast
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.amirmuhsin.listinghelper.R
@@ -15,8 +16,7 @@ import com.amirmuhsin.listinghelper.databinding.FragmentHomeBinding
 import com.amirmuhsin.listinghelper.ui.s1_home.command.HomeCommands
 import com.amirmuhsin.listinghelper.ui.s1_home.list.ProductListAdapter
 import com.amirmuhsin.listinghelper.ui.s2_0_product_detail.ProductDetailFragment
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 
 class HomeFragment: BaseFragment<FragmentHomeBinding, HomeViewModel>(
     FragmentHomeBinding::inflate
@@ -67,10 +67,11 @@ class HomeFragment: BaseFragment<FragmentHomeBinding, HomeViewModel>(
     }
 
     override fun setObservers() {
-        viewModel.fProducts.flowWithLifecycle(lifecycle)
-            .onEach { list ->
-                productListAdapter.submitList(list)
-            }.launchIn(lifecycleScope)
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.fProducts.collect { productListAdapter.submitList(it) }
+            }
+        }
     }
 
     override fun handleCommand(command: Command) {

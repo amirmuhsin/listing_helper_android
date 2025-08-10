@@ -22,7 +22,7 @@ abstract class BaseViewModel: ViewModel() {
     private val _flErrorSnackbar = MutableSharedFlow<String>(replay = 0)
     val flErrorSnackbar = _flErrorSnackbar.asSharedFlow()
 
-    private val _fCommand = MutableSharedFlow<Command>(extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+    private val _fCommand = MutableSharedFlow<Command>(replay = 0, extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
     val flCommand = _fCommand.asSharedFlow()
 
     open fun sendCommand(command: Command) {

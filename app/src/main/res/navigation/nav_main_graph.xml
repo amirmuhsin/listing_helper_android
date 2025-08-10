@@ -67,6 +67,6 @@
     <fragment
         android:id="@+id/fullScreenImageFragment"
         android:name="com.amirmuhsin.listinghelper.ui.common.fullscreen_image.FullScreenViewerFragment"
-        tools:layout="@layout/fragment_full_screen_image" />
+        tools:layout="@layout/fragment_full_screen_image"/>
 
 </navigation>
