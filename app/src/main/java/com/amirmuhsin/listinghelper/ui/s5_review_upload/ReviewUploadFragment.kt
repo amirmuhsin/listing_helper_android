@@ -99,9 +99,7 @@ class ReviewUploadFragment: BaseFragment<FragmentReviewUploadBinding, ReviewUplo
                 binding.btnUpload.visibility = View.GONE
 
                 binding.btnUpload.postDelayed({
-                    findNavController().navigate(
-                        R.id.action_reviewUpload_to_home
-                    )
+                    findNavController().popBackStack()
                 }, 1000)
             }
 
