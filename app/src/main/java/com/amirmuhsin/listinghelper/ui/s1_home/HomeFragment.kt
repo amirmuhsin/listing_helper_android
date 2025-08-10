@@ -59,7 +59,7 @@ class HomeFragment: BaseFragment<FragmentHomeBinding, HomeViewModel>(
         val packageInfo = packageManager.getPackageInfo(packageName, 0)
         val versionName = packageInfo.versionName
 
-        binding.tvVersion.text = "Version: $versionName | 3-August-2025"
+        binding.tvVersion.text = "Version: $versionName | 11-August-2025"
 
         binding.rvProducts.adapter = productListAdapter
         binding.rvProducts.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
