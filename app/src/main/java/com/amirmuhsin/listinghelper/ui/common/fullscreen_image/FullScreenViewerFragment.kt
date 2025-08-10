@@ -33,7 +33,7 @@ class FullScreenViewerFragment: BaseFragment<FragmentFullScreenImageBinding, Ful
     override val viewModel: FullScreenViewerViewModel by viewModels {
         FullScreenViewerViewModelFactory(
             requireContext().applicationContext,
-            productId = arguments?.getLong(ARG_PRODUCT_ID) ?: -1,
+            productId = arguments?.getLong(ARG_PRODUCT_ID) ?: -1L,
             startPhotoPairId = arguments?.getString(ARG_START_PHOTO_ID) ?: ""
         )
     }
@@ -101,16 +101,21 @@ class FullScreenViewerFragment: BaseFragment<FragmentFullScreenImageBinding, Ful
 
     override fun setObservers() {
         viewModel.flPhotos.flowWithLifecycle(lifecycle)
-            .onEach { images ->
-                adapter.submitList(images)
-            }.launchIn(lifecycleScope)
-
-        viewModel.flStartIndexFlow.flowWithLifecycle(lifecycle)
-            .onEach { startIndex ->
-                if (startIndex == -1) return@onEach
-                binding.viewPager.setCurrentItem(startIndex.coerceIn(viewModel.flPhotos.value.indices), false)
-                updatePhotoMeta(startIndex)
-            }.launchIn(lifecycleScope)
+            .onEach { pair ->
+                pair ?: return@onEach
+                val (photos, startIndex) = pair
+                adapter.submitList(photos) {
+                    if (startIndex >= 0 && photos.isNotEmpty()) {
+                        val safe = startIndex.coerceIn(photos.indices)
+                        binding.viewPager.setCurrentItem(safe, false)
+                        updatePhotoMeta(safe)
+                    } else {
+                        val cur = binding.viewPager.currentItem.coerceIn(photos.indices)
+                        updatePhotoMeta(cur)
+                    }
+                }
+            }
+            .launchIn(lifecycleScope)
     }
 
     override fun handleCommand(command: Command) {
@@ -130,19 +135,22 @@ class FullScreenViewerFragment: BaseFragment<FragmentFullScreenImageBinding, Ful
     }
 
     private fun updatePhotoMeta(position: Int) {
-        val list = viewModel.flPhotos.value
-        val pair = list.getOrNull(position) ?: return
+        val state = viewModel.flPhotos.value ?: return
+        val (photos, _) = state
+        if (photos.isEmpty()) return
 
-        val fileSizeBytes = getImageSizeInBytes(requireContext(), pair.cleanedUri)
-        val resolution = getImageResolution(requireContext(), pair.cleanedUri)
+        val idx = position.coerceIn(photos.indices)
+        val pair = photos[idx]
 
-        val imageResolution = resolution?.let { "${it.first} x ${it.second}" } ?: "Unknown"
-        val imageSizeInKB = getReadableSize(fileSizeBytes)
-        binding.tvImageResolution.text = imageResolution
-        binding.tvImageSize.text = imageSizeInKB
+        val uri = pair.cleanedUri ?: pair.originalUri
+        val fileSizeBytes = getImageSizeInBytes(requireContext(), uri)
+        val resolution = getImageResolution(requireContext(), uri)
 
-        binding.tvCount.text = "${position + 1} / ${list.size}"
+        binding.tvImageResolution.text = resolution?.let { "${it.first} x ${it.second}" } ?: "Unknown"
+        binding.tvImageSize.text = getReadableSize(fileSizeBytes)
+        binding.tvCount.text = "${idx + 1} / ${photos.size}"
     }
+
 
     private fun toggleSystemUI() {
         val window = requireActivity().window

@@ -16,13 +16,13 @@ class FullScreenViewerViewModel(
     val productId: Long,
     val startPhotoPairId: String,
     val photoPairLocalRepository: PhotoPairLocalRepository
-): BaseViewModel() {
+) : BaseViewModel() {
 
-    private val _flPhotos = MutableStateFlow(emptyList<PhotoPair>())
-    val flPhotos: StateFlow<List<PhotoPair>> = _flPhotos
+    private val _flPhotos = MutableStateFlow<Pair<List<PhotoPair>, Int>?>(null)
+    val flPhotos: StateFlow<Pair<List<PhotoPair>, Int>?> = _flPhotos
 
-    private val _flStartIndex = MutableStateFlow(-1)
-    val flStartIndexFlow: StateFlow<Int> = _flStartIndex
+    // keep a local cache to operate on
+    private var photoPairs: List<PhotoPair> = emptyList()
 
     var isListChanged = false
         private set
@@ -33,36 +33,36 @@ class FullScreenViewerViewModel(
 
     private fun getPhotoPairs() {
         viewModelScope.launch {
-            val allPhotoPairs = photoPairLocalRepository.getAllByProductId(productId).sortedBy { it.order }
-            _flPhotos.value = allPhotoPairs
+            photoPairs = photoPairLocalRepository
+                .getAllByProductId(productId)
+                .sortedBy { it.order }
 
-            val startIndex = allPhotoPairs.indexOfFirst { it.internalId == startPhotoPairId }
-            if (startIndex != -1) {
-                _flStartIndex.value = startIndex
-            } else {
-                _flStartIndex.value = 0
-            }
+            val initialIndex = photoPairs.indexOfFirst { it.internalId == startPhotoPairId }
+            // emit photos + start index (or -1 if not found so Fragment can skip jump)
+            _flPhotos.value = photoPairs to if (initialIndex >= 0) initialIndex else -1
         }
     }
 
     fun deletePhotoPair(index: Int) {
         viewModelScope.launch {
-            val current = _flPhotos.value.toMutableList()
-            if (index !in current.indices) return@launch
+            if (index !in photoPairs.indices) return@launch
 
-            val victim = current[index]
+            val victim = photoPairs[index]
+
             // 1) delete DB row
             photoPairLocalRepository.delete(victim)
 
-            // 2) best-effort delete local files if they are our managed copies
+            // 2) best-effort delete local files we own
             victim.cleanedUri?.let { ImageStore.deleteIfManaged(appContext, it) }
             ImageStore.deleteIfManaged(appContext, victim.originalUri)
 
-            // 3) update UI
-            current.removeAt(index)
-            _flPhotos.value = current
+            // 3) update local cache + emit (with startIndex = -1 so UI keeps current position)
+            val updated = photoPairs.toMutableList().apply { removeAt(index) }.toList()
+            photoPairs = updated
+            _flPhotos.value = updated to -1
+
             isListChanged = true
-            if (current.isEmpty()) {
+            if (updated.isEmpty()) {
                 sendCommand(FullScreenCommands.AllImagesDeleted)
             } else {
                 sendCommand(FullScreenCommands.ImageDeleted)
