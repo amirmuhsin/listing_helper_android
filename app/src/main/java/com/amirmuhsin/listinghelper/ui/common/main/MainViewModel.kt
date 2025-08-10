@@ -18,7 +18,7 @@ class MainViewModel(
 
     fun createNewProductWithPhotos(uris: List<Uri>) {
         viewModelScope.launch {
-            val productId = productRepo.create(Product.createEmpty())
+            val productId = productRepo.create(Product.createEmpty(uris.size))
 
             uris.forEachIndexed { index, uri ->
                 val item = PhotoPair(

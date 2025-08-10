@@ -20,7 +20,7 @@ data class Product(
 
     companion object {
 
-        fun createEmpty(): Product {
+        fun createEmpty(totalImageCount: Int = 0): Product {
             return Product(
                 id = 0,
                 sku = "",
@@ -29,7 +29,9 @@ data class Product(
                 description = "",
                 shortDescription = "No Description",
                 addedTime = "",
-                changedTime = ""
+                changedTime = "",
+                status = Status.DRAFT,
+                totalImageCount = totalImageCount
             )
         }
     }
