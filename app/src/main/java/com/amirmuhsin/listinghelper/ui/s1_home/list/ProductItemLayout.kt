@@ -6,6 +6,7 @@ import android.widget.RelativeLayout
 import com.amirmuhsin.listinghelper.R
 import com.amirmuhsin.listinghelper.databinding.ItemLayoutProductBinding
 import com.amirmuhsin.listinghelper.domain.product.Product
+import com.amirmuhsin.listinghelper.util.Time
 
 class ProductItemLayout(
     context: Context,
@@ -51,6 +52,9 @@ class ProductItemLayout(
         }
 
         binding.tvBadgePhotoCount.text = product.totalImageCount.toString() + " photos"
+
+        binding.tvDate.text = "Created • " + Time.isoUtcToDeviceText(product.addedTime)
+
     }
 
 }

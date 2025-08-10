@@ -27,7 +27,6 @@ class MainActivity: BaseActivity<ActivityMainBinding, MainViewModel>(ActivityMai
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
-
         intent?.let { handleSharedImagesIfAny(it) }
     }
 

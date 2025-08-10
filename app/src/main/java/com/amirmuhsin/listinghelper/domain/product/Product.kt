@@ -1,5 +1,7 @@
 package com.amirmuhsin.listinghelper.domain.product
 
+import com.amirmuhsin.listinghelper.util.Time
+
 data class Product(
     val id: Long,
     val serverId: Long,
@@ -22,6 +24,8 @@ data class Product(
     companion object {
 
         fun createEmpty(totalImageCount: Int = 0): Product {
+            val nowIso = Time.nowUtcIso()
+
             return Product(
                 id = 0,
                 serverId = -1,
@@ -30,8 +34,8 @@ data class Product(
                 name = "New Product",
                 description = "",
                 shortDescription = "No Description",
-                addedTime = "",
-                changedTime = "",
+                addedTime = nowIso,
+                changedTime = nowIso,
                 status = Status.DRAFT,
                 totalImageCount = totalImageCount
             )

@@ -5,6 +5,7 @@ import com.amirmuhsin.listinghelper.data.db.mapper.toDomain
 import com.amirmuhsin.listinghelper.data.db.mapper.toEntity
 import com.amirmuhsin.listinghelper.domain.product.Product
 import com.amirmuhsin.listinghelper.domain.product.ProductLocalRepository
+import com.amirmuhsin.listinghelper.util.Time
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -18,10 +19,11 @@ class ProductLocalRepositoryImpl(
         createdProductId
     }
 
-    override suspend fun update(product: Product) = withContext(Dispatchers.IO) {
-        val productEntity = product.toEntity()
-        productDao.upsert(productEntity)
-        Unit
+    override suspend fun update(product: Product){
+        return withContext(Dispatchers.IO) {
+            val updated = product.copy(changedTime = Time.nowUtcIso())
+            productDao.upsert(updated.toEntity())
+        }
     }
 
     override suspend fun delete(product: Product) = withContext(Dispatchers.IO) {
