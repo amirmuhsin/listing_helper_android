@@ -6,6 +6,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -41,8 +42,11 @@ class ReviewUploadFragment: BaseFragment<FragmentReviewUploadBinding, ReviewUplo
             },
             onPhotoRemove = { pair -> viewModel.removePair(pair) },
             startDragListener = { viewHolder -> touchHelper?.startDrag(viewHolder) },
-            onReordered = { reorderedList -> viewModel.setReorderedPairsSilently(reorderedList) }
+            onReordered = { reorderedList ->
+                viewModel.setReorderedPairsSilently(reorderedList)
+            }
         )
+        viewModel.load(productId) // moved here to avoid swap animation
     }
 
     override fun prepareUI() {
@@ -111,6 +115,15 @@ class ReviewUploadFragment: BaseFragment<FragmentReviewUploadBinding, ReviewUplo
                 binding.btnUpload.text = "Uploading ${percent}% (${command.uploaded}/${command.total})"
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.rvConfirmation.itemAnimator = null
+        // Re-enable animations after a short delay if needed
+        binding.rvConfirmation.postDelayed({
+            binding.rvConfirmation.itemAnimator = DefaultItemAnimator()
+        }, 100)
     }
 
     companion object {

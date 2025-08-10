@@ -11,5 +11,6 @@ data class PhotoPairEntity(
     val cleanedUri: String?,
     val bgCleanStatus: String,
     val sortOrder: Int,
-    val uploadStatus: String
+    val uploadStatus: String,
+    val uploadItemId: Long? = null,
 )

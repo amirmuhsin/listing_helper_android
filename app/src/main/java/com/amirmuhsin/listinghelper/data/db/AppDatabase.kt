@@ -14,7 +14,7 @@ import com.amirmuhsin.listinghelper.data.db.model.ProductEntity
         ProductEntity::class,
         PhotoPairEntity::class
     ],
-    version = 1,
+    version = 2,
     exportSchema = true
 )
 abstract class AppDatabase: RoomDatabase() {
@@ -35,8 +35,6 @@ abstract class AppDatabase: RoomDatabase() {
                     AppDatabase::class.java,
                     DB_NAME
                 )
-                    // For development; remove or replace with real Migrations in prod
-                    .fallbackToDestructiveMigration(false)
                     .build()
                     .also { INSTANCE = it }
             }

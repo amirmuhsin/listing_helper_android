@@ -25,4 +25,7 @@ interface PhotoPairDao {
 
     @Query("SELECT * FROM photo_pairs_table WHERE id = :id")
     suspend fun getById(id: Long): PhotoPairEntity?
+
+    @Query("UPDATE photo_pairs_table SET sortOrder = :order WHERE id = :internalId")
+    suspend fun updateOrder(internalId: String, order: Int)
 }

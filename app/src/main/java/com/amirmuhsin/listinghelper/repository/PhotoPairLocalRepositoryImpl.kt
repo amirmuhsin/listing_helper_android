@@ -24,6 +24,12 @@ class PhotoPairLocalRepositoryImpl(
         Unit
     }
 
+    override suspend fun updateOrder(internalId: String, order: Int) {
+        withContext(Dispatchers.IO) {
+            photoPairDao.updateOrder(internalId, order)
+        }
+    }
+
     override suspend fun delete(photoPair: PhotoPair) {
         withContext(Dispatchers.IO) {
             photoPairDao.deleteById(photoPair.internalId)

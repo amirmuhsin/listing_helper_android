@@ -11,7 +11,8 @@ fun PhotoPairEntity.toDomain() = PhotoPair(
     cleanedUri = cleanedUri?.let(Uri::parse),
     bgCleanStatus = PhotoPair.BgCleanStatus.valueOf(bgCleanStatus),
     order = sortOrder,
-    uploadStatus = PhotoPair.UploadStatus.valueOf(uploadStatus)
+    uploadStatus = PhotoPair.UploadStatus.valueOf(uploadStatus),
+    uploadItemId = uploadItemId
 )
 
 fun PhotoPair.toEntity() = PhotoPairEntity(
@@ -21,5 +22,6 @@ fun PhotoPair.toEntity() = PhotoPairEntity(
     cleanedUri = cleanedUri?.toString(),
     bgCleanStatus = bgCleanStatus.name,
     sortOrder = order,
-    uploadStatus = uploadStatus.name
+    uploadStatus = uploadStatus.name,
+    uploadItemId = uploadItemId
 )

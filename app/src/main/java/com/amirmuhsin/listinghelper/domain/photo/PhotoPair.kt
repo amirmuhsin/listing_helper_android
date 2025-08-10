@@ -12,7 +12,8 @@ data class PhotoPair(
     val cleanedUri: Uri?,
     val bgCleanStatus: BgCleanStatus = BgCleanStatus.PENDING,
     val order: Int,
-    val uploadStatus: UploadStatus = UploadStatus.PENDING
+    val uploadStatus: UploadStatus = UploadStatus.PENDING,
+    val uploadItemId: Long? = null,
 ): Parcelable, PhotoItem() {
 
     enum class BgCleanStatus {
