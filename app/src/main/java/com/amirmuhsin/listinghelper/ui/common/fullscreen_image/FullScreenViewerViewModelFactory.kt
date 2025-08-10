@@ -1,20 +1,27 @@
 package com.amirmuhsin.listinghelper.ui.common.fullscreen_image
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.amirmuhsin.listinghelper.domain.photo.PhotoPair
+import com.amirmuhsin.listinghelper.data.db.AppDatabase
+import com.amirmuhsin.listinghelper.repository.PhotoPairLocalRepositoryImpl
 
 class FullScreenViewerViewModelFactory(
-    private val photoPairs: List<PhotoPair>,
-    private val startIndex: Int
-) : ViewModelProvider.Factory {
+    private val appContext: Context,
+    private val productId: Long,
+    private val startPhotoPairId: String
+): ViewModelProvider.Factory {
 
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+    override fun <T: ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(FullScreenViewerViewModel::class.java)) {
+            val db = AppDatabase.getInstance(appContext)
+
             @Suppress("UNCHECKED_CAST")
             return FullScreenViewerViewModel(
-                photoPairs = photoPairs,
-                startIndex = startIndex
+                appContext = appContext,
+                productId = productId,
+                startPhotoPairId = startPhotoPairId,
+                photoPairLocalRepository = PhotoPairLocalRepositoryImpl(db.photoPairDao())
             ) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class ${modelClass.name}")

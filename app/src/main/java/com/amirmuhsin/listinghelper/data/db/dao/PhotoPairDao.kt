@@ -20,6 +20,9 @@ interface PhotoPairDao {
     @Query("DELETE FROM photo_pairs_table WHERE productId = :productId")
     suspend fun deleteByProductId(productId: Long)
 
+    @Query("DELETE FROM photo_pairs_table WHERE id = :internalId")
+    suspend fun deleteById(internalId: String)
+
     @Query("SELECT * FROM photo_pairs_table WHERE id = :id")
     suspend fun getById(id: Long): PhotoPairEntity?
 }

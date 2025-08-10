@@ -65,7 +65,7 @@ class MainActivity: BaseActivity<ActivityMainBinding, MainViewModel>(ActivityMai
     }
 
     private fun openProductDetails(productId: Long) {
-        val args = ProductDetailFragment.createArgs(productId)
+        val args = ProductDetailFragment.createArgs(productId, true)
         navController.navigate(R.id.productDetailFragment, args)
     }
 }

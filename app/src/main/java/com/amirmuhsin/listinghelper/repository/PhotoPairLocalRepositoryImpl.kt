@@ -1,7 +1,6 @@
 package com.amirmuhsin.listinghelper.repository
 
 import com.amirmuhsin.listinghelper.data.db.dao.PhotoPairDao
-import com.amirmuhsin.listinghelper.data.db.dao.ProductDao
 import com.amirmuhsin.listinghelper.data.db.mapper.toDomain
 import com.amirmuhsin.listinghelper.data.db.mapper.toEntity
 import com.amirmuhsin.listinghelper.domain.photo.PhotoPair
@@ -10,25 +9,30 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class PhotoPairLocalRepositoryImpl(
-    private val productDao: ProductDao,
     private val photoPairDao: PhotoPairDao
 ): PhotoPairLocalRepository {
 
-    override suspend fun create(product: PhotoPair): Long = withContext(Dispatchers.IO) {
-        val photoPairEntity = product.toEntity()
+    override suspend fun create(photoPair: PhotoPair): Long = withContext(Dispatchers.IO) {
+        val photoPairEntity = photoPair.toEntity()
         val createdPhotoPairId = photoPairDao.upsert(photoPairEntity)
         createdPhotoPairId
     }
 
-    override suspend fun update(product: PhotoPair) = withContext(Dispatchers.IO) {
-        val photoPairEntity = product.toEntity()
+    override suspend fun update(photoPair: PhotoPair) = withContext(Dispatchers.IO) {
+        val photoPairEntity = photoPair.toEntity()
         photoPairDao.upsert(photoPairEntity)
         Unit
     }
 
-    override suspend fun delete(product: PhotoPair) {
+    override suspend fun delete(photoPair: PhotoPair) {
         withContext(Dispatchers.IO) {
-            photoPairDao.deleteByProductId(product.productId)
+            photoPairDao.deleteById(photoPair.internalId)
+        }
+    }
+
+    override suspend fun deleteByProductId(productId: Long) {
+        withContext(Dispatchers.IO) {
+            photoPairDao.deleteByProductId(productId)
         }
     }
 

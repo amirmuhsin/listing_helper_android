@@ -15,7 +15,7 @@ class MainViewModelFactory(
     override fun <T: ViewModel> create(modelClass: Class<T>): T {
         val db = AppDatabase.getInstance(context)
         val productRepo = ProductLocalRepositoryImpl(db.productDao())
-        val photoRepo = PhotoPairLocalRepositoryImpl(db.productDao(), db.photoPairDao())
+        val photoRepo = PhotoPairLocalRepositoryImpl(db.photoPairDao())
         return MainViewModel(productRepo, photoRepo) as T
     }
 }

@@ -21,7 +21,7 @@ class ProductDetailViewModelFactory(
             @Suppress("UNCHECKED_CAST")
             return ProductDetailViewModel(
                 productLocalRepository = ProductLocalRepositoryImpl(appDatabase.productDao()),
-                photoPairLocalRepository = PhotoPairLocalRepositoryImpl(appDatabase.productDao(), appDatabase.photoPairDao()),
+                photoPairLocalRepository = PhotoPairLocalRepositoryImpl(appDatabase.photoPairDao()),
                 productRemoteRepository = ProductRemoteRepositoryImpl(
                     context = appContext,
                     ProductNetworkModule.productService,

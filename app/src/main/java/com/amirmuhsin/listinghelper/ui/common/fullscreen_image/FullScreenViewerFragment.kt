@@ -18,13 +18,11 @@ import androidx.viewpager2.widget.ViewPager2
 import com.amirmuhsin.listinghelper.core_views.base.ui.BaseFragment
 import com.amirmuhsin.listinghelper.core_views.events.command.Command
 import com.amirmuhsin.listinghelper.databinding.FragmentFullScreenImageBinding
-import com.amirmuhsin.listinghelper.domain.photo.PhotoPair
 import com.amirmuhsin.listinghelper.ui.common.fullscreen_image.command.FullScreenCommands
 import com.amirmuhsin.listinghelper.ui.common.fullscreen_image.list.FullScreenImagePagerAdapter
 import com.amirmuhsin.listinghelper.util.getImageResolution
 import com.amirmuhsin.listinghelper.util.getImageSizeInBytes
 import com.amirmuhsin.listinghelper.util.getReadableSize
-import com.amirmuhsin.listinghelper.util.parcelableList
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
@@ -34,8 +32,9 @@ class FullScreenViewerFragment: BaseFragment<FragmentFullScreenImageBinding, Ful
 
     override val viewModel: FullScreenViewerViewModel by viewModels {
         FullScreenViewerViewModelFactory(
-            photoPairs = arguments?.parcelableList(ARG_PHOTO_LIST) ?: emptyList(),
-            startIndex = arguments?.getInt(ARG_START_INDEX) ?: 0
+            requireContext().applicationContext,
+            productId = arguments?.getLong(ARG_PRODUCT_ID) ?: -1,
+            startPhotoPairId = arguments?.getString(ARG_START_PHOTO_ID) ?: ""
         )
     }
 
@@ -108,6 +107,7 @@ class FullScreenViewerFragment: BaseFragment<FragmentFullScreenImageBinding, Ful
 
         viewModel.flStartIndexFlow.flowWithLifecycle(lifecycle)
             .onEach { startIndex ->
+                if (startIndex == -1) return@onEach
                 binding.viewPager.setCurrentItem(startIndex.coerceIn(viewModel.flPhotos.value.indices), false)
                 updatePhotoMeta(startIndex)
             }.launchIn(lifecycleScope)
@@ -164,10 +164,7 @@ class FullScreenViewerFragment: BaseFragment<FragmentFullScreenImageBinding, Ful
 
     private fun goBackList() {
         if (viewModel.isListChanged) {
-            val latestList = viewModel.flPhotos.value
-            setFragmentResult(RK_PHOTO_LIST, Bundle().apply {
-                putParcelableArrayList(ARG_PHOTO_LIST, ArrayList(latestList))
-            })
+            setFragmentResult(RK_PHOTO_LIST_CHANGED, Bundle.EMPTY)
         }
         findNavController().popBackStack()
     }
@@ -178,13 +175,14 @@ class FullScreenViewerFragment: BaseFragment<FragmentFullScreenImageBinding, Ful
 
     companion object {
 
-        const val ARG_PHOTO_LIST = "arg:photo_list"
-        const val ARG_START_INDEX = "arg:start_index"
-        const val RK_PHOTO_LIST = "rk:photo_list"
+        const val ARG_PRODUCT_ID = "arg:product_id"
+        const val ARG_START_PHOTO_ID = "arg:start_photo_id"
 
-        fun createArgs(photoList: List<PhotoPair>, startIndex: Int) = Bundle().apply {
-            putParcelableArrayList(ARG_PHOTO_LIST, ArrayList(photoList))
-            putInt(ARG_START_INDEX, startIndex)
+        const val RK_PHOTO_LIST_CHANGED = "rk:photo_list"
+
+        fun createArgs(productId: Long, startPhotoId: String) = Bundle().apply {
+            putLong(ARG_PRODUCT_ID, productId)
+            putString(ARG_START_PHOTO_ID, startPhotoId)
         }
     }
 }

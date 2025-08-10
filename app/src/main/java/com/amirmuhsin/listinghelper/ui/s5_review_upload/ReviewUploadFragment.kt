@@ -34,21 +34,17 @@ class ReviewUploadFragment: BaseFragment<FragmentReviewUploadBinding, ReviewUplo
     private var touchHelper: ItemTouchHelper? = null
 
     override fun assignObjects() {
-        setFragmentResultListener(FullScreenViewerFragment.RK_PHOTO_LIST) { _, bundle ->
-            val pairs = bundle.parcelableList<PhotoPair>(FullScreenViewerFragment.ARG_PHOTO_LIST) ?: emptyList()
-            viewModel.setPhotoPairs(pairs)
+        setFragmentResultListener(FullScreenViewerFragment.RK_PHOTO_LIST_CHANGED) { _, bundle ->
+//            val pairs = bundle.parcelableList<PhotoPair>(FullScreenViewerFragment.ARG_PHOTO_LIST) ?: emptyList()
+//            viewModel.setPhotoPairs(pairs)
         }
         productId = requireArguments().getLong(ARG_PRODUCT_ID, -1L)
 
         adapter = ReviewUploadAdapter(
             requireContext(),
             onPhotoClick = { clickedPair ->
-                val allPhotoPairs = viewModel.pairs.value
-                val startIndex = allPhotoPairs.indexOfFirst { it.internalId == clickedPair.internalId }
-                if (startIndex >= 0) {
-                    val args = FullScreenViewerFragment.createArgs(allPhotoPairs, startIndex)
-                    findNavController().navigate(R.id.action_global_fullScreenImage, args)
-                }
+                val args = FullScreenViewerFragment.createArgs(productId, clickedPair.internalId)
+                findNavController().navigate(R.id.action_global_fullScreenImage, args)
             },
             onPhotoRemove = { pair -> viewModel.removePair(pair) },
             startDragListener = { viewHolder -> touchHelper?.startDrag(viewHolder) },

@@ -15,12 +15,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.amirmuhsin.listinghelper.R
 import com.amirmuhsin.listinghelper.core_views.base.ui.BaseFragment
 import com.amirmuhsin.listinghelper.databinding.FragmentProductDetailBinding
-import com.amirmuhsin.listinghelper.domain.photo.PhotoPair
 import com.amirmuhsin.listinghelper.ui.common.fullscreen_image.FullScreenViewerFragment
 import com.amirmuhsin.listinghelper.ui.s2_1_barcode_scanner.BarcodeScannerActivity
 import com.amirmuhsin.listinghelper.ui.s5_review_upload.ReviewUploadFragment
 import com.amirmuhsin.listinghelper.util.ImageStore
-import com.amirmuhsin.listinghelper.util.parcelableList
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanOptions
 import kotlinx.coroutines.flow.launchIn
@@ -43,12 +41,7 @@ class ProductDetailFragment: BaseFragment<FragmentProductDetailBinding, ProductD
     }
 
     private var productId: Long = -1L
-    private var isBarcodeLaunchRequired = true
-
-    // if (isBarcodeLaunchRequired) {
-    //                isBarcodeLaunchRequired = false
-    //                openBarcodeScanner()
-    //            }
+    private var isBarcodeLaunchRequired = false
 
     private val pickImagesLauncher =
         registerForActivityResult(ActivityResultContracts.GetMultipleContents()) { uris ->
@@ -60,26 +53,23 @@ class ProductDetailFragment: BaseFragment<FragmentProductDetailBinding, ProductD
 
     override fun assignObjects() {
         productId = arguments?.getLong(ARG_PRODUCT_ID, -1L) ?: -1L
+        isBarcodeLaunchRequired = arguments?.getBoolean(ARG_IS_BARCODE_LAUNCH_REQUIRED, false) ?: false
 
         // TODO: OLD results
         setFragmentResultListener(RK_CLEANED_PHOTOS) { _, bundle ->
-            val cleanedPairs = bundle.parcelableList<PhotoPair>(ARG_IMAGE_URI) ?: emptyList()
+//            bundle.parcelableList<PhotoPair>(ARG_IMAGE_URI) ?: emptyList()
 //            viewModel.setCleanedPhotos(cleanedPairs)
         }
-        setFragmentResultListener(FullScreenViewerFragment.RK_PHOTO_LIST) { _, bundle ->
-            val pairs = bundle.parcelableList<PhotoPair>(FullScreenViewerFragment.ARG_PHOTO_LIST) ?: emptyList()
+        setFragmentResultListener(FullScreenViewerFragment.RK_PHOTO_LIST_CHANGED) { _, bundle ->
+//            bundle.parcelableList<PhotoPair>(FullScreenViewerFragment.ARG_PHOTO_LIST) ?: emptyList()
 //            viewModel.setCleanedPhotos(pairs)
         }
 
         cleanedPhotosAdapter = CleanedPhotoAdapter(
             requireContext(),
             onPhotoClick = { clickedPhotoPair ->
-                val allPhotoPairs = viewModel.flPhotoPairs.value.filterIsInstance<PhotoPair>()
-                val startIndex = allPhotoPairs.indexOfFirst { it.internalId == clickedPhotoPair.internalId }
-                if (startIndex >= 0) {
-                    val args = FullScreenViewerFragment.createArgs(allPhotoPairs, startIndex)
-                    findNavController().navigate(R.id.action_global_fullScreenImage, args)
-                }
+                val args = FullScreenViewerFragment.createArgs(productId, clickedPhotoPair.internalId)
+                findNavController().navigate(R.id.action_global_fullScreenImage, args)
             }, onAddClick = {
                 pickImagesLauncher.launch("image/*")
             })
@@ -131,6 +121,12 @@ class ProductDetailFragment: BaseFragment<FragmentProductDetailBinding, ProductD
             }.launchIn(lifecycleScope)
 
         viewModel.getLocalProductByIdInFull(productId)
+
+        if (isBarcodeLaunchRequired) {
+            isBarcodeLaunchRequired = false
+            requireArguments().putBoolean(ARG_IS_BARCODE_LAUNCH_REQUIRED, false)
+            openBarcodeScanner()
+        }
     }
 
     private fun openBarcodeScanner() {
@@ -146,13 +142,15 @@ class ProductDetailFragment: BaseFragment<FragmentProductDetailBinding, ProductD
     companion object {
 
         const val RK_CLEANED_PHOTOS = "rk:cleaned_photos"
-
         const val ARG_IMAGE_URI = "arg:image_uri"
-        private const val ARG_PRODUCT_ID = "arg:product_id"
 
-        fun createArgs(productId: Long): Bundle {
+        private const val ARG_PRODUCT_ID = "arg:product_id"
+        private const val ARG_IS_BARCODE_LAUNCH_REQUIRED = "arg:is_barcode_launch_required"
+
+        fun createArgs(productId: Long, isBarcodeLaunchRequired: Boolean = false): Bundle {
             return Bundle().apply {
                 putLong(ARG_PRODUCT_ID, productId)
+                putBoolean(ARG_IS_BARCODE_LAUNCH_REQUIRED, isBarcodeLaunchRequired)
             }
         }
     }
