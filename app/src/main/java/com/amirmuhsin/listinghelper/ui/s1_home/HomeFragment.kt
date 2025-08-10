@@ -82,6 +82,12 @@ class HomeFragment: BaseFragment<FragmentHomeBinding, HomeViewModel>(
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        viewModel.getAllProducts()
+    }
+
     private fun openProductDetails(productId: Long) {
         val args = ProductDetailFragment.createArgs(productId)
         findNavController().navigate(R.id.action_open_product_details, args)

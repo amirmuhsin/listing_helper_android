@@ -15,10 +15,6 @@ class HomeViewModel(
     private val _fProducts = MutableStateFlow<List<Product>>(emptyList())
     val fProducts = _fProducts
 
-    init {
-        getAllProducts()
-    }
-
     fun createNewProduct() {
         viewModelScope.launch {
             val newProduct = Product.createEmpty()
