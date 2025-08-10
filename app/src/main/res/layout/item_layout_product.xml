@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/clRoot"
     android:layout_width="match_parent"
-    android:layout_height="56dp"
+    android:layout_height="wrap_content"
     android:background="?selectableItemBackground"
     android:clickable="true"
     android:focusable="true">
@@ -13,14 +13,67 @@
     <TextView
         android:id="@+id/tvName"
         style="@style/Body_3_TextAppearance"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/medium_padding"
+        android:layout_marginTop="@dimen/small_padding"
+        android:layout_marginEnd="@dimen/medium_padding"
+        android:ellipsize="marquee"
+        android:lines="1"
+        android:maxLines="1"
+        app:layout_constraintEnd_toStartOf="@id/tvPhotoCount"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Product Name"/>
+
+    <TextView
+        android:id="@+id/tvShortDescription"
+        style="@style/Body_5_TextAppearance"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/medium_padding"
         android:layout_marginTop="@dimen/small_padding"
-
+        android:layout_marginBottom="@dimen/small_padding"
+        android:lines="2"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvName"
+        tools:text="This is a short description"/>
+
+    <ImageView
+        android:id="@+id/ivUploadStatus"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/small_padding"
+        android:src="@drawable/ic_warning"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:visibility="visible"/>
+
+    <TextView
+        android:id="@+id/tvStatus"
+        style="@style/Body_5_TextAppearance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/small_padding"
+        app:layout_constraintBottom_toBottomOf="@id/ivUploadStatus"
+        app:layout_constraintEnd_toStartOf="@id/ivUploadStatus"
+        app:layout_constraintTop_toTopOf="@id/ivUploadStatus"
+        tools:text="IN PROGRESS"/>
+
+    <TextView
+        android:id="@+id/tvPhotoCount"
+        style="@style/Body_5_TextAppearance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/small_padding"
+        android:layout_marginEnd="@dimen/small_padding"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="Product Name"/>
+        tools:text="total image: 5"/>
+
+<!--    TODO: TextView to show last modified date-->
 
     <View
         android:id="@+id/divider"
