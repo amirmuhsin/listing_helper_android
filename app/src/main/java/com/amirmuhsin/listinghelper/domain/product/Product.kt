@@ -2,6 +2,7 @@ package com.amirmuhsin.listinghelper.domain.product
 
 data class Product(
     val id: Long,
+    val serverId: Long,
     val sku: String,
     val isActive: Boolean,
     val name: String,
@@ -23,6 +24,7 @@ data class Product(
         fun createEmpty(totalImageCount: Int = 0): Product {
             return Product(
                 id = 0,
+                serverId = -1,
                 sku = "",
                 isActive = true,
                 name = "New Product",

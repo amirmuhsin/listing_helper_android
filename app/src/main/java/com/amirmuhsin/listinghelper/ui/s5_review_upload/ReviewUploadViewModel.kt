@@ -100,7 +100,7 @@ class ReviewUploadViewModel(
         }
     }
 
-    fun uploadAll(productItemId: Long) {
+    fun uploadAll(productId: Long) {
         // Only upload PENDING (and optionally FAILED on retry)
         val candidates =
             inMemory.filter { it.uploadStatus == PhotoPair.UploadStatus.PENDING || it.uploadStatus == PhotoPair.UploadStatus.FAILED }
@@ -127,7 +127,7 @@ class ReviewUploadViewModel(
                 // start uploading
                 try {
                     val imageAM = productRemoteRepository.uploadImage(
-                        productItemId,
+                        productId,
                         pair.internalId,
                         pair.cleanedUri!!,
                         "1-1-1"
@@ -154,7 +154,7 @@ class ReviewUploadViewModel(
 
             sendCommand(ReviewUploadCommands.UploadCompleted(uploaded, total))
 
-            val fullyDone = finalizeProductStatus(productId, uploaded, total)
+            val fullyDone = finalizeProductStatus(this@ReviewUploadViewModel.productId, uploaded, total)
             if (!fullyDone && uploaded != total) {
                 showErrorSnackbar("Some images failed to upload. Please try again.")
             } else if (fullyDone) {

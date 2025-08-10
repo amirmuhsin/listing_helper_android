@@ -36,6 +36,7 @@ class ProductDetailViewModel(
 
             // update product model with productAM and save locally
             val updatedProduct = product?.copy(
+                serverId = productAM.id,
                 sku = productAM.sku,
                 isActive = productAM.isActive,
                 name = productAM.name,

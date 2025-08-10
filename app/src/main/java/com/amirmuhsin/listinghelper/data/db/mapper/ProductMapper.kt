@@ -5,9 +5,9 @@ import com.amirmuhsin.listinghelper.domain.product.Product
 
 // Product
 fun ProductEntity.toDomain() = Product(
-    id, sku, isActive, name, description, shortDescription, addedTime, changedTime, Product.Status.valueOf(status), totalImageCount
+    id, serverId, sku, isActive, name, description, shortDescription, addedTime, changedTime, Product.Status.valueOf(status), totalImageCount
 )
 
 fun Product.toEntity() = ProductEntity(
-    id, sku, isActive, name, description, shortDescription, addedTime, changedTime, status.name, totalImageCount
+    id, serverId, sku, isActive, name, description, shortDescription, addedTime, changedTime, status.name, totalImageCount
 )

@@ -32,7 +32,8 @@ class CleanedPhotoAdapter(
                     a is PhotoPair && b is PhotoPair ->
                         a.cleanedUri == b.cleanedUri &&
                                 a.bgCleanStatus == b.bgCleanStatus &&
-                                a.internalId == b.internalId // defensive
+                                a.internalId == b.internalId && // defensive
+                                a.uploadStatus == b.uploadStatus
 
                     a is AddPhotoItemButton && b is AddPhotoItemButton -> true
 
