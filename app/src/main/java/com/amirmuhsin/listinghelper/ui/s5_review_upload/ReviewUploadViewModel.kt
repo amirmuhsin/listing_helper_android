@@ -123,11 +123,14 @@ class ReviewUploadViewModel(
             val total = candidates.size
             var uploaded = 0
 
+            val product = productLocalRepository.getById(productId)
+            val serverId = product?.serverId ?: -1
+
             candidates.forEachIndexed { index, pair ->
                 // start uploading
                 try {
                     val imageAM = productRemoteRepository.uploadImage(
-                        productId,
+                        serverId,
                         pair.internalId,
                         pair.cleanedUri!!,
                         "1-1-1"

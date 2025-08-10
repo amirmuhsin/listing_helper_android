@@ -3,12 +3,12 @@ package com.amirmuhsin.listinghelper.repository
 import android.content.Context
 import android.net.Uri
 import android.util.Base64
-import com.amirmuhsin.listinghelper.domain.product.ProductRemoteRepository
 import com.amirmuhsin.listinghelper.data.networking.api.ImageService
 import com.amirmuhsin.listinghelper.data.networking.api.ProductService
 import com.amirmuhsin.listinghelper.data.networking.model.product.ImageAM
 import com.amirmuhsin.listinghelper.data.networking.model.product.ProductAM
 import com.amirmuhsin.listinghelper.data.networking.model.request.UploadProductImageRequest
+import com.amirmuhsin.listinghelper.domain.product.ProductRemoteRepository
 import retrofit2.HttpException
 
 class ProductRemoteRepositoryImpl(
@@ -47,6 +47,7 @@ class ProductRemoteRepositoryImpl(
     }
 
     override suspend fun uploadImage(itemId: Long, photoId: String, uri: Uri, channelId: String): ImageAM {
+        if (itemId == -1L) throw IllegalArgumentException("Invalid itemId: $itemId")
         val inputStream = context.contentResolver.openInputStream(uri)
             ?: throw IllegalArgumentException("Cannot open URI: $uri")
         val bytes = inputStream.use { it.readBytes() }

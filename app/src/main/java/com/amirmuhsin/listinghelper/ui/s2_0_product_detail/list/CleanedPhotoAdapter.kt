@@ -18,6 +18,10 @@ class CleanedPhotoAdapter(
 
     companion object {
 
+        private const val TYPE_PHOTO = 0
+        private const val TYPE_ADD = 1
+        private const val ADD_BUTTON_ID = Long.MIN_VALUE
+
         private val DIFF = object: DiffUtil.ItemCallback<PhotoItem>() {
             override fun areItemsTheSame(a: PhotoItem, b: PhotoItem): Boolean {
                 return when {
@@ -41,9 +45,20 @@ class CleanedPhotoAdapter(
                 }
             }
         }
+    }
 
-        private const val TYPE_PHOTO = 0
-        private const val TYPE_ADD = 1
+    override fun getItemId(position: Int): Long = when (val item = getItem(position)) {
+        is PhotoPair -> item.internalId.toStableId()
+        is AddPhotoItemButton -> ADD_BUTTON_ID
+    }
+
+    private fun String.toStableId(): Long = try {
+        val u = java.util.UUID.fromString(this)
+        u.mostSignificantBits xor u.leastSignificantBits
+    } catch (_: IllegalArgumentException) {
+        var h = 1125899906842597L
+        for (c in this) h = 31L * h + c.code
+        h
     }
 
     override fun getItemViewType(position: Int): Int {
