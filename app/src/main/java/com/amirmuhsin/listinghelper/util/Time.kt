@@ -48,4 +48,17 @@ object Time {
     /** Helpers if you ever need raw epoch millis */
     fun nowEpochMillis(): Long = nowUtc().toEpochMilli()
     fun epochMillisToIsoUtc(ms: Long): String = ISO_INSTANT.format(Instant.ofEpochMilli(ms))
+
+    /** Extract date portion from ISO UTC string for grouping (e.g., "11 Aug 2025") */
+    fun isoUtcToDateOnly(
+        isoUtc: String?,
+        pattern: String = "dd MMM yyyy",
+        locale: Locale = Locale.getDefault()
+    ): String {
+        if (isoUtc.isNullOrBlank()) return ""
+        val instant = runCatching { Instant.parse(isoUtc) }.getOrNull() ?: return ""
+        val zone = ZoneId.systemDefault()
+        val formatter = DateTimeFormatter.ofPattern(pattern, locale)
+        return formatter.format(instant.atZone(zone))
+    }
 }

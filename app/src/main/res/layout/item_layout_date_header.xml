@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/tvDateHeader"
+    style="@style/Body_6_TextAppearance"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/list_header_bg"
+    android:fontFamily="@font/roboto_medium"
+    android:paddingStart="@dimen/medium_padding"
+    android:paddingTop="@dimen/very_small_padding"
+    android:paddingEnd="@dimen/medium_padding"
+    android:paddingBottom="@dimen/very_small_padding"
+    android:textColor="@color/list_header_text_color"
+    tools:text="08 Oct 2025"/>

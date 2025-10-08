@@ -5,35 +5,79 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.amirmuhsin.listinghelper.domain.product.DateHeaderItem
 import com.amirmuhsin.listinghelper.domain.product.Product
+import com.amirmuhsin.listinghelper.domain.product.ProductItem
+import com.amirmuhsin.listinghelper.domain.product.ProductListItem
 
 class ProductListAdapter(
     private val onProductClick: (Product) -> Unit,
-): ListAdapter<Product, ProductListAdapter.ProductListItemViewHolder>(DIFF) {
+): ListAdapter<ProductListItem, RecyclerView.ViewHolder>(DIFF) {
 
     companion object {
-        private val DIFF = object : DiffUtil.ItemCallback<Product>() {
-            override fun areItemsTheSame(oldItem: Product, newItem: Product): Boolean {
-                return oldItem.id == newItem.id
+        private const val TYPE_DATE_HEADER = 0
+        private const val TYPE_PRODUCT = 1
+
+        private val DIFF = object : DiffUtil.ItemCallback<ProductListItem>() {
+            override fun areItemsTheSame(oldItem: ProductListItem, newItem: ProductListItem): Boolean {
+                return when {
+                    oldItem is ProductItem && newItem is ProductItem ->
+                        oldItem.product.id == newItem.product.id
+                    oldItem is DateHeaderItem && newItem is DateHeaderItem ->
+                        oldItem.date == newItem.date
+                    else -> false
+                }
             }
 
-            override fun areContentsTheSame(oldItem: Product, newItem: Product): Boolean {
-                return oldItem == newItem
+            override fun areContentsTheSame(oldItem: ProductListItem, newItem: ProductListItem): Boolean {
+                return when {
+                    oldItem is ProductItem && newItem is ProductItem ->
+                        oldItem.product == newItem.product
+                    oldItem is DateHeaderItem && newItem is DateHeaderItem ->
+                        oldItem.date == newItem.date
+                    else -> false
+                }
             }
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductListItemViewHolder {
-        val layout = ProductItemLayout(parent.context, onProductClick)
-        return ProductListItemViewHolder(layout)
+    override fun getItemViewType(position: Int): Int {
+        return when (getItem(position)) {
+            is DateHeaderItem -> TYPE_DATE_HEADER
+            is ProductItem -> TYPE_PRODUCT
+        }
     }
 
-    override fun onBindViewHolder(holder: ProductListItemViewHolder, position: Int) {
-        val item = getItem(position)
-        holder.layout.fillContent(item)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return when (viewType) {
+            TYPE_DATE_HEADER -> {
+                val layout = DateHeaderItemLayout(parent.context)
+                DateHeaderViewHolder(layout)
+            }
+            TYPE_PRODUCT -> {
+                val layout = ProductItemLayout(parent.context, onProductClick)
+                ProductViewHolder(layout)
+            }
+            else -> error("Unknown view type")
+        }
     }
 
-    inner class ProductListItemViewHolder(item: View): RecyclerView.ViewHolder(item) {
-        val layout = item as ProductItemLayout
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        when (val item = getItem(position)) {
+            is DateHeaderItem -> {
+                (holder as DateHeaderViewHolder).layout.fillContent(item.date)
+            }
+            is ProductItem -> {
+                (holder as ProductViewHolder).layout.fillContent(item.product)
+            }
+        }
+    }
+
+    inner class DateHeaderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val layout = itemView as DateHeaderItemLayout
+    }
+
+    inner class ProductViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val layout = itemView as ProductItemLayout
     }
 }

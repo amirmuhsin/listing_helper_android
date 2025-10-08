@@ -81,7 +81,7 @@ class HomeFragment: BaseFragment<FragmentHomeBinding, HomeViewModel>(
     override fun setObservers() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.fProducts.collect { productListAdapter.submitList(it) }
+                viewModel.fProductItems.collect { productListAdapter.submitList(it) }
             }
         }
     }

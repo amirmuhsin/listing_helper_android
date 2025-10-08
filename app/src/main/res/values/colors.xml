@@ -63,6 +63,10 @@
     <color name="gray_item_bg_normal">#F6F6F7</color>
     <color name="gray_item_bg_pressed">#E1E1E2</color>
 
+    <!--  Date Header  -->
+    <color name="list_header_bg">#EAEAF2</color>
+    <color name="list_header_text_color">#575757</color>
+
     <!--  Bottom View Navigation  -->
     <color name="bottom_nav_view_bg">#F6F7F6</color>
     <color name="bottom_nav_view_top_divider">#B2B2B2</color>
