@@ -49,6 +49,23 @@
         app:layout_constraintTop_toTopOf="@id/tvName"
         tools:text="5 photos"/>
 
+    <!-- SKU -->
+    <TextView
+        android:id="@+id/tvSku"
+        style="@style/Body_5_TextAppearance"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/medium_padding"
+        android:layout_marginTop="@dimen/very_small_padding"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="@color/primary_text"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvName"
+        tools:text="SKU: 123456789"/>
+
     <!-- Short description -->
     <TextView
         android:id="@+id/tvShortDescription"
@@ -62,7 +79,7 @@
         android:textColor="@color/secondary_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvName"
+        app:layout_constraintTop_toBottomOf="@id/tvSku"
         tools:text="This is a short description. Two lines max, then ellipsize."/>
 
     <!-- Status chip + icon -->

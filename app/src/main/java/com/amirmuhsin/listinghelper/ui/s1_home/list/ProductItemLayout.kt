@@ -29,6 +29,7 @@ class ProductItemLayout(
         this.product = product
 
         binding.tvName.text = product.name
+        binding.tvSku.text = if (product.sku.isNotBlank()) "SKU: ${product.sku}" else "SKU: —"
         binding.tvShortDescription.text = product.shortDescription
 
         binding.tvChipStatus.text = when (product.status) {
