@@ -3,6 +3,8 @@ package com.amirmuhsin.listinghelper.ui.common.main
 import android.content.Intent
 import android.net.Uri
 import androidx.activity.viewModels
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.navigation.fragment.NavHostFragment
 import com.amirmuhsin.listinghelper.R
 import com.amirmuhsin.listinghelper.core_views.base.ui.BaseActivity
@@ -22,6 +24,12 @@ class MainActivity: BaseActivity<ActivityMainBinding, MainViewModel>(ActivityMai
     private val navController by lazy { navHostFragment.navController }
 
     override fun assignObjects() {
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, windowInsets ->
+            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+            view.setPadding(0, insets.top, 0, 0)
+            windowInsets
+        }
+
         handleSharedImagesIfAny(intent)
     }
 
