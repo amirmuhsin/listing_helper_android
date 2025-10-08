@@ -3,6 +3,7 @@ package com.amirmuhsin.listinghelper.ui.s1_home
 import androidx.lifecycle.viewModelScope
 import com.amirmuhsin.listinghelper.core_views.base.viewmodel.BaseViewModel
 import com.amirmuhsin.listinghelper.domain.product.DateHeaderItem
+import com.amirmuhsin.listinghelper.domain.product.EmptyStateItem
 import com.amirmuhsin.listinghelper.domain.product.Product
 import com.amirmuhsin.listinghelper.domain.product.ProductItem
 import com.amirmuhsin.listinghelper.domain.product.ProductListItem
@@ -53,6 +54,10 @@ class HomeViewModel(
     }
 
     private fun groupProductsByDate(products: List<Product>): List<ProductListItem> {
+        if (products.isEmpty()) {
+            return listOf(EmptyStateItem("No products found"))
+        }
+
         val items = mutableListOf<ProductListItem>()
         var lastDate: String? = null
 

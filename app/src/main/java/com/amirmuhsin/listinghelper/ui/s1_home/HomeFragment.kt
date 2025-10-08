@@ -2,6 +2,7 @@ package com.amirmuhsin.listinghelper.ui.s1_home
 
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.View
 import android.widget.CompoundButton
 import android.widget.Toast
 import androidx.fragment.app.viewModels
@@ -42,15 +43,20 @@ class HomeFragment: BaseFragment<FragmentHomeBinding, HomeViewModel>(
             viewModel.createNewProduct()
         }
 
-        binding.etSearch.addTextChangedListener(object : TextWatcher {
+        binding.etSearch.addTextChangedListener(object: TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 viewModel.searchProducts(s?.toString() ?: "")
+                updateClearButtonVisibility(s?.isNotEmpty() == true)
             }
 
             override fun afterTextChanged(s: Editable?) {}
         })
+
+        binding.btnClearSearch.setOnClickListener {
+            binding.etSearch.text?.clear()
+        }
 
         binding.chSandbox.setOnCheckedChangeListener(object: CompoundButton.OnCheckedChangeListener {
             override fun onCheckedChanged(p0: CompoundButton?, p1: Boolean) {
@@ -98,6 +104,10 @@ class HomeFragment: BaseFragment<FragmentHomeBinding, HomeViewModel>(
         super.onResume()
 
         viewModel.getAllProducts()
+    }
+
+    private fun updateClearButtonVisibility(isVisible: Boolean) {
+        binding.btnClearSearch.visibility = if (isVisible) View.VISIBLE else View.GONE
     }
 
     private fun openProductDetails(productId: Long) {
