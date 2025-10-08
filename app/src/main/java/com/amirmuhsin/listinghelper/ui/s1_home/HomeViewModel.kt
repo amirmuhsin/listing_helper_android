@@ -15,6 +15,8 @@ class HomeViewModel(
     private val _fProducts = MutableStateFlow<List<Product>>(emptyList())
     val fProducts = _fProducts
 
+    private var allProducts: List<Product> = emptyList()
+
     fun createNewProduct() {
         viewModelScope.launch {
             val newProduct = Product.createEmpty()
@@ -27,8 +29,22 @@ class HomeViewModel(
     fun getAllProducts() {
         viewModelScope.launch {
             val products = productLocalRepository.getAll()
-
+            allProducts = products
             _fProducts.value = products
+        }
+    }
+
+    fun searchProducts(query: String) {
+        viewModelScope.launch {
+            val filteredProducts = if (query.isBlank()) {
+                allProducts
+            } else {
+                allProducts.filter { product ->
+                    product.name.contains(query, ignoreCase = true) ||
+                    product.sku.contains(query, ignoreCase = true)
+                }
+            }
+            _fProducts.value = filteredProducts
         }
     }
 }
