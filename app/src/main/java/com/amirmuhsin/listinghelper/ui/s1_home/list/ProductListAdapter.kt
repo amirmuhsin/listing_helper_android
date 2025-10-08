@@ -2,14 +2,26 @@ package com.amirmuhsin.listinghelper.ui.s1_home.list
 
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.amirmuhsin.listinghelper.domain.product.Product
 
 class ProductListAdapter(
     private val onProductClick: (Product) -> Unit,
-): RecyclerView.Adapter<ProductListAdapter.ProductListItemViewHolder>() {
+): ListAdapter<Product, ProductListAdapter.ProductListItemViewHolder>(DIFF) {
 
-    private val products: MutableList<Product> = mutableListOf()
+    companion object {
+        private val DIFF = object : DiffUtil.ItemCallback<Product>() {
+            override fun areItemsTheSame(oldItem: Product, newItem: Product): Boolean {
+                return oldItem.id == newItem.id
+            }
+
+            override fun areContentsTheSame(oldItem: Product, newItem: Product): Boolean {
+                return oldItem == newItem
+            }
+        }
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductListItemViewHolder {
         val layout = ProductItemLayout(parent.context, onProductClick)
@@ -17,22 +29,11 @@ class ProductListAdapter(
     }
 
     override fun onBindViewHolder(holder: ProductListItemViewHolder, position: Int) {
-        val item = products[position]
+        val item = getItem(position)
         holder.layout.fillContent(item)
     }
 
-    override fun getItemCount(): Int {
-        return products.size
-    }
-
-    fun submitList(newProducts: List<Product>) {
-        products.clear()
-        products.addAll(newProducts)
-        notifyDataSetChanged()
-    }
-
     inner class ProductListItemViewHolder(item: View): RecyclerView.ViewHolder(item) {
-
         val layout = item as ProductItemLayout
     }
 }
