@@ -9,14 +9,6 @@ import retrofit2.Retrofit
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.util.concurrent.TimeUnit
 
-/**
- * DEPRECATED: PhotoRoom integration is no longer used.
- * This module is kept for backward compatibility but should not be used in new code.
- */
-@Deprecated(
-    message = "PhotoRoom integration is no longer used. This will be removed in a future version.",
-    level = DeprecationLevel.WARNING
-)
 object PhotoRoomNetworkModule {
 
     private const val BASE_URL = "https://image-api.photoroom.com/"

@@ -1,20 +1,14 @@
 package com.amirmuhsin.listinghelper.ui.s5_review_upload
 
 import androidx.lifecycle.viewModelScope
-import androidx.work.Constraints
-import androidx.work.Data
-import androidx.work.ExistingWorkPolicy
-import androidx.work.NetworkType
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkInfo
-import androidx.work.WorkManager
 import com.amirmuhsin.listinghelper.core_views.base.viewmodel.BaseViewModel
+import com.amirmuhsin.listinghelper.core_views.result.ResultError
 import com.amirmuhsin.listinghelper.domain.photo.PhotoPair
 import com.amirmuhsin.listinghelper.domain.photo.PhotoPairLocalRepository
 import com.amirmuhsin.listinghelper.domain.product.Product
 import com.amirmuhsin.listinghelper.domain.product.ProductLocalRepository
+import com.amirmuhsin.listinghelper.domain.product.ProductRemoteRepository
 import com.amirmuhsin.listinghelper.ui.s5_review_upload.command.ReviewUploadCommands
-import com.amirmuhsin.listinghelper.workers.ImageUploadWorker
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -22,7 +16,7 @@ import kotlinx.coroutines.launch
 class ReviewUploadViewModel(
     private val productLocalRepository: ProductLocalRepository,
     private val photoPairLocalRepository: PhotoPairLocalRepository,
-    private val workManager: WorkManager,
+    private val productRemoteRepository: ProductRemoteRepository,
 ): BaseViewModel() {
 
     private val _pairs = MutableStateFlow<List<PhotoPair>>(emptyList())
@@ -126,77 +120,72 @@ class ReviewUploadViewModel(
                 p
             }
         }
-
         viewModelScope.launch {
-            // Update database status to UPLOADING for candidates
-            candidates.forEach { pair ->
-                photoPairLocalRepository.updateUploadStatus(
+            val total = candidates.size
+            var uploaded = 0
+
+            val product = productLocalRepository.getById(productId)
+            val serverId = product?.serverId ?: -1
+
+            candidates.forEachIndexed { index, pair ->
+                // start uploading
+                val uploadResult = productRemoteRepository.uploadImage(
+                    serverId,
                     pair.internalId,
-                    PhotoPair.UploadStatus.UPLOADING
+                    pair.cleanedUri!!,
+                    "1-1-1"
                 )
-            }
 
-            // Create WorkManager request for background upload
-            val inputData = Data.Builder()
-                .putLong(ImageUploadWorker.KEY_PRODUCT_ID, productId)
-                .build()
+                uploadResult
+                    .onSuccess { imageAM ->
+                        val updatedPair = pair.copy(
+                            uploadStatus = PhotoPair.UploadStatus.UPLOADED,
+                            uploadItemId = imageAM.imageId
+                        )
+                        updatePair(updatedPair)
 
-            val constraints = Constraints.Builder()
-                .setRequiredNetworkType(NetworkType.CONNECTED)
-                .build()
-
-            val uploadWorkRequest = OneTimeWorkRequestBuilder<ImageUploadWorker>()
-                .setInputData(inputData)
-                .setConstraints(constraints)
-                .build()
-
-            // Enqueue work with unique name to prevent duplicate uploads
-            val workName = "${ImageUploadWorker.WORK_NAME_PREFIX}$productId"
-            workManager.enqueueUniqueWork(
-                workName,
-                ExistingWorkPolicy.KEEP, // Keep existing work if already running
-                uploadWorkRequest
-            )
-
-            // Observe work status
-            workManager.getWorkInfoByIdLiveData(uploadWorkRequest.id)
-                .observeForever { workInfo ->
-                    when (workInfo?.state) {
-                        WorkInfo.State.SUCCEEDED -> {
-                            val successCount = workInfo.outputData.getInt(ImageUploadWorker.KEY_SUCCESS_COUNT, 0)
-                            val failureCount = workInfo.outputData.getInt(ImageUploadWorker.KEY_FAILURE_COUNT, 0)
-                            val total = successCount + failureCount
-
-                            _uploadProgress.value = 100
-                            sendCommand(ReviewUploadCommands.UploadCompleted(successCount, total))
-
-                            viewModelScope.launch {
-                                // Reload pairs to reflect updated statuses from WorkManager
-                                load(productId)
-
-                                val fullyDone = finalizeProductStatus(productId, successCount, total)
-                                if (!fullyDone && successCount != total) {
-                                    showErrorSnackbar("Some images failed to upload. Please try again.")
-                                } else if (fullyDone) {
-                                    sendCommand(ReviewUploadCommands.UploadFullyCompleted)
+                        uploaded++
+                        sendCommand(ReviewUploadCommands.UploadItemProgress(uploaded, total))
+                    }
+                    .onFailure { error ->
+                        // Provide detailed error messages based on error type
+                        val errorMessage = when (error) {
+                            is ResultError.NetworkError -> {
+                                if (error.isTimeout) {
+                                    "Upload timeout for image ${index + 1}"
+                                } else {
+                                    "Network error uploading image ${index + 1}: ${error.message}"
                                 }
                             }
+                            is ResultError.HttpError -> {
+                                "Server error uploading image ${index + 1}: ${error.message}"
+                            }
+                            is ResultError.BusinessError -> {
+                                "Upload failed for image ${index + 1}: ${error.message}"
+                            }
+                            else -> {
+                                "Upload failed for image ${index + 1}: ${error.message}"
+                            }
                         }
-                        WorkInfo.State.FAILED -> {
-                            val errorMessage = workInfo.outputData.getString(ImageUploadWorker.KEY_ERROR_MESSAGE)
-                            showErrorSnackbar("Upload failed: ${errorMessage ?: "Unknown error"}")
-                            sendCommand(ReviewUploadCommands.UploadCompleted(uploaded = 0, total = candidates.size))
-                        }
-                        WorkInfo.State.RUNNING -> {
-                            // Could update progress here if worker provides intermediate updates
-                        }
-                        else -> {
-                            // ENQUEUED, BLOCKED, CANCELLED states
-                        }
-                    }
-                }
+                        showErrorSnackbar(errorMessage)
 
-            showSuccessSnackbar("Upload started in background. You can close the app safely.")
+                        val failedPair = pair.copy(uploadStatus = PhotoPair.UploadStatus.FAILED)
+                        updatePair(failedPair)
+                    }
+
+                // progress should be based on the upload count
+                _uploadProgress.value = ((uploaded.toFloat() / total) * 100).toInt()
+            }
+
+            sendCommand(ReviewUploadCommands.UploadCompleted(uploaded, total))
+
+            val fullyDone = finalizeProductStatus(this@ReviewUploadViewModel.productId, uploaded, total)
+            if (!fullyDone && uploaded != total) {
+                showErrorSnackbar("Some images failed to upload. Please try again.")
+            } else if (fullyDone) {
+                sendCommand(ReviewUploadCommands.UploadFullyCompleted)
+            }
+
         }
     }
 

@@ -21,8 +21,7 @@ val networkModule = module {
         ProductNetworkModule.imageService
     }
 
-    // PhotoRoom API Service - DEPRECATED: No longer in use
-    @Suppress("DEPRECATION")
+    // PhotoRoom API Service
     single<PhotoRoomService> {
         PhotoRoomNetworkModule.photoRoomService
     }
