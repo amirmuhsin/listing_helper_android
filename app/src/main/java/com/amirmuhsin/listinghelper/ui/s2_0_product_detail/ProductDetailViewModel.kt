@@ -3,6 +3,7 @@ package com.amirmuhsin.listinghelper.ui.s2_0_product_detail
 import android.net.Uri
 import androidx.lifecycle.viewModelScope
 import com.amirmuhsin.listinghelper.core_views.base.viewmodel.BaseViewModel
+import com.amirmuhsin.listinghelper.core_views.result.ResultError
 import com.amirmuhsin.listinghelper.domain.photo.AddPhotoItemButton
 import com.amirmuhsin.listinghelper.domain.photo.PhotoItem
 import com.amirmuhsin.listinghelper.domain.photo.PhotoPair
@@ -31,24 +32,57 @@ class ProductDetailViewModel(
 
     fun fetchAndUpdateBySku(sku: String) {
         viewModelScope.launch {
-            val productAM = productRemoteRepository.getProductsBySku(sku)
-            val product = _fProduct.value
+            showProgressDialog()
 
-            // update product model with productAM and save locally
-            val updatedProduct = product?.copy(
-                serverId = productAM.id,
-                sku = productAM.sku,
-                isActive = productAM.isActive,
-                name = productAM.name,
-                description = productAM.description,
-                shortDescription = productAM.shortDescription,
-            ) ?: run {
-                showErrorSnackbar("Product not found")
-                return@launch
-            }
+            val productResult = productRemoteRepository.getProductsBySku(sku)
 
-            productLocalRepository.update(updatedProduct)
-            _fProduct.value = updatedProduct
+            productResult
+                .onSuccess { productAM ->
+                    val product = _fProduct.value
+
+                    // update product model with productAM and save locally
+                    val updatedProduct = product?.copy(
+                        serverId = productAM.id,
+                        sku = productAM.sku,
+                        isActive = productAM.isActive,
+                        name = productAM.name,
+                        description = productAM.description,
+                        shortDescription = productAM.shortDescription,
+                    ) ?: run {
+                        hideProgressDialog()
+                        showErrorSnackbar("Product not found locally")
+                        return@launch
+                    }
+
+                    productLocalRepository.update(updatedProduct)
+                    _fProduct.value = updatedProduct
+                    hideProgressDialog()
+                    showSuccessSnackbar("Product updated successfully")
+                }
+                .onFailure { error ->
+                    hideProgressDialog()
+
+                    // Provide user-friendly error messages
+                    val errorMessage = when (error) {
+                        is ResultError.NetworkError -> {
+                            if (error.isTimeout) {
+                                "Request timed out. Please try again."
+                            } else {
+                                "Network error: ${error.message}"
+                            }
+                        }
+                        is ResultError.HttpError -> {
+                            "Server error: ${error.message}"
+                        }
+                        is ResultError.BusinessError -> {
+                            error.message
+                        }
+                        else -> {
+                            "Failed to fetch product: ${error.message}"
+                        }
+                    }
+                    showErrorSnackbar(errorMessage)
+                }
         }
     }
 

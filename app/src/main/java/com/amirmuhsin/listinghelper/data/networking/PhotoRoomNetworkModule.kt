@@ -7,6 +7,7 @@ import okhttp3.Request
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.scalars.ScalarsConverterFactory
+import java.util.concurrent.TimeUnit
 
 object PhotoRoomNetworkModule {
 
@@ -32,6 +33,11 @@ object PhotoRoomNetworkModule {
     private val okHttpClient = OkHttpClient.Builder()
         .addInterceptor(apiKeyInterceptor)
         .addInterceptor(loggingInterceptor)
+        // Timeout configurations for background removal (can take longer)
+        .connectTimeout(30, TimeUnit.SECONDS)
+        .readTimeout(90, TimeUnit.SECONDS)
+        .writeTimeout(90, TimeUnit.SECONDS)
+        .callTimeout(180, TimeUnit.SECONDS)
         .build()
 
     val retrofit: Retrofit = Retrofit.Builder()

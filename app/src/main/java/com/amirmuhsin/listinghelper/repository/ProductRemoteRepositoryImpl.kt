@@ -3,13 +3,14 @@ package com.amirmuhsin.listinghelper.repository
 import android.content.Context
 import android.net.Uri
 import android.util.Base64
+import com.amirmuhsin.listinghelper.core_views.result.Result
+import com.amirmuhsin.listinghelper.core_views.result.ResultError
 import com.amirmuhsin.listinghelper.data.networking.api.ImageService
 import com.amirmuhsin.listinghelper.data.networking.api.ProductService
 import com.amirmuhsin.listinghelper.data.networking.model.product.ImageAM
 import com.amirmuhsin.listinghelper.data.networking.model.product.ProductAM
 import com.amirmuhsin.listinghelper.data.networking.model.request.UploadProductImageRequest
 import com.amirmuhsin.listinghelper.domain.product.ProductRemoteRepository
-import retrofit2.HttpException
 
 class ProductRemoteRepositoryImpl(
     private val context: Context,
@@ -17,37 +18,41 @@ class ProductRemoteRepositoryImpl(
     private val imageService: ImageService
 ): ProductRemoteRepository {
 
-    override suspend fun getProductsBySku(sku: String): ProductAM {
+    override suspend fun getProductsBySku(sku: String): Result<ProductAM> = Result.runCatching {
         val resp = productService.getProductBySKU(sku)
-        if (!resp.isSuccessful) throw HttpException(resp)
-        // you might want to null-check body/data more carefully
+        if (!resp.isSuccessful) throw retrofit2.HttpException(resp)
 
         val results = resp.body()?.items
+            ?: throw IllegalStateException("Response body is null")
 
         println("Results: $results")
 
-        results?.forEach { product ->
-            if (product.sku == sku) {
-                return product
-            }
-        }
-        throw NoSuchElementException("No product found with SKU: $sku")
+        results.firstOrNull { it.sku == sku }
+            ?: throw NoSuchElementException("No product found with SKU: $sku")
     }
 
-    override suspend fun getProductById(itemId: Long): ProductAM {
+    override suspend fun getProductById(itemId: Long): Result<ProductAM> = Result.runCatching {
         val resp = productService.getProductById(itemId)
-        if (!resp.isSuccessful) throw HttpException(resp)
-        return resp.body()!!
+        if (!resp.isSuccessful) throw retrofit2.HttpException(resp)
+        resp.body() ?: throw IllegalStateException("Response body is null")
     }
 
-    override suspend fun getImagesForItem(itemId: Long): List<ImageAM> {
+    override suspend fun getImagesForItem(itemId: Long): Result<List<ImageAM>> = Result.runCatching {
         val resp = imageService.getProductImages(itemId)
-        if (!resp.isSuccessful) throw HttpException(resp)
-        return resp.body()!!
+        if (!resp.isSuccessful) throw retrofit2.HttpException(resp)
+        resp.body() ?: throw IllegalStateException("Response body is null")
     }
 
-    override suspend fun uploadImage(itemId: Long, photoId: String, uri: Uri, channelId: String): ImageAM {
-        if (itemId == -1L) throw IllegalArgumentException("Invalid itemId: $itemId")
+    override suspend fun uploadImage(
+        itemId: Long,
+        photoId: String,
+        uri: Uri,
+        channelId: String
+    ): Result<ImageAM> = Result.runCatching {
+        if (itemId == -1L) {
+            throw IllegalArgumentException("Invalid itemId: $itemId")
+        }
+
         val inputStream = context.contentResolver.openInputStream(uri)
             ?: throw IllegalArgumentException("Cannot open URI: $uri")
         val bytes = inputStream.use { it.readBytes() }
@@ -56,14 +61,14 @@ class ProductRemoteRepositoryImpl(
 
         val request = UploadProductImageRequest(
             itemData = base64Data,
-            fileName = "${itemId}_${photoId}.jpg", // or derive a better name
+            fileName = "${itemId}_${photoId}.jpg",
             salesChannelId = channelId
         )
 
         val response = imageService.uploadProductImage(itemId, request)
         if (!response.isSuccessful) {
-            throw HttpException(response)
+            throw retrofit2.HttpException(response)
         }
-        return response.body()!!
+        response.body() ?: throw IllegalStateException("Response body is null")
     }
 }

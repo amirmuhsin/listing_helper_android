@@ -2,6 +2,7 @@ package com.amirmuhsin.listinghelper.ui.s5_review_upload
 
 import androidx.lifecycle.viewModelScope
 import com.amirmuhsin.listinghelper.core_views.base.viewmodel.BaseViewModel
+import com.amirmuhsin.listinghelper.core_views.result.ResultError
 import com.amirmuhsin.listinghelper.domain.photo.PhotoPair
 import com.amirmuhsin.listinghelper.domain.photo.PhotoPairLocalRepository
 import com.amirmuhsin.listinghelper.domain.product.Product
@@ -128,28 +129,49 @@ class ReviewUploadViewModel(
 
             candidates.forEachIndexed { index, pair ->
                 // start uploading
-                try {
-                    val imageAM = productRemoteRepository.uploadImage(
-                        serverId,
-                        pair.internalId,
-                        pair.cleanedUri!!,
-                        "1-1-1"
-                    )
+                val uploadResult = productRemoteRepository.uploadImage(
+                    serverId,
+                    pair.internalId,
+                    pair.cleanedUri!!,
+                    "1-1-1"
+                )
 
-                    val updatedPair = pair.copy(
-                        uploadStatus = PhotoPair.UploadStatus.UPLOADED,
-                        uploadItemId = imageAM.imageId
-                    )
-                    updatePair(updatedPair)
+                uploadResult
+                    .onSuccess { imageAM ->
+                        val updatedPair = pair.copy(
+                            uploadStatus = PhotoPair.UploadStatus.UPLOADED,
+                            uploadItemId = imageAM.imageId
+                        )
+                        updatePair(updatedPair)
 
-                    uploaded++
-                    sendCommand(ReviewUploadCommands.UploadItemProgress(uploaded, total))
-                } catch (e: Exception) {
-                    showErrorSnackbar("Upload failed: ${e.message}")
+                        uploaded++
+                        sendCommand(ReviewUploadCommands.UploadItemProgress(uploaded, total))
+                    }
+                    .onFailure { error ->
+                        // Provide detailed error messages based on error type
+                        val errorMessage = when (error) {
+                            is ResultError.NetworkError -> {
+                                if (error.isTimeout) {
+                                    "Upload timeout for image ${index + 1}"
+                                } else {
+                                    "Network error uploading image ${index + 1}: ${error.message}"
+                                }
+                            }
+                            is ResultError.HttpError -> {
+                                "Server error uploading image ${index + 1}: ${error.message}"
+                            }
+                            is ResultError.BusinessError -> {
+                                "Upload failed for image ${index + 1}: ${error.message}"
+                            }
+                            else -> {
+                                "Upload failed for image ${index + 1}: ${error.message}"
+                            }
+                        }
+                        showErrorSnackbar(errorMessage)
 
-                    val failedPair = pair.copy(uploadStatus = PhotoPair.UploadStatus.FAILED)
-                    updatePair(failedPair)
-                }
+                        val failedPair = pair.copy(uploadStatus = PhotoPair.UploadStatus.FAILED)
+                        updatePair(failedPair)
+                    }
 
                 // progress should be based on the upload count
                 _uploadProgress.value = ((uploaded.toFloat() / total) * 100).toInt()

@@ -5,6 +5,8 @@ import android.net.Uri
 import androidx.core.net.toUri
 import androidx.lifecycle.viewModelScope
 import com.amirmuhsin.listinghelper.core_views.base.viewmodel.BaseViewModel
+import com.amirmuhsin.listinghelper.core_views.result.Result
+import com.amirmuhsin.listinghelper.core_views.result.ResultError
 import com.amirmuhsin.listinghelper.domain.photo.PhotoPair
 import com.amirmuhsin.listinghelper.data.networking.api.PhotoRoomService
 import com.amirmuhsin.listinghelper.util.copyUriToTempFile
@@ -15,7 +17,8 @@ import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
-import retrofit2.HttpException
+import okhttp3.ResponseBody
+import retrofit2.Response
 import java.io.File
 import java.util.UUID
 
@@ -56,35 +59,11 @@ class BgCleanerViewModel(
 
         _flPairs.value.forEachIndexed { index, pair ->
             viewModelScope.launch(Dispatchers.IO) {
-                // 1) Read the file from cacheDir
-                val originalUri = pair.originalUri
-                val tempFile = copyUriToTempFile(appContext, originalUri) ?: return@launch
+                val result = processImage(pair)
 
-                // 2) Build MultipartBody.Part
-                val requestFile = tempFile
-                    .asRequestBody("image/jpeg".toMediaTypeOrNull())
-                val multipart = MultipartBody.Part.createFormData(
-                    "imageFile", tempFile.name, requestFile
-                )
-
-                // 3) Optionally add other form parts (e.g. format=jpg)
-                //    val formatPart = RequestBody.create("text/plain".toMediaTypeOrNull(), "jpg")
-
-                try {
-                    val response = service.editImage(
-                        imageFile = multipart
-                    )
-                    if (response.isSuccessful) {
-                        // 4) Read raw bytes (PNG/JPG/WEBP)
-                        val body = response.body() ?: return@launch
-                        val bytes = body.bytes()
-
-                        // write bytes to file so Coil can load from disk
-                        val out = File(appContext.cacheDir, "cleaned_${pair.internalId}.jpg")
-                        out.writeBytes(bytes)
-                        val cleanedUri = out.toUri()
-
-                        // 6) Store it and emit
+                result
+                    .onSuccess { cleanedUri ->
+                        // Update UI with successful result
                         _flPairs.value = _flPairs.value.map {
                             if (it.internalId == pair.internalId) {
                                 it.copy(cleanedUri = cleanedUri, bgCleanStatus = PhotoPair.BgCleanStatus.COMPLETED)
@@ -92,17 +71,74 @@ class BgCleanerViewModel(
                                 it
                             }
                         }
-
                         calculateProgress()
-                    } else {
-                        // 7) Handle non-2xx (e.g. quota exceeded, bad request)
-                        throw HttpException(response)
                     }
-                } catch (e: Exception) {
-                    //
-                }
+                    .onFailure { error ->
+                        // Mark this pair as failed and show error
+                        _flPairs.value = _flPairs.value.map {
+                            if (it.internalId == pair.internalId) {
+                                it.copy(bgCleanStatus = PhotoPair.BgCleanStatus.FAILED)
+                            } else {
+                                it
+                            }
+                        }
+
+                        // Show appropriate error message based on error type
+                        when (error) {
+                            is ResultError.NetworkError -> {
+                                if (error.isTimeout) {
+                                    showErrorSnackbar("Background removal timed out for image ${index + 1}")
+                                } else {
+                                    showErrorSnackbar("Network error for image ${index + 1}: ${error.message}")
+                                }
+                            }
+                            is ResultError.HttpError -> {
+                                showErrorSnackbar("Server error for image ${index + 1}: ${error.message}")
+                            }
+                            else -> {
+                                showErrorSnackbar("Failed to process image ${index + 1}: ${error.message}")
+                            }
+                        }
+                        calculateProgress()
+                    }
             }
         }
+    }
+
+    private suspend fun processImage(pair: PhotoPair): Result<Uri> = Result.runCatching {
+        // 1) Read the file from cacheDir
+        val originalUri = pair.originalUri
+        val tempFile = copyUriToTempFile(appContext, originalUri)
+            ?: throw IllegalArgumentException("Cannot copy URI to temp file: $originalUri")
+
+        // 2) Build MultipartBody.Part
+        val requestFile = tempFile
+            .asRequestBody("image/jpeg".toMediaTypeOrNull())
+        val multipart = MultipartBody.Part.createFormData(
+            "imageFile", tempFile.name, requestFile
+        )
+
+        // 3) Make API call
+        val response = service.editImage(imageFile = multipart)
+
+        // 4) Process response
+        processImageResponse(response, pair)
+    }
+
+    private fun processImageResponse(response: Response<ResponseBody>, pair: PhotoPair): Uri {
+        if (!response.isSuccessful) {
+            throw retrofit2.HttpException(response)
+        }
+
+        // Read raw bytes (PNG/JPG/WEBP)
+        val body = response.body() ?: throw IllegalStateException("Response body is null")
+        val bytes = body.bytes()
+
+        // Write bytes to file so Coil can load from disk
+        val out = File(appContext.cacheDir, "cleaned_${pair.internalId}.jpg")
+        out.writeBytes(bytes)
+
+        return out.toUri()
     }
 
     private fun calculateProgress() {
