@@ -9,7 +9,6 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.updateLayoutParams
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -24,16 +23,17 @@ import com.amirmuhsin.listinghelper.util.getImageSizeInBytes
 import com.amirmuhsin.listinghelper.util.getReadableSize
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 class FullScreenViewerFragment: BaseFragment<FragmentFullScreenImageBinding, FullScreenViewerViewModel>(
     FragmentFullScreenImageBinding::inflate
 ) {
 
-    override val viewModel: FullScreenViewerViewModel by viewModels {
-        FullScreenViewerViewModelFactory(
-            requireContext().applicationContext,
-            productId = arguments?.getLong(ARG_PRODUCT_ID) ?: -1L,
-            startPhotoPairId = arguments?.getString(ARG_START_PHOTO_ID) ?: ""
+    override val viewModel: FullScreenViewerViewModel by viewModel {
+        parametersOf(
+            arguments?.getLong(ARG_PRODUCT_ID) ?: -1L,
+            arguments?.getString(ARG_START_PHOTO_ID) ?: ""
         )
     }
 

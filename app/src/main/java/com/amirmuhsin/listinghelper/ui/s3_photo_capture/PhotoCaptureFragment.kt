@@ -28,7 +28,6 @@ import androidx.camera.core.resolutionselector.ResolutionStrategy
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
@@ -41,6 +40,7 @@ import com.amirmuhsin.listinghelper.ui.s3_photo_capture.list.PhotoCaptureAdapter
 import com.amirmuhsin.listinghelper.ui.s4_bg_clean.BgCleanerFragment
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.File
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
@@ -49,7 +49,7 @@ class PhotoCaptureFragment: BaseFragment<FragmentPhotoCaptureBinding, PhotoCaptu
     FragmentPhotoCaptureBinding::inflate
 ) {
 
-    override val viewModel: PhotoCaptureViewModel by viewModels()
+    override val viewModel: PhotoCaptureViewModel by viewModel()
 
     private lateinit var cameraProvider: ProcessCameraProvider
     private lateinit var imageCapture: ImageCapture

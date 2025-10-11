@@ -2,7 +2,6 @@ package com.amirmuhsin.listinghelper.ui.s5_review_upload
 
 import android.view.View
 import androidx.core.os.bundleOf
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -19,12 +18,13 @@ import com.amirmuhsin.listinghelper.ui.s5_review_upload.list.DragDropCallback
 import com.amirmuhsin.listinghelper.ui.s5_review_upload.list.ReviewUploadAdapter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ReviewUploadFragment: BaseFragment<FragmentReviewUploadBinding, ReviewUploadViewModel>(
     FragmentReviewUploadBinding::inflate
 ) {
 
-    override val viewModel: ReviewUploadViewModel by viewModels { ReviewUploadViewModelFactory(requireContext()) }
+    override val viewModel: ReviewUploadViewModel by viewModel()
 
     private lateinit var adapter: ReviewUploadAdapter
     private var productId: Long = -1L

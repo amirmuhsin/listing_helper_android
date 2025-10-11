@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.widget.doAfterTextChanged
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -22,14 +21,13 @@ import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanOptions
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class ProductDetailFragment: BaseFragment<FragmentProductDetailBinding, ProductDetailViewModel>(
     FragmentProductDetailBinding::inflate
 ) {
 
-    override val viewModel: ProductDetailViewModel by viewModels {
-        ProductDetailViewModelFactory(requireContext().applicationContext)
-    }
+    override val viewModel: ProductDetailViewModel by viewModel()
 
     private lateinit var cleanedPhotosAdapter: CleanedPhotoAdapter
 

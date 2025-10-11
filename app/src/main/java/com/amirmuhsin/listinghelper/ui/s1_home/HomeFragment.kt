@@ -5,7 +5,6 @@ import android.text.TextWatcher
 import android.view.View
 import android.widget.CompoundButton
 import android.widget.Toast
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -20,12 +19,13 @@ import com.amirmuhsin.listinghelper.ui.s1_home.command.HomeCommands
 import com.amirmuhsin.listinghelper.ui.s1_home.list.ProductListAdapter
 import com.amirmuhsin.listinghelper.ui.s2_0_product_detail.ProductDetailFragment
 import kotlinx.coroutines.launch
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class HomeFragment: BaseFragment<FragmentHomeBinding, HomeViewModel>(
     FragmentHomeBinding::inflate
 ) {
 
-    override val viewModel: HomeViewModel by viewModels { HomeViewModelFactory(requireContext().applicationContext) }
+    override val viewModel: HomeViewModel by viewModel()
 
     private lateinit var productListAdapter: ProductListAdapter
 

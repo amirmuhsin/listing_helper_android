@@ -2,7 +2,6 @@ package com.amirmuhsin.listinghelper.ui.common.main
 
 import android.content.Intent
 import android.net.Uri
-import androidx.activity.viewModels
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.navigation.fragment.NavHostFragment
@@ -13,12 +12,11 @@ import com.amirmuhsin.listinghelper.databinding.ActivityMainBinding
 import com.amirmuhsin.listinghelper.ui.common.main.command.MainCommands
 import com.amirmuhsin.listinghelper.ui.s2_0_product_detail.ProductDetailFragment
 import com.amirmuhsin.listinghelper.util.ImageStore
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity: BaseActivity<ActivityMainBinding, MainViewModel>(ActivityMainBinding::inflate) {
 
-    override val viewModel: MainViewModel by viewModels {
-        MainViewModelFactory(applicationContext)
-    }
+    override val viewModel: MainViewModel by viewModel()
 
     private val navHostFragment by lazy { supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment }
     private val navController by lazy { navHostFragment.navController }

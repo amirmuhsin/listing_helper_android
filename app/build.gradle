@@ -103,6 +103,12 @@ dependencies {
 
     implementation libs.delayed.progress
 
+    // Koin for Dependency Injection
+    def koin_version = "3.5.6"
+    implementation "io.insert-koin:koin-android:$koin_version"
+    implementation "io.insert-koin:koin-androidx-navigation:$koin_version"
+    implementation "io.insert-koin:koin-androidx-workmanager:$koin_version"
+
     testImplementation libs.junit
     androidTestImplementation libs.androidx.junit
     androidTestImplementation libs.androidx.espresso.core
