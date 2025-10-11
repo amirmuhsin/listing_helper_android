@@ -7,6 +7,14 @@ import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
 
+/**
+ * DEPRECATED: PhotoRoom integration is no longer used.
+ * This service is kept for backward compatibility but should not be used in new code.
+ */
+@Deprecated(
+    message = "PhotoRoom integration is no longer used. This will be removed in a future version.",
+    level = DeprecationLevel.WARNING
+)
 interface PhotoRoomService {
 
     @Multipart

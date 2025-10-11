@@ -22,6 +22,11 @@ import retrofit2.Response
 import java.io.File
 import java.util.UUID
 
+/**
+ * DEPRECATED: This ViewModel uses PhotoRoom API which is no longer in use.
+ * Kept for backward compatibility.
+ */
+@Suppress("DEPRECATION")
 class BgCleanerViewModel(
     private val service: PhotoRoomService,
     private val appContext: Context

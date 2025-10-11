@@ -6,6 +6,8 @@ import com.amirmuhsin.listinghelper.data.db.mapper.toEntity
 import com.amirmuhsin.listinghelper.domain.photo.PhotoPair
 import com.amirmuhsin.listinghelper.domain.photo.PhotoPairLocalRepository
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 
 class PhotoPairLocalRepositoryImpl(
@@ -52,6 +54,24 @@ class PhotoPairLocalRepositoryImpl(
     override suspend fun getAllByProductId(productId: Long): List<PhotoPair> {
         return withContext(Dispatchers.IO) {
             photoPairDao.getByProductId(productId).map { it.toDomain() }
+        }
+    }
+
+    override suspend fun updateUploadStatus(internalId: String, status: PhotoPair.UploadStatus) {
+        withContext(Dispatchers.IO) {
+            photoPairDao.updateUploadStatus(internalId, status.name)
+        }
+    }
+
+    override suspend fun updateServerIdAndStatus(localId: String, serverId: String, status: PhotoPair.UploadStatus) {
+        withContext(Dispatchers.IO) {
+            photoPairDao.updateServerIdAndStatus(localId, serverId, status.name)
+        }
+    }
+
+    override fun getPhotoPairsForProduct(productId: Long): Flow<List<PhotoPair>> {
+        return photoPairDao.observeByProductId(productId).map { entities ->
+            entities.map { it.toDomain() }
         }
     }
 

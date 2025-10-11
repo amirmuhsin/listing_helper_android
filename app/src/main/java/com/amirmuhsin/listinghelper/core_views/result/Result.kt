@@ -31,9 +31,9 @@ sealed class Result<out T> {
     /**
      * Returns the data if Success, or the default value if Failure
      */
-    fun getOrElse(default: T): T = when (this) {
+    inline fun getOrElse(default: () -> @UnsafeVariance T): T = when (this) {
         is Success -> data
-        is Failure -> default
+        is Failure -> default()
     }
 
     /**
@@ -79,7 +79,7 @@ sealed class Result<out T> {
     /**
      * Recovers from a Failure by providing a default value
      */
-    inline fun recover(recovery: (ResultError) -> T): Result<T> = when (this) {
+    inline fun recover(recovery: (ResultError) -> @UnsafeVariance T): Result<T> = when (this) {
         is Success -> this
         is Failure -> Success(recovery(error))
     }

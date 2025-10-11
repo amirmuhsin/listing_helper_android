@@ -5,6 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.amirmuhsin.listinghelper.data.db.model.PhotoPairEntity
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface PhotoPairDao {
@@ -28,4 +29,13 @@ interface PhotoPairDao {
 
     @Query("UPDATE photo_pairs_table SET sortOrder = :order WHERE id = :internalId")
     suspend fun updateOrder(internalId: String, order: Int)
+
+    @Query("UPDATE photo_pairs_table SET uploadStatus = :status WHERE id = :internalId")
+    suspend fun updateUploadStatus(internalId: String, status: String)
+
+    @Query("UPDATE photo_pairs_table SET uploadItemId = :serverId, uploadStatus = :status WHERE id = :localId")
+    suspend fun updateServerIdAndStatus(localId: String, serverId: String, status: String)
+
+    @Query("SELECT * FROM photo_pairs_table WHERE productId = :productId ORDER BY sortOrder ASC")
+    fun observeByProductId(productId: Long): Flow<List<PhotoPairEntity>>
 }

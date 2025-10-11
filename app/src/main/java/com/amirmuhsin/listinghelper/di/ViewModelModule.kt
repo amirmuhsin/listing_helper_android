@@ -1,5 +1,6 @@
 package com.amirmuhsin.listinghelper.di
 
+import androidx.work.WorkManager
 import com.amirmuhsin.listinghelper.ui.common.fullscreen_image.FullScreenViewerViewModel
 import com.amirmuhsin.listinghelper.ui.common.main.MainViewModel
 import com.amirmuhsin.listinghelper.ui.empty.EmptyViewModel
@@ -17,9 +18,17 @@ import org.koin.dsl.module
  */
 val viewModelModule = module {
 
+    // Provide WorkManager instance
+    single {
+        WorkManager.getInstance(androidContext())
+    }
+
     // Main ViewModels
     viewModel {
-        MainViewModel()
+        MainViewModel(
+            productRepo = get(),
+            photoRepo = get()
+        )
     }
 
     viewModel {
@@ -51,7 +60,7 @@ val viewModelModule = module {
         ReviewUploadViewModel(
             productLocalRepository = get(),
             photoPairLocalRepository = get(),
-            productRemoteRepository = get()
+            workManager = get()
         )
     }
 
